@@ -464,6 +464,11 @@ function showDashboard(profile) {
 async function verifyUserProfile(
     session
 ) {
+    if (
+        !session ||
+        !session.user
+    ) {
+        
 
     if (
         !session ||
@@ -652,17 +657,6 @@ async function handleLogin(event) {
 
             return;
         }
-
-       const debugResult =
-    await glsSupabase.rpc(
-        "debug_gls_current_user"
-    );
-
-console.log(
-    "GLS AUTH DEBUG:",
-    debugResult
-);
-
 
         await verifyUserProfile(
             data.session
