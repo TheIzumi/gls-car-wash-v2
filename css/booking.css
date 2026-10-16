@@ -1133,3 +1133,35 @@ select:invalid {
         font-size: 29px;
     }
 }
+
+/* =========================================================
+   BOOKING PAGE FOOTER
+   ========================================================= */
+
+.booking-footer {
+    width: 100%;
+    max-width: 520px;
+
+    margin: 18px auto 8px;
+
+    padding: 0 16px;
+
+    color: #8794a5;
+
+    font-size: 11px;
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+.booking-footer p {
+    margin: 2px 0;
+}
+
+.booking-footer .developer-credit {
+    color: #9aa5b3;
+
+    font-size: 10px;
+
+    letter-spacing: 0.2px;
+}
