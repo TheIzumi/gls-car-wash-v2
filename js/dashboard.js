@@ -2169,7 +2169,7 @@ function registerEvents() {
 
 function requiredElementsExist() {
 
-    const required = [
+    const required = {
         loginScreen,
         loginForm,
         loginEmail,
@@ -2199,15 +2199,30 @@ function requiredElementsExist() {
         queueList,
 
         recentBookingsList
-    ];
+    };
 
 
-    return !required.some(
-        function (element) {
-
+    const missing = Object.entries(required)
+        .filter(function ([name, element]) {
             return !element;
-        }
-    );
+        })
+        .map(function ([name]) {
+            return name;
+        });
+
+
+    if (missing.length > 0) {
+
+        console.error(
+            "GLS Dashboard missing HTML elements:",
+            missing
+        );
+
+        return false;
+    }
+
+
+    return true;
 }
 
 
