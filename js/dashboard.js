@@ -564,7 +564,6 @@ async function handleLogin(event) {
 
     event.preventDefault();
 
-
     if (
         loginInProgress ||
         !glsSupabase
