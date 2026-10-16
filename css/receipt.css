@@ -1,0 +1,1269 @@
+/* =========================================================
+   GLS CAR WASH V2
+   Official Receipt
+   File: css/receipt.css
+   ========================================================= */
+
+
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+
+:root {
+    --primary: #123b66;
+    --primary-dark: #0b2948;
+    --primary-mid: #174f87;
+    --primary-soft: #edf5ff;
+
+    --background: #f2f5f8;
+    --surface: #ffffff;
+    --surface-soft: #f8fafc;
+
+    --text: #172b42;
+    --muted: #6b7b8f;
+    --border: #e1e7ee;
+
+    --success: #16835d;
+    --success-bg: #e9f8f0;
+    --success-border: #bde5cf;
+
+    --danger: #b6372b;
+    --danger-bg: #fff0ee;
+
+    --shadow:
+        0 14px 40px
+        rgba(15, 39, 66, 0.10);
+}
+
+
+/* =========================================================
+   2. GLOBAL
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    min-height: 100%;
+
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    padding:
+        30px
+        16px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #edf3f8 0%,
+            var(--background) 100%
+        );
+
+    color: var(--text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    -webkit-font-smoothing:
+        antialiased;
+}
+
+button,
+a {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   3. PAGE
+   ========================================================= */
+
+.receipt-page {
+    width: 100%;
+    max-width: 640px;
+
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   4. LOADING / ERROR STATES
+   ========================================================= */
+
+.receipt-state-card {
+    width: 100%;
+
+    padding:
+        42px
+        28px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        20px;
+
+    box-shadow:
+        var(--shadow);
+
+    text-align: center;
+}
+
+
+.receipt-state-card h1 {
+    margin:
+        16px 0 8px;
+
+    color:
+        var(--primary);
+
+    font-size: 24px;
+    font-weight: 850;
+}
+
+
+.receipt-state-card p {
+    max-width: 400px;
+
+    margin:
+        0 auto;
+
+    color:
+        var(--muted);
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   5. LOADING SPINNER
+   ========================================================= */
+
+.loading-spinner {
+    width: 42px;
+    height: 42px;
+
+    margin:
+        0 auto;
+
+    border:
+        4px solid
+        #e4ebf2;
+
+    border-top-color:
+        var(--primary);
+
+    border-radius:
+        50%;
+
+    animation:
+        receipt-spin
+        0.8s
+        linear
+        infinite;
+}
+
+
+@keyframes receipt-spin {
+
+    to {
+        transform:
+            rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   6. ERROR STATE
+   ========================================================= */
+
+.error-state {
+    border-color:
+        #f1cec9;
+}
+
+
+.error-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    margin:
+        0 auto;
+
+    background:
+        var(--danger-bg);
+
+    border:
+        1px solid
+        #f1c4be;
+
+    border-radius:
+        50%;
+
+    color:
+        var(--danger);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+
+.secondary-link {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+    justify-content:
+        center;
+
+    min-height: 42px;
+
+    margin-top: 22px;
+
+    padding:
+        9px
+        16px;
+
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #d4deea;
+
+    border-radius:
+        10px;
+
+    color:
+        var(--primary);
+
+    font-weight: 750;
+
+    text-decoration: none;
+}
+
+
+.secondary-link:hover {
+    background:
+        var(--primary-soft);
+}
+
+
+/* =========================================================
+   7. RECEIPT CONTAINER
+   ========================================================= */
+
+.receipt-container {
+    width: 100%;
+
+    overflow: hidden;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        20px;
+
+    box-shadow:
+        var(--shadow);
+}
+
+
+/* =========================================================
+   8. RECEIPT HEADER
+   ========================================================= */
+
+.receipt-header {
+    position: relative;
+
+    padding:
+        30px
+        30px
+        25px;
+
+    text-align: center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.receipt-header::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 5px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--primary),
+            var(--primary-mid)
+        );
+
+    content: "";
+}
+
+
+.receipt-header .brand-logo {
+    display: block;
+
+    width: 130px;
+    max-width: 55%;
+
+    height: auto;
+
+    margin:
+        0 auto
+        17px;
+
+    object-fit: contain;
+}
+
+
+.company-details h1 {
+    margin:
+        0;
+
+    color:
+        var(--primary);
+
+    font-size: 19px;
+    font-weight: 900;
+
+    letter-spacing:
+        0.4px;
+}
+
+
+.company-details p {
+    margin:
+        4px 0 0;
+
+    color:
+        var(--muted);
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.receipt-title {
+    margin-top: 21px;
+}
+
+
+.receipt-title span {
+    display: block;
+
+    margin-bottom: 1px;
+
+    color:
+        #8b97a7;
+
+    font-size: 9px;
+    font-weight: 850;
+
+    letter-spacing:
+        2px;
+}
+
+
+.receipt-title strong {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 25px;
+    font-weight: 900;
+
+    letter-spacing:
+        1px;
+}
+
+
+/* =========================================================
+   9. RECEIPT META
+   ========================================================= */
+
+.receipt-meta {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 1px;
+
+    background:
+        var(--border);
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.receipt-meta-item {
+    padding:
+        15px
+        20px;
+
+    background:
+        var(--surface-soft);
+}
+
+
+.receipt-meta-item span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing:
+        0.6px;
+
+    text-transform:
+        uppercase;
+}
+
+
+.receipt-meta-item strong {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   10. RECEIPT SECTIONS
+   ========================================================= */
+
+.receipt-section {
+    padding:
+        22px
+        28px
+        4px;
+}
+
+
+.receipt-section-heading {
+    margin-bottom: 7px;
+
+    padding-bottom: 8px;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.receipt-section-heading span {
+    color:
+        var(--primary);
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing:
+        1px;
+}
+
+
+.receipt-details {
+    width: 100%;
+}
+
+
+/* =========================================================
+   11. RECEIPT ROWS
+   ========================================================= */
+
+.receipt-row {
+    display: flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        space-between;
+
+    gap: 20px;
+
+    min-height: 43px;
+
+    padding:
+        9px 0;
+
+    border-bottom:
+        1px dashed
+        #e4e9ef;
+}
+
+
+.receipt-row:last-child {
+    border-bottom: 0;
+}
+
+
+.receipt-row span {
+    color:
+        var(--muted);
+
+    font-size: 12px;
+}
+
+
+.receipt-row strong {
+    color:
+        var(--text);
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-align: right;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+.receipt-plate {
+    color:
+        var(--primary) !important;
+
+    font-size:
+        15px !important;
+
+    font-weight:
+        900 !important;
+
+    letter-spacing:
+        0.6px;
+}
+
+
+/* =========================================================
+   12. PAID BADGE
+   ========================================================= */
+
+.paid-badge {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-width: 60px;
+
+    padding:
+        5px
+        10px;
+
+    background:
+        var(--success-bg);
+
+    border:
+        1px solid
+        var(--success-border);
+
+    border-radius:
+        999px;
+
+    color:
+        var(--success) !important;
+
+    font-size:
+        10px !important;
+
+    font-weight:
+        900 !important;
+
+    letter-spacing:
+        0.7px;
+}
+
+
+/* =========================================================
+   13. TOTAL PAID
+   ========================================================= */
+
+.receipt-total {
+    position: relative;
+
+    margin:
+        22px
+        28px;
+
+    padding:
+        22px
+        20px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf5ff,
+            #e5f0fc
+        );
+
+    border:
+        1px solid
+        #d4e5f7;
+
+    border-radius:
+        14px;
+
+    text-align: center;
+}
+
+
+.receipt-total::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background:
+        var(--primary);
+
+    content: "";
+}
+
+
+.receipt-total span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        #66798e;
+
+    font-size: 10px;
+    font-weight: 850;
+
+    letter-spacing:
+        0.9px;
+}
+
+
+.receipt-total strong {
+    display: block;
+
+    color:
+        var(--primary);
+
+    font-size: 36px;
+    font-weight: 950;
+
+    line-height: 1.1;
+
+    letter-spacing:
+        -0.8px;
+}
+
+
+/* =========================================================
+   14. REFERENCES
+   ========================================================= */
+
+.receipt-reference {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+
+    margin:
+        0 28px
+        22px;
+}
+
+
+.receipt-reference > div {
+    padding:
+        14px;
+
+    background:
+        var(--surface-soft);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        10px;
+}
+
+
+.receipt-reference span {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color:
+        var(--muted);
+
+    font-size: 9px;
+    font-weight: 750;
+
+    text-transform:
+        uppercase;
+
+    letter-spacing:
+        0.4px;
+}
+
+
+.receipt-reference strong {
+    display: block;
+
+    color:
+        var(--text);
+
+    font-size: 11px;
+    font-weight: 800;
+
+    overflow-wrap:
+        anywhere;
+}
+
+
+/* =========================================================
+   15. THANK YOU
+   ========================================================= */
+
+.receipt-thank-you {
+    margin:
+        0 28px;
+
+    padding:
+        20px
+        15px;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    text-align: center;
+}
+
+
+.receipt-thank-you strong {
+    display: block;
+
+    color:
+        var(--primary);
+
+    font-size: 13px;
+}
+
+
+.receipt-thank-you p {
+    max-width: 390px;
+
+    margin:
+        5px auto 0;
+
+    color:
+        var(--muted);
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   16. ACTION BUTTONS
+   ========================================================= */
+
+.receipt-actions {
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 10px;
+
+    padding:
+        22px
+        28px;
+
+    background:
+        var(--surface-soft);
+
+    border-top:
+        1px solid
+        var(--border);
+}
+
+
+.receipt-actions .primary-button,
+.receipt-actions .secondary-button {
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    min-height: 47px;
+
+    padding:
+        11px
+        16px;
+
+    border-radius:
+        10px;
+
+    font-size: 12px;
+    font-weight: 850;
+
+    text-decoration: none;
+}
+
+
+.receipt-actions .primary-button {
+    border: 0;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary),
+            var(--primary-mid)
+        );
+
+    color:
+        #ffffff;
+
+    box-shadow:
+        0 5px 12px
+        rgba(
+            18,
+            59,
+            102,
+            0.15
+        );
+}
+
+
+.receipt-actions .primary-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            var(--primary-dark),
+            #123f6c
+        );
+}
+
+
+.receipt-actions .secondary-button {
+    background:
+        #ffffff;
+
+    border:
+        1px solid
+        #d3dde8;
+
+    color:
+        var(--primary);
+}
+
+
+.receipt-actions .secondary-button:hover {
+    background:
+        var(--primary-soft);
+}
+
+
+/* =========================================================
+   17. RECEIPT FOOTER
+   ========================================================= */
+
+.receipt-footer {
+    padding:
+        16px
+        20px
+        20px;
+
+    background:
+        #ffffff;
+
+    border-top:
+        1px solid
+        var(--border);
+
+    color:
+        #8794a5;
+
+    font-size: 9px;
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+.receipt-footer p {
+    margin:
+        1px 0;
+}
+
+
+.receipt-footer .developer-credit {
+    color:
+        #9aa5b3;
+
+    font-size: 8px;
+
+    letter-spacing:
+        0.2px;
+}
+
+
+/* =========================================================
+   18. MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    body {
+        padding:
+            10px;
+    }
+
+
+    .receipt-container,
+    .receipt-state-card {
+        border-radius:
+            16px;
+    }
+
+
+    .receipt-header {
+        padding:
+            25px
+            20px
+            21px;
+    }
+
+
+    .receipt-header .brand-logo {
+        width:
+            115px;
+    }
+
+
+    .company-details h1 {
+        font-size:
+            17px;
+    }
+
+
+    .receipt-title strong {
+        font-size:
+            22px;
+    }
+
+
+    .receipt-meta {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .receipt-meta-item {
+        padding:
+            13px
+            18px;
+    }
+
+
+    .receipt-section {
+        padding:
+            20px
+            20px
+            2px;
+    }
+
+
+    .receipt-total {
+        margin:
+            20px;
+
+        padding:
+            20px
+            15px;
+    }
+
+
+    .receipt-total strong {
+        font-size:
+            33px;
+    }
+
+
+    .receipt-reference {
+        grid-template-columns:
+            1fr;
+
+        margin:
+            0 20px
+            20px;
+    }
+
+
+    .receipt-thank-you {
+        margin:
+            0 20px;
+    }
+
+
+    .receipt-actions {
+        grid-template-columns:
+            1fr;
+
+        padding:
+            20px;
+    }
+}
+
+
+/* =========================================================
+   19. VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .receipt-row {
+        align-items:
+            flex-start;
+
+        flex-direction:
+            column;
+
+        gap: 3px;
+    }
+
+
+    .receipt-row strong {
+        text-align:
+            left;
+    }
+
+
+    .receipt-total strong {
+        font-size:
+            30px;
+    }
+}
+
+
+/* =========================================================
+   20. PRINT / SAVE PDF
+   ========================================================= */
+
+@media print {
+
+    @page {
+        size: A4;
+
+        margin:
+            12mm;
+    }
+
+
+    html,
+    body {
+        width: 100%;
+
+        margin: 0;
+        padding: 0;
+
+        background:
+            #ffffff !important;
+
+        color:
+            #000000;
+
+        print-color-adjust:
+            exact;
+
+        -webkit-print-color-adjust:
+            exact;
+    }
+
+
+    .receipt-page {
+        width: 100%;
+        max-width: none;
+
+        margin: 0;
+    }
+
+
+    .receipt-container {
+        width: 100%;
+        max-width: 170mm;
+
+        margin:
+            0 auto;
+
+        background:
+            #ffffff;
+
+        border:
+            1px solid
+            #d7d7d7;
+
+        border-radius:
+            0;
+
+        box-shadow:
+            none;
+    }
+
+
+    .receipt-actions {
+        display:
+            none !important;
+    }
+
+
+    .receipt-state-card {
+        display:
+            none !important;
+    }
+
+
+    .receipt-header {
+        padding-top:
+            18px;
+    }
+
+
+    .receipt-header::before {
+        background:
+            #123b66 !important;
+    }
+
+
+    .receipt-total {
+        background:
+            #edf5ff !important;
+    }
+
+
+    .paid-badge {
+        background:
+            #e9f8f0 !important;
+
+        border-color:
+            #bde5cf !important;
+    }
+
+
+    .receipt-footer {
+        padding-bottom:
+            12px;
+    }
+}
+
+
+/* =========================================================
+   21. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior:
+            auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+
+
+    .loading-spinner {
+        animation:
+            none;
+    }
+}
