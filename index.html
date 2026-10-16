@@ -28,7 +28,7 @@
         <p class="eyebrow">AUTHORIZED ACCESS</p>
         <h2>Staff Sign In</h2>
         <p class="login-copy">Sign in to manage payments, queue operations and daily car wash activity.</p>
-       <form id="loginForm" method="post">
+       <form id="loginForm" onsubmit="return false;">
           <div class="form-field"><label for="loginEmail">Email Address</label><input id="loginEmail" name="email" type="email" autocomplete="username" required></div>
           <div class="form-field"><label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" required></div>
           <p id="loginMessage" class="status-message" role="alert" aria-live="polite"></p>
