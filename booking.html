@@ -16,489 +16,156 @@
 
     <meta
         name="description"
-        content="GLS Car Wash customer registration and booking system."
+        content="GLS Car Wash booking, queue and payment system."
     >
 
-    <title>GLS Car Wash Booking</title>
+    <title>GLS Car Wash</title>
 
     <link rel="stylesheet" href="css/main.css">
 
     <link rel="stylesheet" href="css/booking.css">
     
 </head>
-
-
 <body>
-
     <main class="booking-container">
-
-        <!-- ==========================================
-             GLS BRANDING
-        =========================================== -->
-
         <header class="booking-header">
-
             <img src="assets/logo.png" alt="Global Line Services Logo" class="logo">
-
-            <h1>
-                GLS Car Wash
-            </h1>
-
-            <p class="booking-intro">
-                Register your vehicle and select your
-                preferred car wash service.
-            </p>
-
+            <h1>GLS Car Wash</h1>
+            <p class="booking-intro">Register your vehicle and select your preferred car wash service.</p>
         </header>
 
-
-        <!-- ==========================================
-             BOOKING FORM
-        =========================================== -->
-
-        <form
-            id="booking-form"
-            novalidate
-        >
-
-
-            <!-- PHONE NUMBER -->
-
-            <div class="form-field">
-
-                <label for="phoneNumber">
-                    Phone Number
-                    <span class="required">*</span>
-                </label>
-
-                <input
-                    type="tel"
-                    id="phoneNumber"
-                    name="phoneNumber"
-                    placeholder="Example: 0123456789"
-                    autocomplete="tel"
-                    inputmode="tel"
-                    maxlength="15"
-                    required
-                >
-
-                <small>
-                    Required for booking and receipt reference.
-                </small>
-
-            </div>
-
-
-            <!-- PLATE NUMBER -->
-
-            <div class="form-field">
-
-                <label for="plateNumber">
-                    Plate Number
-                    <span class="required">*</span>
-                </label>
-
-                <input
-                    type="text"
-                    id="plateNumber"
-                    name="plateNumber"
-                    placeholder="Example: VBL1234"
-                    autocomplete="off"
-                    autocapitalize="characters"
-                    maxlength="15"
-                    required
-                >
-
-                <small>
-                    Your plate number will also be used
-                    for the wash queue display.
-                </small>
-
-            </div>
-
-
-            <!-- CUSTOMER NAME -->
-
-            <div class="form-field">
-
-                <label for="customerName">
-                    Customer Name
-                    <span class="optional">
-                        (Optional)
-                    </span>
-                </label>
-
-                <input
-                    type="text"
-                    id="customerName"
-                    name="customerName"
-                    placeholder="Enter your name"
-                    autocomplete="name"
-                    maxlength="100"
-                >
-
-            </div>
-
-
-            <!-- ==========================================
-                 VEHICLE
-            =========================================== -->
-
-            <div class="form-field">
-
-                <label for="vehicleType">
-                    Vehicle Type
-                    <span class="required">*</span>
-                </label>
-
-                <select
-                    id="vehicleType"
-                    name="vehicleType"
-                    required
-                >
-
-                    <option value="">
-                        Select Vehicle
-                    </option>
-
-                    <option value="Small Car">
-                        Small Car - RM25
-                    </option>
-
-                    <option value="Sedan">
-                        Sedan - RM28
-                    </option>
-
-                    <option value="SUV">
-                        SUV - RM35
-                    </option>
-
-                    <option value="MPV">
-                        MPV - RM40
-                    </option>
-
-                    <option value="Van">
-                        Van - RM50
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- ==========================================
-                 WASH TYPE
-            =========================================== -->
-
-            <div class="form-field">
-
-                <label for="washType">
-                    Wash Type
-                    <span class="required">*</span>
-                </label>
-
-                <select
-                    id="washType"
-                    name="washType"
-                    required
-                >
-
-                    <option value="">
-                        Select Wash Type
-                    </option>
-
-                    <option value="Normal Wash">
-                        Normal Wash
-                    </option>
-
-                    <option value="Nano Wash">
-                        Nano Wash (+RM15)
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- PRICE INFORMATION -->
-
-            <div class="pricing-note">
-
-                <strong>
-                    Nano Wash
-                </strong>
-
-                <span>
-                    Additional RM15.00 from the
-                    Normal Wash price.
-                </span>
-
-            </div>
-
-
-            <!-- ==========================================
-                 BOOKING TYPE
-            =========================================== -->
-
-            <div class="form-field">
-
-                <label for="bookingType">
-                    Visit Type
-                    <span class="required">*</span>
-                </label>
-
-                <select
-                    id="bookingType"
-                    name="bookingType"
-                    required
-                >
-
-                    <option value="Walk-In">
-                        Walk-In / Wash Now
-                    </option>
-
-                    <option value="Future Booking">
-                        Book for Later
-                    </option>
-
-                </select>
-
-            </div>
-
-
-            <!-- ==========================================
-                 FUTURE BOOKING
-            =========================================== -->
-
-            <div
-                id="futureBookingFields"
-                class="future-booking-fields"
-                hidden
-            >
-
-                <div class="future-booking-heading">
-
-                    <h2>
-                        Select Your Slot
-                    </h2>
-
-                    <p>
-                        Choose your preferred booking
-                        date and time.
-                    </p>
-
+        <section id="bookingFormSection">
+            <form id="booking-form" novalidate>
+                <div class="form-field">
+                    <label for="phoneNumber">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Example: 0123456789" autocomplete="tel" inputmode="tel" maxlength="15" required>
+                    <small>Required for booking and receipt reference.</small>
                 </div>
-
 
                 <div class="form-field">
-
-                    <label for="bookingDate">
-                        Booking Date
-                        <span class="required">*</span>
-                    </label>
-
-                    <input
-                        type="date"
-                        id="bookingDate"
-                        name="bookingDate"
-                    >
-
+                    <label for="plateNumber">Plate Number <span class="required">*</span></label>
+                    <input type="text" id="plateNumber" name="plateNumber" placeholder="Example: VBL1234" autocomplete="off" autocapitalize="characters" maxlength="15" required>
+                    <small>Your plate number will also be used for the wash queue display.</small>
                 </div>
-
 
                 <div class="form-field">
-
-                    <label for="bookingTime">
-                        Booking Time
-                        <span class="required">*</span>
-                    </label>
-
-                    <input
-                        type="time"
-                        id="bookingTime"
-                        name="bookingTime"
-                    >
-
+                    <label for="customerName">Customer Name <span class="optional">(Optional)</span></label>
+                    <input type="text" id="customerName" name="customerName" placeholder="Enter your name" autocomplete="name" maxlength="100">
                 </div>
 
-                <small class="booking-slot-note">
-                    Slot availability will be confirmed
-                    before final booking confirmation.
-                </small>
+                <div class="form-field">
+                    <label for="vehicleType">Vehicle Type <span class="required">*</span></label>
+                    <select id="vehicleType" name="vehicleType" required>
+                        <option value="">Select Vehicle</option>
+                        <option value="Small Car">Small Car - RM25</option>
+                        <option value="Sedan">Sedan - RM28</option>
+                        <option value="SUV">SUV - RM35</option>
+                        <option value="MPV">MPV - RM40</option>
+                        <option value="Van">Van - RM50</option>
+                    </select>
+                </div>
 
+                <div class="form-field">
+                    <label for="washType">Wash Type <span class="required">*</span></label>
+                    <select id="washType" name="washType" required>
+                        <option value="">Select Wash Type</option>
+                        <option value="Normal Wash">Normal Wash</option>
+                        <option value="Nano Wash">Nano Wash (+RM15)</option>
+                    </select>
+                </div>
+
+                <div class="pricing-note"><strong>Nano Wash</strong><span>Additional RM15.00 from the Normal Wash price.</span></div>
+
+                <div class="form-field">
+                    <label for="bookingType">Visit Type <span class="required">*</span></label>
+                    <select id="bookingType" name="bookingType" required>
+                        <option value="Walk-In">Walk-In / Wash Now</option>
+                        <option value="Future Booking">Book for Later</option>
+                    </select>
+                </div>
+
+                <div id="futureBookingFields" class="future-booking-fields" hidden>
+                    <div class="future-booking-heading"><h2>Select Your Slot</h2><p>Choose your preferred booking date and time.</p></div>
+                    <div class="form-field"><label for="bookingDate">Booking Date <span class="required">*</span></label><input type="date" id="bookingDate" name="bookingDate"></div>
+                    <div class="form-field"><label for="bookingTime">Booking Time <span class="required">*</span></label><input type="time" id="bookingTime" name="bookingTime"></div>
+                    <small class="booking-slot-note">Slot availability will be confirmed before final booking confirmation.</small>
+                </div>
+
+                <section class="total-box" aria-live="polite"><span class="total-label">Estimated Total</span><div id="totalAmount">RM 0.00</div><small>Final amount is based on the selected vehicle and wash type.</small></section>
+                <p id="bookingMessage" class="booking-message" role="status" aria-live="polite"></p>
+                <button id="continueButton" type="submit">Continue</button>
+                <p class="form-footer-note">Please check your vehicle details before continuing.</p>
+            </form>
+        </section>
+
+        <section id="bookingConfirmation" class="booking-confirmation" hidden>
+            <div class="confirmation-success-icon">✓</div>
+            <p class="confirmation-eyebrow">REGISTRATION SUCCESSFUL</p>
+            <h2 id="confirmationHeading">You're in the queue!</h2>
+            <p id="confirmationDescription" class="confirmation-description">Please keep this screen for reference.</p>
+            <div id="confirmationQueueSection" class="queue-number-card"><span>YOUR QUEUE NUMBER</span><strong id="confirmationQueueNo">Q0000</strong></div>
+            <div class="confirmation-details">
+                <div class="confirmation-row"><span>Booking No.</span><strong id="confirmationBookingNo">-</strong></div>
+                <div class="confirmation-row"><span>Plate Number</span><strong id="confirmationPlate">-</strong></div>
+                <div class="confirmation-row"><span>Vehicle</span><strong id="confirmationVehicle">-</strong></div>
+                <div class="confirmation-row"><span>Service</span><strong id="confirmationService">-</strong></div>
+                <div class="confirmation-row"><span>Visit</span><strong id="confirmationVisit">-</strong></div>
             </div>
+            <div class="confirmation-total"><span>Total Amount</span><strong id="confirmationAmount">RM 0.00</strong></div>
+            <div class="payment-status-card"><span>Payment Status</span><strong>NOT PAID</strong><small>Official receipt will be available after payment is confirmed.</small></div>
+            <button id="paymentButton" class="payment-button" type="button">Proceed to Payment</button>
+            <button id="newBookingButton" class="new-booking-button" type="button">Make Another Booking</button>
+        </section>
 
+        <section id="paymentSection" class="payment-section" hidden>
+            <button id="paymentBackButton" class="payment-back-button" type="button">← Back</button>
+            <div class="payment-heading"><p class="confirmation-eyebrow">PAYMENT</p><h2>Choose Payment Method</h2><p>Select how you would like to pay.</p></div>
+            <div class="payment-total-card"><span>Amount Due</span><strong id="paymentAmount">RM 0.00</strong></div>
+            <div class="payment-method-grid">
+                <button id="cashPaymentButton" class="payment-method-card" type="button"><span class="payment-method-icon">💵</span><strong>Cash</strong><small>Pay directly to our staff.</small></button>
+                <button id="duitNowPaymentButton" class="payment-method-card" type="button"><span class="payment-method-icon">📱</span><strong>DuitNow QR</strong><small>Scan using your banking app.</small></button>
+            </div>
+        </section>
 
-            <!-- ==========================================
-                 TOTAL
-            =========================================== -->
+        <section id="cashPaymentSection" class="payment-detail-section" hidden>
+            <button id="cashBackButton" class="payment-back-button" type="button">← Back</button>
+            <div class="payment-detail-icon">💵</div>
+            <p class="confirmation-eyebrow">CASH PAYMENT</p>
+            <h2>Pay at the Counter</h2>
+            <p class="payment-detail-description">Please pay the amount below directly to our staff.</p>
+            <div class="confirmation-total"><span>Amount Due</span><strong id="cashPaymentAmount">RM 0.00</strong></div>
+            <div class="payment-status-card"><span>Payment Status</span><strong>AWAITING PAYMENT</strong><small>Official receipt will be available after staff confirms your payment.</small></div>
+            <p class="payment-help-text">Please show your booking or queue number to our staff when making payment.</p>
+        </section>
 
-            <section
-                class="total-box"
-                aria-live="polite"
-            >
+        <section id="duitNowPaymentSection" class="payment-detail-section" hidden>
+            <button id="duitNowBackButton" class="payment-back-button" type="button">← Back</button>
+            <p class="confirmation-eyebrow">DUITNOW QR PAYMENT</p>
+            <h2>Scan to Pay</h2>
+            <p class="payment-detail-description">Scan the QR code below using your banking or eWallet application.</p>
+            <div class="confirmation-total"><span>Amount Due</span><strong id="duitNowPaymentAmount">RM 0.00</strong></div>
+            <div class="duitnow-qr-card"><img src="assets/duitnow-qr.png" alt="GLS DuitNow QR Code" class="duitnow-qr-image"></div>
+            <div class="duitnow-notice"><strong>Before completing payment</strong><p>Please verify the payment recipient details shown in your banking application before confirming.</p></div>
+            <button id="paymentSubmittedButton" class="payment-button" type="button">I've Made Payment</button>
+            <p class="payment-help-text">Payment will remain pending until verified by GLS staff.</p>
+        </section>
 
-                <span class="total-label">
-                    Estimated Total
-                </span>
-
-                <div id="totalAmount">
-                    RM 0.00
-                </div>
-
-                <small>
-                    Final amount is based on the
-                    selected vehicle and wash type.
-                </small>
-
-            </section>
-
-
-            <!-- ==========================================
-                 STATUS MESSAGE
-            =========================================== -->
-
-            <p
-                id="bookingMessage"
-                class="booking-message"
-                role="status"
-                aria-live="polite"
-            ></p>
-
-
-            <!-- ==========================================
-                 CONTINUE
-            =========================================== -->
-
-            <button
-                id="continueButton"
-                type="submit"
-            >
-                Continue
-            </button>
-
-
-            <p class="form-footer-note">
-                Please check your vehicle details
-                before continuing.
-            </p>
-
-        </form>
-
-        <section
-    id="bookingConfirmation"
-    class="booking-confirmation"
-    hidden
->
-    <div class="confirmation-success-icon">
-        ✓
-    </div>
-
-    <p class="confirmation-eyebrow">
-        REGISTRATION SUCCESSFUL
-    </p>
-
-    <h2>
-        You're in the queue!
-    </h2>
-
-    <p class="confirmation-description">
-        Please keep this screen for reference.
-    </p>
-
-    <div
-        id="confirmationQueueSection"
-        class="queue-number-card"
-    >
-        <span>
-            YOUR QUEUE NUMBER
-        </span>
-
-        <strong id="confirmationQueueNo">
-            Q0000
-        </strong>
-    </div>
-
-    <div class="confirmation-details">
-
-        <div class="confirmation-row">
-            <span>Booking No.</span>
-            <strong id="confirmationBookingNo">-</strong>
-        </div>
-
-        <div class="confirmation-row">
-            <span>Plate Number</span>
-            <strong id="confirmationPlate">-</strong>
-        </div>
-
-        <div class="confirmation-row">
-            <span>Vehicle</span>
-            <strong id="confirmationVehicle">-</strong>
-        </div>
-
-        <div class="confirmation-row">
-            <span>Service</span>
-            <strong id="confirmationService">-</strong>
-        </div>
-
-        <div class="confirmation-row">
-            <span>Visit</span>
-            <strong id="confirmationVisit">-</strong>
-        </div>
-
-    </div>
-
-    <div class="confirmation-total">
-        <span>Total Amount</span>
-
-        <strong id="confirmationAmount">
-            RM 0.00
-        </strong>
-    </div>
-
-    <div class="payment-status-card">
-        <span>Payment Status</span>
-
-        <strong>
-            NOT PAID
-        </strong>
-
-        <small>
-            Official receipt will be available
-            after payment is confirmed.
-        </small>
-    </div>
-
-    <button
-        id="paymentButton"
-        class="payment-button"
-        type="button"
-    >
-        Proceed to Payment
-    </button>
-
-    <button
-        id="newBookingButton"
-        class="new-booking-button"
-        type="button"
-    >
-        Make Another Booking
-    </button>
-
-</section>
-
-
+        <section id="paymentPendingSection" class="payment-detail-section" hidden>
+            <div class="confirmation-success-icon">✓</div>
+            <p class="confirmation-eyebrow">PAYMENT SUBMITTED</p>
+            <h2>Verification Pending</h2>
+            <p class="payment-detail-description">Your payment submission has been received. Please wait for GLS staff to verify the payment.</p>
+            <div class="confirmation-details">
+                <div class="confirmation-row"><span>Booking No.</span><strong id="pendingBookingNo">-</strong></div>
+                <div class="confirmation-row"><span>Plate Number</span><strong id="pendingPlate">-</strong></div>
+                <div class="confirmation-row"><span>Amount</span><strong id="pendingAmount">RM 0.00</strong></div>
+            </div>
+            <div class="payment-pending-card"><span>Payment Status</span><strong>PENDING VERIFICATION</strong><small>Do not make another payment for this booking unless advised by staff.</small></div>
+            <p class="payment-help-text">Your official receipt will become available once your payment is confirmed.</p>
+        </section>
     </main>
 
-
-    <!-- ==========================================
-         JAVASCRIPT
-    =========================================== -->
-
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/booking.js">
-        </script>
-
+    <script src="js/booking.js"></script>
 </body>
-
 </html>
