@@ -385,6 +385,109 @@
 
         </form>
 
+        <section
+    id="bookingConfirmation"
+    class="booking-confirmation"
+    hidden
+>
+    <div class="confirmation-success-icon">
+        ✓
+    </div>
+
+    <p class="confirmation-eyebrow">
+        REGISTRATION SUCCESSFUL
+    </p>
+
+    <h2>
+        You're in the queue!
+    </h2>
+
+    <p class="confirmation-description">
+        Please keep this screen for reference.
+    </p>
+
+    <div
+        id="confirmationQueueSection"
+        class="queue-number-card"
+    >
+        <span>
+            YOUR QUEUE NUMBER
+        </span>
+
+        <strong id="confirmationQueueNo">
+            Q0000
+        </strong>
+    </div>
+
+    <div class="confirmation-details">
+
+        <div class="confirmation-row">
+            <span>Booking No.</span>
+            <strong id="confirmationBookingNo">-</strong>
+        </div>
+
+        <div class="confirmation-row">
+            <span>Plate Number</span>
+            <strong id="confirmationPlate">-</strong>
+        </div>
+
+        <div class="confirmation-row">
+            <span>Vehicle</span>
+            <strong id="confirmationVehicle">-</strong>
+        </div>
+
+        <div class="confirmation-row">
+            <span>Service</span>
+            <strong id="confirmationService">-</strong>
+        </div>
+
+        <div class="confirmation-row">
+            <span>Visit</span>
+            <strong id="confirmationVisit">-</strong>
+        </div>
+
+    </div>
+
+    <div class="confirmation-total">
+        <span>Total Amount</span>
+
+        <strong id="confirmationAmount">
+            RM 0.00
+        </strong>
+    </div>
+
+    <div class="payment-status-card">
+        <span>Payment Status</span>
+
+        <strong>
+            NOT PAID
+        </strong>
+
+        <small>
+            Official receipt will be available
+            after payment is confirmed.
+        </small>
+    </div>
+
+    <button
+        id="paymentButton"
+        class="payment-button"
+        type="button"
+    >
+        Proceed to Payment
+    </button>
+
+    <button
+        id="newBookingButton"
+        class="new-booking-button"
+        type="button"
+    >
+        Make Another Booking
+    </button>
+
+</section>
+
+
     </main>
 
 
