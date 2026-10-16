@@ -1,1 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#123b66"
+    >
+
+    <meta
+        name="description"
+        content="GLS Car Wash Official Receipt"
+    >
+
+    <title>GLS Car Wash | Official Receipt</title>
+
+    <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+
+<body>
+
+    <main class="receipt-page">
+
+
+        <!-- ==========================================
+             LOADING
+        =========================================== -->
+
+        <section
+            id="receiptLoading"
+            class="receipt-state-card"
+        >
+
+            <div class="loading-spinner"></div>
+
+            <h1>
+                Loading Receipt
+            </h1>
+
+            <p>
+                Please wait while we retrieve
+                your official receipt.
+            </p>
+
+        </section>
+
+
+        <!-- ==========================================
+             ERROR
+        =========================================== -->
+
+        <section
+            id="receiptError"
+            class="receipt-state-card error-state"
+            hidden
+        >
+
+            <div class="error-icon">
+                !
+            </div>
+
+            <h1>
+                Receipt Unavailable
+            </h1>
+
+            <p id="receiptErrorMessage">
+                Unable to retrieve this receipt.
+            </p>
+
+            <a
+                href="index.html"
+                class="secondary-link"
+            >
+                Return to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- ==========================================
+             OFFICIAL RECEIPT
+        =========================================== -->
+
+        <section
+            id="receiptContainer"
+            class="receipt-container"
+            hidden
+        >
+
+
+            <!-- ======================================
+                 RECEIPT HEADER
+            ======================================= -->
+
+            <header class="receipt-header">
+
+                <img src="assets/logo.png" alt="Global Line Services Logo" class="brand-logo">
+
+                <div class="company-details">
+
+                    <h1>
+                        GLOBAL LINE SERVICES
+                    </h1>
+
+                    <p>
+                        GLS Car Wash
+                    </p>
+
+                </div>
+
+
+                <div class="receipt-title">
+
+                    <span>
+                        OFFICIAL
+                    </span>
+
+                    <strong>
+                        RECEIPT
+                    </strong>
+
+                </div>
+
+            </header>
+
+
+            <!-- ======================================
+                 RECEIPT INFORMATION
+            ======================================= -->
+
+            <section class="receipt-meta">
+
+                <div class="receipt-meta-item">
+
+                    <span>
+                        Receipt No.
+                    </span>
+
+                    <strong id="receiptNumber">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="receipt-meta-item">
+
+                    <span>
+                        Payment Date
+                    </span>
+
+                    <strong id="receiptDate">
+                        -
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 CUSTOMER INFORMATION
+            ======================================= -->
+
+            <section class="receipt-section">
+
+                <div class="receipt-section-heading">
+
+                    <span>
+                        CUSTOMER &amp; VEHICLE
+                    </span>
+
+                </div>
+
+
+                <div class="receipt-details">
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Customer
+                        </span>
+
+                        <strong id="receiptCustomer">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Plate Number
+                        </span>
+
+                        <strong
+                            id="receiptPlate"
+                            class="receipt-plate"
+                        >
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Vehicle
+                        </span>
+
+                        <strong id="receiptVehicle">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Service
+                        </span>
+
+                        <strong id="receiptService">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 PAYMENT INFORMATION
+            ======================================= -->
+
+            <section class="receipt-section">
+
+                <div class="receipt-section-heading">
+
+                    <span>
+                        PAYMENT
+                    </span>
+
+                </div>
+
+
+                <div class="receipt-details">
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Payment Method
+                        </span>
+
+                        <strong id="receiptPaymentMethod">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="receipt-row">
+
+                        <span>
+                            Payment Status
+                        </span>
+
+                        <strong
+                            id="receiptPaymentStatus"
+                            class="paid-badge"
+                        >
+                            PAID
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 TOTAL PAID
+            ======================================= -->
+
+            <section class="receipt-total">
+
+                <span>
+                    TOTAL PAID
+                </span>
+
+                <strong id="receiptAmount">
+                    RM 0.00
+                </strong>
+
+            </section>
+
+
+            <!-- ======================================
+                 REFERENCES
+            ======================================= -->
+
+            <section class="receipt-reference">
+
+                <div>
+
+                    <span>
+                        Booking Reference
+                    </span>
+
+                    <strong id="receiptBookingNo">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div>
+
+                    <span>
+                        Queue Number
+                    </span>
+
+                    <strong id="receiptQueueNo">
+                        -
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 THANK YOU
+            ======================================= -->
+
+            <section class="receipt-thank-you">
+
+                <strong>
+                    Thank you for choosing GLS Car Wash.
+                </strong>
+
+                <p>
+                    We appreciate your support and
+                    look forward to serving you again.
+                </p>
+
+            </section>
+
+
+            <!-- ======================================
+                 ACTIONS
+            ======================================= -->
+
+            <section class="receipt-actions">
+
+                <button
+                    id="printReceiptButton"
+                    class="primary-button"
+                    type="button"
+                >
+                    Print / Save PDF
+                </button>
+
+
+                <a
+                    href="index.html"
+                    class="secondary-button"
+                >
+                    Back to Dashboard
+                </a>
+
+            </section>
+
+
+            <!-- ======================================
+                 RECEIPT FOOTER
+            ======================================= -->
+
+            <footer class="receipt-footer">
+
+                <p>
+                    © 2026 Global Line Services
+                </p>
+
+                <p class="developer-credit">
+                    System crafted by TheIz
+                </p>
+
+            </footer>
+
+
+        </section>
+
+    </main>
+
+
+    <!-- ==========================================
+         SUPABASE
+    =========================================== -->
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+    ></script>
+
+
+    <!-- ==========================================
+         RECEIPT APPLICATION
+    =========================================== -->
+
+    <script src="js/dashboard.js"></script>
+
+</body>
+
+</html>
