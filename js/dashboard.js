@@ -1,6 +1,6 @@
 /* =========================================================
    GLS CAR WASH V2
-   Staff / Owner Operations Dashboard
+   Operations Dashboard
    File: js/dashboard.js
    ========================================================= */
 
@@ -8,7 +8,7 @@
 
 
 /* =========================================================
-   1. SUPABASE CONFIGURATION
+   1. CONFIGURATION
    ========================================================= */
 
 const GLS_SUPABASE_URL =
@@ -20,84 +20,125 @@ const GLS_SUPABASE_PUBLISHABLE_KEY =
 const GLS_TIMEZONE =
     "Asia/Kuala_Lumpur";
 
-let glsSupabase = null;
-
 
 /* =========================================================
    2. APPLICATION STATE
    ========================================================= */
 
+let glsSupabase = null;
+
 let currentProfile = null;
 
 let loginInProgress = false;
+let logoutInProgress = false;
 let dashboardLoading = false;
 let paymentConfirmationInProgress = false;
 
-let activeQueueFilter = "active";
+let activeQueueFilter =
+    "active";
+
+let latestDashboardData = null;
 
 let dashboardRefreshTimer = null;
 
 
 /* =========================================================
-   3. AUTH ELEMENTS
+   3. LOGIN ELEMENTS
    ========================================================= */
 
 const loginScreen =
-    document.getElementById("loginScreen");
+    document.getElementById(
+        "loginScreen"
+    );
 
 const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById(
+        "loginForm"
+    );
 
 const loginEmail =
-    document.getElementById("loginEmail");
+    document.getElementById(
+        "loginEmail"
+    );
 
 const loginPassword =
-    document.getElementById("loginPassword");
+    document.getElementById(
+        "loginPassword"
+    );
 
 const loginMessage =
-    document.getElementById("loginMessage");
+    document.getElementById(
+        "loginMessage"
+    );
 
 const loginButton =
-    document.getElementById("loginButton");
-
-const dashboardScreen =
-    document.getElementById("dashboardScreen");
-
-const authStatus =
-    document.getElementById("authStatus");
-
-const logoutButton =
-    document.getElementById("logoutButton");
+    document.getElementById(
+        "loginButton"
+    );
 
 
 /* =========================================================
    4. DASHBOARD ELEMENTS
    ========================================================= */
 
+const dashboardScreen =
+    document.getElementById(
+        "dashboardScreen"
+    );
+
+const authStatus =
+    document.getElementById(
+        "authStatus"
+    );
+
+const logoutButton =
+    document.getElementById(
+        "logoutButton"
+    );
+
 const welcomeText =
-    document.getElementById("welcomeText");
+    document.getElementById(
+        "welcomeText"
+    );
 
 const currentDate =
-    document.getElementById("currentDate");
-
-const vehiclesToday =
-    document.getElementById("vehiclesToday");
-
-const revenueToday =
-    document.getElementById("revenueToday");
-
-const waitingCount =
-    document.getElementById("waitingCount");
-
-const washingCount =
-    document.getElementById("washingCount");
-
-const pendingPaymentCount =
-    document.getElementById("pendingPaymentCount");
+    document.getElementById(
+        "currentDate"
+    );
 
 
 /* =========================================================
-   5. PAYMENT ELEMENTS
+   5. SUMMARY ELEMENTS
+   ========================================================= */
+
+const vehiclesToday =
+    document.getElementById(
+        "vehiclesToday"
+    );
+
+const revenueToday =
+    document.getElementById(
+        "revenueToday"
+    );
+
+const waitingCount =
+    document.getElementById(
+        "waitingCount"
+    );
+
+const washingCount =
+    document.getElementById(
+        "washingCount"
+    );
+
+const pendingPaymentCount =
+    document.getElementById(
+        "pendingPaymentCount"
+    );
+
+
+/* =========================================================
+   6. PAYMENT ELEMENTS
    ========================================================= */
 
 const refreshPaymentsButton =
@@ -117,7 +158,7 @@ const pendingPaymentsList =
 
 
 /* =========================================================
-   6. QUEUE ELEMENTS
+   7. QUEUE ELEMENTS
    ========================================================= */
 
 const refreshQueueButton =
@@ -142,7 +183,7 @@ const queueFilterButtons =
 
 
 /* =========================================================
-   7. RECENT BOOKINGS
+   8. RECENT BOOKINGS
    ========================================================= */
 
 const recentBookingsList =
@@ -152,7 +193,7 @@ const recentBookingsList =
 
 
 /* =========================================================
-   8. CURRENCY
+   9. FORMATTERS
    ========================================================= */
 
 const currencyFormatter =
@@ -175,11 +216,9 @@ function formatCurrency(value) {
 }
 
 
-/* =========================================================
-   9. MALAYSIA DATE / TIME
-   ========================================================= */
-
-function formatMalaysiaDateTime(value) {
+function formatMalaysiaDateTime(
+    value
+) {
 
     if (!value) {
         return "—";
@@ -227,6 +266,10 @@ function formatMalaysiaDateTime(value) {
 }
 
 
+/* =========================================================
+   10. CURRENT DATE
+   ========================================================= */
+
 function updateCurrentDate() {
 
     if (!currentDate) {
@@ -262,12 +305,14 @@ function updateCurrentDate() {
                 hour12:
                     true
             }
-        ).format(new Date());
+        ).format(
+            new Date()
+        );
 }
 
 
 /* =========================================================
-   10. STATUS MESSAGE
+   11. MESSAGE HELPER
    ========================================================= */
 
 function setMessage(
@@ -289,13 +334,15 @@ function setMessage(
 
 
     if (type) {
-        element.classList.add(type);
+        element.classList.add(
+            type
+        );
     }
 }
 
 
 /* =========================================================
-   11. DOM HELPERS
+   12. DOM HELPER
    ========================================================= */
 
 function createElement(
@@ -305,7 +352,9 @@ function createElement(
 ) {
 
     const element =
-        document.createElement(tag);
+        document.createElement(
+            tag
+        );
 
 
     if (className) {
@@ -318,7 +367,6 @@ function createElement(
         text !== undefined &&
         text !== null
     ) {
-
         element.textContent =
             String(text);
     }
@@ -328,25 +376,75 @@ function createElement(
 }
 
 
-function createStatusBadge(status) {
+function createStatusBadge(
+    status
+) {
 
-    const safeStatus =
+    const value =
         String(
-            status || ""
+            status || "unknown"
         )
         .toLowerCase();
 
 
     return createElement(
         "span",
-        `status-badge ${safeStatus}`,
-        safeStatus || "unknown"
+        `status-badge ${value}`,
+        value
     );
 }
 
 
 /* =========================================================
-   12. LOGIN SCREEN
+   13. STOP AUTO REFRESH
+   ========================================================= */
+
+function stopDashboardRefresh() {
+
+    if (
+        dashboardRefreshTimer !== null
+    ) {
+
+        window.clearInterval(
+            dashboardRefreshTimer
+        );
+
+
+        dashboardRefreshTimer =
+            null;
+    }
+}
+
+
+/* =========================================================
+   14. START AUTO REFRESH
+   ========================================================= */
+
+function startDashboardRefresh() {
+
+    stopDashboardRefresh();
+
+
+    dashboardRefreshTimer =
+        window.setInterval(
+            function () {
+
+                if (
+                    currentProfile &&
+                    dashboardScreen &&
+                    !dashboardScreen.hidden
+                ) {
+                    refreshDashboard();
+                }
+
+            },
+            20000
+        );
+}
+
+
+/* =========================================================
+   15. SHOW LOGIN
    ========================================================= */
 
 function showLoginScreen(
@@ -354,7 +452,14 @@ function showLoginScreen(
     type = ""
 ) {
 
-    currentProfile = null;
+    currentProfile =
+        null;
+
+    latestDashboardData =
+        null;
+
+
+    stopDashboardRefresh();
 
 
     if (loginScreen) {
@@ -376,6 +481,7 @@ function showLoginScreen(
 
 
     if (logoutButton) {
+
         logoutButton.hidden =
             true;
 
@@ -392,31 +498,44 @@ function showLoginScreen(
         message,
         type
     );
-
-
-    stopDashboardRefresh();
 }
 
 
 /* =========================================================
-   13. DASHBOARD SCREEN
+   16. SHOW DASHBOARD
    ========================================================= */
 
-function showDashboard(profile) {
+function showDashboard(
+    profile
+) {
 
     currentProfile =
         profile;
 
 
-    loginScreen.hidden =
-        true;
+    if (loginScreen) {
+        loginScreen.hidden =
+            true;
+    }
 
-    dashboardScreen.hidden =
-        false;
+
+    if (dashboardScreen) {
+        dashboardScreen.hidden =
+            false;
+    }
 
 
-    logoutButton.hidden =
-        false;
+    if (logoutButton) {
+
+        logoutButton.hidden =
+            false;
+
+        logoutButton.disabled =
+            false;
+
+        logoutButton.textContent =
+            "Log Out";
+    }
 
 
     const displayName =
@@ -452,23 +571,41 @@ function showDashboard(profile) {
 
     updateCurrentDate();
 
-
     startDashboardRefresh();
 }
 
 
 /* =========================================================
-   14. VERIFY GLS PROFILE
+   17. GET STAFF PROFILE
+   ========================================================= */
+
+async function getMyProfile() {
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "get_my_gls_profile"
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   18. VERIFY USER PROFILE
    ========================================================= */
 
 async function verifyUserProfile(
     session
 ) {
-    if (
-        !session ||
-        !session.user
-    ) {
-        
 
     if (
         !session ||
@@ -481,23 +618,51 @@ async function verifyUserProfile(
     }
 
 
-    const {
-        data: profile,
-        error
-    } =
-        await glsSupabase
-            .from("profiles")
-            .select(
-                "id, full_name, role, is_active"
-            )
-            .eq(
-                "id",
-                session.user.id
-            )
-            .maybeSingle();
+    try {
+
+        const profile =
+            await getMyProfile();
 
 
-    if (error) {
+        if (
+            !profile ||
+            profile.id !==
+                session.user.id ||
+            profile.is_active !==
+                true ||
+            ![
+                "admin",
+                "staff"
+            ].includes(
+                profile.role
+            )
+        ) {
+
+            throw new Error(
+                "GLS account is not authorised."
+            );
+        }
+
+
+        showDashboard(
+            profile
+        );
+
+
+        /*
+         * Dashboard data might fail until
+         * get_gls_dashboard_data() is created.
+         * That should NOT invalidate login.
+         */
+
+        await refreshDashboard();
+
+
+        return true;
+
+    }
+
+    catch (error) {
 
         console.error(
             "GLS profile verification failed:",
@@ -505,10 +670,24 @@ async function verifyUserProfile(
         );
 
 
-        await glsSupabase.auth.signOut({
-            scope:
-                "local"
-        });
+        try {
+
+            await glsSupabase.auth.signOut({
+                scope:
+                    "local"
+            });
+
+        }
+
+        catch (
+            signOutError
+        ) {
+
+            console.warn(
+                "GLS cleanup sign-out failed:",
+                signOutError
+            );
+        }
 
 
         showLoginScreen(
@@ -519,50 +698,55 @@ async function verifyUserProfile(
 
         return false;
     }
-
-
-    if (
-        !profile ||
-        profile.is_active !== true ||
-        ![
-            "admin",
-            "staff"
-        ].includes(profile.role)
-    ) {
-
-        await glsSupabase.auth.signOut({
-            scope:
-                "local"
-        });
-
-
-        showLoginScreen(
-            "This account is not authorised to access the GLS dashboard.",
-            "error"
-        );
-
-
-        return false;
-    }
-
-
-    showDashboard(profile);
-
-
-    await refreshDashboard();
-
-
-    return true;
 }
 
 
 /* =========================================================
-   15. LOGIN
+   19. LOGIN BUSY STATE
    ========================================================= */
 
-async function handleLogin(event) {
+function setLoginBusy(
+    isBusy
+) {
+
+    loginInProgress =
+        isBusy;
+
+
+    loginButton.disabled =
+        isBusy;
+
+
+    loginEmail.disabled =
+        isBusy;
+
+
+    loginPassword.disabled =
+        isBusy;
+
+
+    loginButton.textContent =
+        isBusy
+            ? "Signing In..."
+            : "Sign In";
+}
+
+
+/* =========================================================
+   20. LOGIN
+   ========================================================= */
+
+async function handleLogin(
+    event
+) {
+
+    /*
+     * CRITICAL:
+     * Prevent native form submission.
+     */
 
     event.preventDefault();
+
 
     if (
         loginInProgress ||
@@ -573,7 +757,9 @@ async function handleLogin(event) {
 
 
     const email =
-        loginEmail.value.trim();
+        loginEmail
+            .value
+            .trim();
 
     const password =
         loginPassword.value;
@@ -594,15 +780,9 @@ async function handleLogin(event) {
     }
 
 
-    loginInProgress =
-        true;
-
-
-    loginButton.disabled =
-        true;
-
-    loginButton.textContent =
-        "Signing In...";
+    setLoginBusy(
+        true
+    );
 
 
     setMessage(
@@ -618,7 +798,8 @@ async function handleLogin(event) {
             data,
             error
         } =
-            await glsSupabase.auth
+            await glsSupabase
+                .auth
                 .signInWithPassword({
                     email,
                     password
@@ -626,36 +807,20 @@ async function handleLogin(event) {
 
 
         if (error) {
-
-            console.error(
-                "GLS sign-in failed:",
-                error
-            );
-
-
-            setMessage(
-                loginMessage,
-                "Sign-in failed. Check your email and password.",
-                "error"
-            );
-
-
-            return;
+            throw error;
         }
 
 
         if (
+            !data ||
             !data.session
         ) {
 
-            setMessage(
-                loginMessage,
-                "No active login session was created.",
-                "error"
+            throw new Error(
+                "No active login session was created."
             );
-
-            return;
         }
+
 
         await verifyUserProfile(
             data.session
@@ -666,14 +831,14 @@ async function handleLogin(event) {
     catch (error) {
 
         console.error(
-            "Unexpected GLS login error:",
+            "GLS sign-in failed:",
             error
         );
 
 
         setMessage(
             loginMessage,
-            "Unable to sign in. Please try again.",
+            "Sign-in failed. Check your email and password, then try again.",
             "error"
         );
 
@@ -681,31 +846,29 @@ async function handleLogin(event) {
 
     finally {
 
-        loginInProgress =
-            false;
-
-
-        loginButton.disabled =
-            false;
-
-        loginButton.textContent =
-            "Sign In";
+        setLoginBusy(
+            false
+        );
     }
 }
 
 
 /* =========================================================
-   16. LOGOUT
+   21. LOGOUT
    ========================================================= */
 
 async function handleLogout() {
 
     if (
-        !glsSupabase ||
-        logoutButton.disabled
+        logoutInProgress ||
+        !glsSupabase
     ) {
         return;
     }
+
+
+    logoutInProgress =
+        true;
 
 
     logoutButton.disabled =
@@ -715,15 +878,20 @@ async function handleLogout() {
         "Signing Out...";
 
 
+    stopDashboardRefresh();
+
+
     try {
 
         const {
             error
         } =
-            await glsSupabase.auth.signOut({
-                scope:
-                    "local"
-            });
+            await glsSupabase
+                .auth
+                .signOut({
+                    scope:
+                        "local"
+                });
 
 
         if (error) {
@@ -741,7 +909,7 @@ async function handleLogout() {
     catch (error) {
 
         console.error(
-            "GLS logout failed:",
+            "GLS sign-out failed:",
             error
         );
 
@@ -756,23 +924,22 @@ async function handleLogout() {
         alert(
             "Unable to sign out. Please try again."
         );
+
+    }
+
+    finally {
+
+        logoutInProgress =
+            false;
     }
 }
 
 
 /* =========================================================
-   17. LOAD SECURE DASHBOARD DATA
+   22. GET DASHBOARD DATA
    ========================================================= */
 
 async function getDashboardData() {
-
-    /*
-     * This secure RPC is created in the next
-     * SQL step.
-     *
-     * We deliberately DO NOT query bookings
-     * directly from the browser.
-     */
 
     const {
         data,
@@ -789,6 +956,7 @@ async function getDashboardData() {
 
 
     if (!data) {
+
         throw new Error(
             "No dashboard data returned."
         );
@@ -800,10 +968,12 @@ async function getDashboardData() {
 
 
 /* =========================================================
-   18. SUMMARY CARDS
+   23. SUMMARY
    ========================================================= */
 
-function renderSummary(data) {
+function renderSummary(
+    data
+) {
 
     const summary =
         data.summary || {};
@@ -841,12 +1011,15 @@ function renderSummary(data) {
 
 
 /* =========================================================
-   19. PAYMENT VERIFICATION RENDERING
+   24. PENDING PAYMENT CARDS
    ========================================================= */
 
-function renderPendingPayments(rows) {
+function renderPendingPayments(
+    rows
+) {
 
-    pendingPaymentsList.replaceChildren();
+    pendingPaymentsList
+        .replaceChildren();
 
 
     if (
@@ -854,20 +1027,22 @@ function renderPendingPayments(rows) {
         rows.length === 0
     ) {
 
-        pendingPaymentsList.appendChild(
-            createElement(
-                "div",
-                "empty-state",
-                "No payments are waiting for verification."
-            )
-        );
+        pendingPaymentsList
+            .appendChild(
+                createElement(
+                    "div",
+                    "empty-state",
+                    "No payments are waiting for verification."
+                )
+            );
+
 
         return;
     }
 
 
     rows.forEach(
-        (booking) => {
+        function (booking) {
 
             const card =
                 createElement(
@@ -895,7 +1070,7 @@ function renderPendingPayments(rows) {
                     "strong",
                     "queue-number",
                     booking.queue_no ||
-                        booking.booking_no
+                    booking.booking_no
                 )
             );
 
@@ -928,7 +1103,7 @@ function renderPendingPayments(rows) {
                 );
 
 
-            [
+            const metadata = [
                 booking.customer_name ||
                     "Walk-in customer",
 
@@ -937,9 +1112,11 @@ function renderPendingPayments(rows) {
                 booking.wash_type,
 
                 booking.booking_no
-            ]
-            .forEach(
-                (value) => {
+            ];
+
+
+            metadata.forEach(
+                function (value) {
 
                     meta.appendChild(
                         createElement(
@@ -952,7 +1129,9 @@ function renderPendingPayments(rows) {
             );
 
 
-            main.appendChild(meta);
+            main.appendChild(
+                meta
+            );
 
 
             const side =
@@ -986,20 +1165,30 @@ function renderPendingPayments(rows) {
                 );
 
 
-            methodSelect.setAttribute(
-                "aria-label",
-                `Payment method for ${booking.booking_no}`
-            );
+            const methods = [
+                [
+                    "duitnow",
+                    "DuitNow QR"
+                ],
+                [
+                    "cash",
+                    "Cash"
+                ],
+                [
+                    "transfer",
+                    "Transfer"
+                ],
+                [
+                    "other",
+                    "Other"
+                ]
+            ];
 
 
-            [
-                ["duitnow", "DuitNow QR"],
-                ["cash", "Cash"],
-                ["transfer", "Transfer"],
-                ["other", "Other"]
-            ]
-            .forEach(
-                ([value, text]) => {
+            methods.forEach(
+                function (
+                    [value, text]
+                ) {
 
                     const option =
                         document.createElement(
@@ -1021,11 +1210,6 @@ function renderPendingPayments(rows) {
             );
 
 
-            /*
-             * Pending from customer QR defaults
-             * to DuitNow.
-             */
-
             methodSelect.value =
                 "duitnow";
 
@@ -1044,9 +1228,9 @@ function renderPendingPayments(rows) {
 
             confirmButton.addEventListener(
                 "click",
-                async () => {
+                function () {
 
-                    await confirmPayment(
+                    confirmPayment(
                         booking,
                         methodSelect.value,
                         confirmButton,
@@ -1071,21 +1255,27 @@ function renderPendingPayments(rows) {
             );
 
 
-            card.appendChild(main);
-
-            card.appendChild(side);
-
-
-            pendingPaymentsList.appendChild(
-                card
+            card.appendChild(
+                main
             );
+
+
+            card.appendChild(
+                side
+            );
+
+
+            pendingPaymentsList
+                .appendChild(
+                    card
+                );
         }
     );
 }
 
 
 /* =========================================================
-   20. CONFIRM PAYMENT
+   25. CONFIRM PAYMENT
    ========================================================= */
 
 async function confirmPayment(
@@ -1108,7 +1298,9 @@ async function confirmPayment(
             "duitnow",
             "transfer",
             "other"
-        ].includes(paymentMethod)
+        ].includes(
+            paymentMethod
+        )
     ) {
 
         setMessage(
@@ -1126,8 +1318,7 @@ async function confirmPayment(
             `Confirm ${formatCurrency(
                 booking.amount
             )} payment for ` +
-            `${booking.plate_number} ` +
-            `(${booking.booking_no})?`
+            `${booking.plate_number}?`
         );
 
 
@@ -1188,7 +1379,7 @@ async function confirmPayment(
 
         setMessage(
             paymentMessage,
-            `Payment confirmed for ${booking.booking_no}.`,
+            `Payment confirmed successfully for ${booking.booking_no}.`,
             "success"
         );
 
@@ -1205,55 +1396,9 @@ async function confirmPayment(
         );
 
 
-        let message =
-            "Unable to confirm payment.";
-
-
-        if (
-            error &&
-            typeof error.message === "string"
-        ) {
-
-            const value =
-                error.message
-                    .toLowerCase();
-
-
-            if (
-                value.includes(
-                    "already been confirmed"
-                )
-            ) {
-
-                message =
-                    "This payment has already been confirmed.";
-            }
-
-            else if (
-                value.includes(
-                    "not authorised"
-                )
-            ) {
-
-                message =
-                    "Your account is not authorised to confirm payment.";
-            }
-
-            else if (
-                value.includes(
-                    "inactive"
-                )
-            ) {
-
-                message =
-                    "Your GLS staff account is inactive.";
-            }
-        }
-
-
         setMessage(
             paymentMessage,
-            message,
+            "Unable to confirm payment. Please refresh and verify the booking status.",
             "error"
         );
 
@@ -1264,11 +1409,6 @@ async function confirmPayment(
         paymentConfirmationInProgress =
             false;
 
-
-        /*
-         * Card may already have disappeared after
-         * successful dashboard refresh.
-         */
 
         if (
             document.body.contains(
@@ -1298,10 +1438,12 @@ async function confirmPayment(
 
 
 /* =========================================================
-   21. QUEUE FILTERING
+   26. FILTER QUEUE
    ========================================================= */
 
-function getFilteredQueue(rows) {
+function getFilteredQueue(
+    rows
+) {
 
     if (!Array.isArray(rows)) {
         return [];
@@ -1314,36 +1456,46 @@ function getFilteredQueue(rows) {
     ) {
 
         return rows.filter(
-            (row) =>
-                [
+            function (row) {
+
+                return [
                     "waiting",
                     "washing"
                 ].includes(
                     row.queue_status
-                )
+                );
+            }
         );
     }
 
 
     return rows.filter(
-        (row) =>
-            row.queue_status ===
-            activeQueueFilter
+        function (row) {
+
+            return (
+                row.queue_status ===
+                activeQueueFilter
+            );
+        }
     );
 }
 
 
 /* =========================================================
-   22. QUEUE RENDERING
+   27. RENDER QUEUE
    ========================================================= */
 
-function renderQueue(rows) {
+function renderQueue(
+    rows
+) {
 
     queueList.replaceChildren();
 
 
     const filtered =
-        getFilteredQueue(rows);
+        getFilteredQueue(
+            rows
+        );
 
 
     if (
@@ -1358,12 +1510,13 @@ function renderQueue(rows) {
             )
         );
 
+
         return;
     }
 
 
     filtered.forEach(
-        (booking) => {
+        function (booking) {
 
             const card =
                 createElement(
@@ -1391,7 +1544,7 @@ function renderQueue(rows) {
                     "strong",
                     "queue-number",
                     booking.queue_no ||
-                        "BOOKING"
+                    "BOOKING"
                 )
             );
 
@@ -1424,20 +1577,20 @@ function renderQueue(rows) {
                 );
 
 
-            [
+            const values = [
                 booking.vehicle_type,
                 booking.wash_type,
                 formatCurrency(
                     booking.amount
                 ),
-                booking.payment_status ===
-                    "paid"
-                    ? "PAID"
-                    : booking.payment_status
-                        .toUpperCase()
-            ]
-            .forEach(
-                (value) => {
+                String(
+                    booking.payment_status
+                ).toUpperCase()
+            ];
+
+
+            values.forEach(
+                function (value) {
 
                     meta.appendChild(
                         createElement(
@@ -1450,7 +1603,9 @@ function renderQueue(rows) {
             );
 
 
-            main.appendChild(meta);
+            main.appendChild(
+                meta
+            );
 
 
             const side =
@@ -1471,12 +1626,6 @@ function renderQueue(rows) {
             );
 
 
-            /*
-             * Queue action buttons will become
-             * operational after secure queue RPC
-             * functions are added.
-             */
-
             const actions =
                 createElement(
                     "div",
@@ -1489,7 +1638,7 @@ function renderQueue(rows) {
                 "waiting"
             ) {
 
-                const button =
+                const startButton =
                     createElement(
                         "button",
                         "start-button",
@@ -1497,18 +1646,18 @@ function renderQueue(rows) {
                     );
 
 
-                button.type =
+                startButton.type =
                     "button";
 
-                button.disabled =
+                startButton.disabled =
                     true;
 
-                button.title =
-                    "Queue action backend will be enabled next.";
+                startButton.title =
+                    "Queue actions will be enabled after the secure queue RPC is created.";
 
 
                 actions.appendChild(
-                    button
+                    startButton
                 );
             }
 
@@ -1518,7 +1667,7 @@ function renderQueue(rows) {
                 "washing"
             ) {
 
-                const button =
+                const completeButton =
                     createElement(
                         "button",
                         "complete-button",
@@ -1526,15 +1675,15 @@ function renderQueue(rows) {
                     );
 
 
-                button.type =
+                completeButton.type =
                     "button";
 
-                button.disabled =
+                completeButton.disabled =
                     true;
 
 
                 actions.appendChild(
-                    button
+                    completeButton
                 );
             }
 
@@ -1544,9 +1693,14 @@ function renderQueue(rows) {
             );
 
 
-            card.appendChild(main);
+            card.appendChild(
+                main
+            );
 
-            card.appendChild(side);
+
+            card.appendChild(
+                side
+            );
 
 
             queueList.appendChild(
@@ -1558,12 +1712,15 @@ function renderQueue(rows) {
 
 
 /* =========================================================
-   23. RECENT BOOKINGS
+   28. RECENT BOOKINGS
    ========================================================= */
 
-function renderRecentBookings(rows) {
+function renderRecentBookings(
+    rows
+) {
 
-    recentBookingsList.replaceChildren();
+    recentBookingsList
+        .replaceChildren();
 
 
     if (
@@ -1571,20 +1728,22 @@ function renderRecentBookings(rows) {
         rows.length === 0
     ) {
 
-        recentBookingsList.appendChild(
-            createElement(
-                "div",
-                "empty-state",
-                "No recent bookings."
-            )
-        );
+        recentBookingsList
+            .appendChild(
+                createElement(
+                    "div",
+                    "empty-state",
+                    "No recent bookings."
+                )
+            );
+
 
         return;
     }
 
 
     rows.forEach(
-        (booking) => {
+        function (booking) {
 
             const card =
                 createElement(
@@ -1612,7 +1771,7 @@ function renderRecentBookings(rows) {
                     "strong",
                     "queue-number",
                     booking.queue_no ||
-                        "BOOKING"
+                    "BOOKING"
                 )
             );
 
@@ -1645,16 +1804,18 @@ function renderRecentBookings(rows) {
                 );
 
 
-            [
+            const values = [
                 booking.booking_no,
                 booking.vehicle_type,
                 booking.wash_type,
                 formatMalaysiaDateTime(
                     booking.created_at
                 )
-            ]
-            .forEach(
-                (value) => {
+            ];
+
+
+            values.forEach(
+                function (value) {
 
                     meta.appendChild(
                         createElement(
@@ -1667,10 +1828,12 @@ function renderRecentBookings(rows) {
             );
 
 
-            main.appendChild(meta);
+            main.appendChild(
+                meta
+            );
 
 
-            const side =
+            const amount =
                 createElement(
                     "div",
                     "operation-amount",
@@ -1680,27 +1843,81 @@ function renderRecentBookings(rows) {
                 );
 
 
-            card.appendChild(main);
-
-            card.appendChild(side);
-
-
-            recentBookingsList.appendChild(
-                card
+            card.appendChild(
+                main
             );
+
+
+            card.appendChild(
+                amount
+            );
+
+
+            recentBookingsList
+                .appendChild(
+                    card
+                );
         }
     );
 }
 
 
 /* =========================================================
-   24. REFRESH DASHBOARD
+   29. DASHBOARD DATA ERROR
+   ========================================================= */
+
+function showDashboardDataError(
+    error
+) {
+
+    console.error(
+        "GLS dashboard refresh failed:",
+        error
+    );
+
+
+    let message =
+        "Unable to refresh dashboard data.";
+
+
+    if (
+        error &&
+        typeof error.message ===
+            "string" &&
+        error.message.includes(
+            "get_gls_dashboard_data"
+        )
+    ) {
+
+        message =
+            "Dashboard data service is not configured yet.";
+    }
+
+
+    setMessage(
+        paymentMessage,
+        message,
+        "error"
+    );
+
+
+    setMessage(
+        queueMessage,
+        message,
+        "error"
+    );
+}
+
+
+/* =========================================================
+   30. REFRESH DASHBOARD
    ========================================================= */
 
 async function refreshDashboard() {
 
     if (
         !currentProfile ||
+        !dashboardScreen ||
         dashboardScreen.hidden ||
         dashboardLoading
     ) {
@@ -1728,6 +1945,10 @@ async function refreshDashboard() {
             await getDashboardData();
 
 
+        latestDashboardData =
+            data;
+
+
         renderSummary(
             data
         );
@@ -1752,6 +1973,12 @@ async function refreshDashboard() {
 
 
         setMessage(
+            paymentMessage,
+            ""
+        );
+
+
+        setMessage(
             queueMessage,
             ""
         );
@@ -1760,42 +1987,8 @@ async function refreshDashboard() {
 
     catch (error) {
 
-        console.error(
-            "GLS dashboard refresh failed:",
+        showDashboardDataError(
             error
-        );
-
-
-        /*
-         * This message is expected until
-         * get_gls_dashboard_data RPC is created.
-         */
-
-        const message =
-            error &&
-            typeof error.message === "string" &&
-            error.message.includes(
-                "get_gls_dashboard_data"
-            )
-                ? (
-                    "Dashboard data RPC is not configured yet."
-                )
-                : (
-                    "Unable to refresh dashboard data."
-                );
-
-
-        setMessage(
-            queueMessage,
-            message,
-            "error"
-        );
-
-
-        setMessage(
-            paymentMessage,
-            message,
-            "error"
         );
 
     }
@@ -1816,10 +2009,12 @@ async function refreshDashboard() {
 
 
 /* =========================================================
-   25. QUEUE FILTER BUTTONS
+   31. QUEUE FILTER
    ========================================================= */
 
-function handleQueueFilter(event) {
+function handleQueueFilter(
+    event
+) {
 
     const button =
         event.currentTarget;
@@ -1831,7 +2026,7 @@ function handleQueueFilter(event) {
 
 
     queueFilterButtons.forEach(
-        (item) => {
+        function (item) {
 
             item.classList.toggle(
                 "active",
@@ -1841,59 +2036,140 @@ function handleQueueFilter(event) {
     );
 
 
-    /*
-     * Refresh current dashboard payload.
-     * Secure RPC remains the data source.
-     */
-
-    refreshDashboard();
-}
-
-
-/* =========================================================
-   26. AUTO REFRESH
-   ========================================================= */
-
-function startDashboardRefresh() {
-
-    stopDashboardRefresh();
-
-
-    dashboardRefreshTimer =
-        window.setInterval(
-            () => {
-                refreshDashboard();
-            },
-            20000
-        );
-}
-
-
-function stopDashboardRefresh() {
-
     if (
-        dashboardRefreshTimer !==
-        null
+        latestDashboardData
     ) {
 
-        window.clearInterval(
-            dashboardRefreshTimer
+        renderQueue(
+            latestDashboardData.queue ||
+            []
         );
-
-
-        dashboardRefreshTimer =
-            null;
     }
 }
 
 
 /* =========================================================
-   27. REQUIRED ELEMENTS
+   32. RESTORE SESSION
+   ========================================================= */
+
+async function restoreSession() {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await glsSupabase
+                .auth
+                .getSession();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (
+            data &&
+            data.session
+        ) {
+
+            await verifyUserProfile(
+                data.session
+            );
+
+        }
+
+        else {
+
+            showLoginScreen();
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "GLS session restore failed:",
+            error
+        );
+
+
+        showLoginScreen(
+            "Unable to restore your session. Please sign in again.",
+            "error"
+        );
+    }
+}
+
+
+/* =========================================================
+   33. REGISTER EVENTS
+   ========================================================= */
+
+function registerEvents() {
+
+    loginForm.addEventListener(
+        "submit",
+        handleLogin
+    );
+
+
+    logoutButton.addEventListener(
+        "click",
+        handleLogout
+    );
+
+
+    refreshPaymentsButton
+        .addEventListener(
+            "click",
+            refreshDashboard
+        );
+
+
+    refreshQueueButton
+        .addEventListener(
+            "click",
+            refreshDashboard
+        );
+
+
+    queueFilterButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                handleQueueFilter
+            );
+        }
+    );
+
+
+    document.addEventListener(
+        "visibilitychange",
+        function () {
+
+            if (
+                !document.hidden &&
+                currentProfile
+            ) {
+
+                refreshDashboard();
+            }
+        }
+    );
+}
+
+
+/* =========================================================
+   34. REQUIRED ELEMENT CHECK
    ========================================================= */
 
 function requiredElementsExist() {
 
-    const elements = [
+    const required = [
         loginScreen,
         loginForm,
         loginEmail,
@@ -1926,73 +2202,17 @@ function requiredElementsExist() {
     ];
 
 
-    return !elements.some(
-        (element) => !element
-    );
-}
+    return !required.some(
+        function (element) {
 
-
-/* =========================================================
-   28. EVENT LISTENERS
-   ========================================================= */
-
-function registerEvents() {
-
-    loginForm.addEventListener(
-        "submit",
-        handleLogin
-    );
-
-
-    logoutButton.addEventListener(
-        "click",
-        handleLogout
-    );
-
-
-    refreshPaymentsButton
-        .addEventListener(
-            "click",
-            refreshDashboard
-        );
-
-
-    refreshQueueButton
-        .addEventListener(
-            "click",
-            refreshDashboard
-        );
-
-
-    queueFilterButtons.forEach(
-        (button) => {
-
-            button.addEventListener(
-                "click",
-                handleQueueFilter
-            );
-        }
-    );
-
-
-    document.addEventListener(
-        "visibilitychange",
-        () => {
-
-            if (
-                !document.hidden &&
-                currentProfile
-            ) {
-
-                refreshDashboard();
-            }
+            return !element;
         }
     );
 }
 
 
 /* =========================================================
-   29. SUPABASE INITIALISATION
+   35. SUPABASE INITIALISATION
    ========================================================= */
 
 function initialiseSupabase() {
@@ -2033,88 +2253,17 @@ function initialiseSupabase() {
 
 
 /* =========================================================
-   30. AUTH STATE
-   ========================================================= */
-
-function watchAuthentication() {
-
-    glsSupabase.auth
-        .onAuthStateChange(
-            (event) => {
-
-                if (
-                    event === "SIGNED_OUT"
-                ) {
-
-                    showLoginScreen();
-                }
-            }
-        );
-}
-
-
-/* =========================================================
-   31. RESTORE SESSION
-   ========================================================= */
-
-async function restoreSession() {
-
-    try {
-
-        const {
-            data,
-            error
-        } =
-            await glsSupabase.auth
-                .getSession();
-
-
-        if (error) {
-            throw error;
-        }
-
-
-        if (
-            data &&
-            data.session
-        ) {
-
-            await verifyUserProfile(
-                data.session
-            );
-
-        }
-
-        else {
-
-            showLoginScreen();
-        }
-
-    }
-
-    catch (error) {
-
-        console.error(
-            "GLS session restoration failed:",
-            error
-        );
-
-
-        showLoginScreen(
-            "Unable to restore your session. Please sign in again.",
-            "error"
-        );
-    }
-}
-
-
-/* =========================================================
-   32. INITIALISE APPLICATION
+   36. INITIALISE DASHBOARD
    ========================================================= */
 
 async function initialiseDashboard() {
 
-    if (!requiredElementsExist()) {
+    updateCurrentDate();
+
+
+    if (
+        !requiredElementsExist()
+    ) {
 
         console.error(
             "GLS Dashboard: required HTML elements are missing."
@@ -2122,9 +2271,6 @@ async function initialiseDashboard() {
 
         return;
     }
-
-
-    updateCurrentDate();
 
 
     try {
@@ -2155,9 +2301,14 @@ async function initialiseDashboard() {
     }
 
 
-    registerEvents();
+    /*
+     * No onAuthStateChange listener here.
+     *
+     * Login, restore, and logout are handled
+     * explicitly to keep the flow predictable.
+     */
 
-    watchAuthentication();
+    registerEvents();
 
 
     await restoreSession();
@@ -2170,14 +2321,22 @@ async function initialiseDashboard() {
 
 
 /* =========================================================
-   33. START
+   37. START APPLICATION
    ========================================================= */
 
-if (document.readyState === "loading") {
+if (
+    document.readyState ===
+    "loading"
+) {
+
     document.addEventListener(
         "DOMContentLoaded",
         initialiseDashboard
     );
-} else {
+
+}
+
+else {
+
     initialiseDashboard();
 }
