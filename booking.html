@@ -20,35 +20,35 @@
         <form id="booking-form">
 
             <label>Phone Number *</label>
-            <input type="tel" id="phoneNumber" required>
+            <input type="tel" id="phoneNumber" placeholder="0123456789" required>
 
             <label>Plate Number *</label>
-            <input type="text" id="plateNumber" required>
+            <input type="text" id="plateNumber" placeholder="VBL1234" required>
 
             <label>Customer Name</label>
-            <input type="text" id="customerName">
+            <input type="text" id="customerName" placeholder="Optional">
 
             <label>Vehicle Type</label>
             <select id="vehicleType" required>
                 <option value="">Select Vehicle</option>
-                <option>Small Car</option>
-                <option>Sedan</option>
-                <option>SUV</option>
-                <option>MPV</option>
-                <option>Van</option>
+                <option value="Small Car">Small Car</option>
+                <option value="Sedan">Sedan</option>
+                <option value="SUV">SUV</option>
+                <option value="MPV">MPV</option>
+                <option value="Van">Van</option>
             </select>
 
             <label>Wash Type</label>
             <select id="washType" required>
                 <option value="">Select Wash Type</option>
-                <option>Normal Wash</option>
-                <option>Nano Wash</option>
+                <option value="Normal Wash">Normal Wash</option>
+                <option value="Nano Wash">Nano Wash</option>
             </select>
 
             <label>Booking Type</label>
             <select id="bookingType">
-                <option>Walk-In</option>
-                <option>Future Booking</option>
+                <option value="Walk-In">Walk-In</option>
+                <option value="Future Booking">Future Booking</option>
             </select>
 
             <div class="total-box">
