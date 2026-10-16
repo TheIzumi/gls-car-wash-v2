@@ -1,6 +1,6 @@
 /* =========================================================
    GLS CAR WASH V2
-   Customer QR Booking System
+   Customer Booking + Payment Flow
    File: js/booking.js
    ========================================================= */
 
@@ -21,13 +21,8 @@ let glsSupabase = null;
 
 
 /* =========================================================
-   2. PRICING PREVIEW
-
-   IMPORTANT:
-   These prices are only used for customer-facing preview.
-
-   The official amount is recalculated by the Supabase
-   create_gls_booking() database function.
+   2. PRICE PREVIEW
+   Official price is recalculated by the database RPC.
    ========================================================= */
 
 const NORMAL_WASH_PRICES = {
@@ -46,13 +41,18 @@ const NANO_WASH_EXTRA = 15;
    ========================================================= */
 
 let bookingInProgress = false;
+let paymentSubmissionInProgress = false;
 
 let latestBooking = null;
+let latestSubmittedBooking = null;
 
 
 /* =========================================================
    4. BOOKING FORM ELEMENTS
    ========================================================= */
+
+const bookingFormSection =
+    document.getElementById("bookingFormSection");
 
 const bookingForm =
     document.getElementById("booking-form");
@@ -95,67 +95,119 @@ const continueButton =
 
 
 /* =========================================================
-   5. CONFIRMATION UI ELEMENTS
+   5. CONFIRMATION ELEMENTS
    ========================================================= */
 
 const bookingConfirmation =
-    document.getElementById(
-        "bookingConfirmation"
-    );
+    document.getElementById("bookingConfirmation");
+
+const confirmationHeading =
+    document.getElementById("confirmationHeading");
+
+const confirmationDescription =
+    document.getElementById("confirmationDescription");
 
 const confirmationQueueSection =
-    document.getElementById(
-        "confirmationQueueSection"
-    );
+    document.getElementById("confirmationQueueSection");
 
 const confirmationQueueNo =
-    document.getElementById(
-        "confirmationQueueNo"
-    );
+    document.getElementById("confirmationQueueNo");
 
 const confirmationBookingNo =
-    document.getElementById(
-        "confirmationBookingNo"
-    );
+    document.getElementById("confirmationBookingNo");
 
 const confirmationPlate =
-    document.getElementById(
-        "confirmationPlate"
-    );
+    document.getElementById("confirmationPlate");
 
 const confirmationVehicle =
-    document.getElementById(
-        "confirmationVehicle"
-    );
+    document.getElementById("confirmationVehicle");
 
 const confirmationService =
-    document.getElementById(
-        "confirmationService"
-    );
+    document.getElementById("confirmationService");
 
 const confirmationVisit =
-    document.getElementById(
-        "confirmationVisit"
-    );
+    document.getElementById("confirmationVisit");
 
 const confirmationAmount =
-    document.getElementById(
-        "confirmationAmount"
-    );
+    document.getElementById("confirmationAmount");
 
 const paymentButton =
-    document.getElementById(
-        "paymentButton"
-    );
+    document.getElementById("paymentButton");
 
 const newBookingButton =
-    document.getElementById(
-        "newBookingButton"
-    );
+    document.getElementById("newBookingButton");
 
 
 /* =========================================================
-   6. CURRENCY FORMATTER
+   6. PAYMENT METHOD ELEMENTS
+   ========================================================= */
+
+const paymentSection =
+    document.getElementById("paymentSection");
+
+const paymentBackButton =
+    document.getElementById("paymentBackButton");
+
+const paymentAmount =
+    document.getElementById("paymentAmount");
+
+const cashPaymentButton =
+    document.getElementById("cashPaymentButton");
+
+const duitNowPaymentButton =
+    document.getElementById("duitNowPaymentButton");
+
+
+/* =========================================================
+   7. CASH ELEMENTS
+   ========================================================= */
+
+const cashPaymentSection =
+    document.getElementById("cashPaymentSection");
+
+const cashBackButton =
+    document.getElementById("cashBackButton");
+
+const cashPaymentAmount =
+    document.getElementById("cashPaymentAmount");
+
+
+/* =========================================================
+   8. DUITNOW ELEMENTS
+   ========================================================= */
+
+const duitNowPaymentSection =
+    document.getElementById("duitNowPaymentSection");
+
+const duitNowBackButton =
+    document.getElementById("duitNowBackButton");
+
+const duitNowPaymentAmount =
+    document.getElementById("duitNowPaymentAmount");
+
+const paymentSubmittedButton =
+    document.getElementById("paymentSubmittedButton");
+
+
+/* =========================================================
+   9. PAYMENT PENDING ELEMENTS
+   ========================================================= */
+
+const paymentPendingSection =
+    document.getElementById("paymentPendingSection");
+
+const pendingBookingNo =
+    document.getElementById("pendingBookingNo");
+
+const pendingPlate =
+    document.getElementById("pendingPlate");
+
+const pendingAmount =
+    document.getElementById("pendingAmount");
+
+
+/* =========================================================
+   10. CURRENCY
    ========================================================= */
 
 const currencyFormatter =
@@ -171,7 +223,6 @@ const currencyFormatter =
 
 
 function formatCurrency(value) {
-
     return currencyFormatter.format(
         Number(value) || 0
     );
@@ -179,14 +230,44 @@ function formatCurrency(value) {
 
 
 /* =========================================================
-   7. BOOKING MESSAGE
+   11. PAGE STATE
+   ========================================================= */
+
+const applicationSections = [
+    bookingFormSection,
+    bookingConfirmation,
+    paymentSection,
+    cashPaymentSection,
+    duitNowPaymentSection,
+    paymentPendingSection
+];
+
+
+function showOnlySection(section) {
+    applicationSections.forEach((item) => {
+        if (item) {
+            item.hidden = item !== section;
+        }
+    });
+
+
+    if (section) {
+        section.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+    }
+}
+
+
+/* =========================================================
+   12. MESSAGE
    ========================================================= */
 
 function setBookingMessage(
     message,
     type = ""
 ) {
-
     if (!bookingMessage) {
         return;
     }
@@ -206,20 +287,10 @@ function setBookingMessage(
 
 
 /* =========================================================
-   8. PRICE CALCULATION
+   13. PRICE PREVIEW
    ========================================================= */
 
 function calculatePrice() {
-
-    if (
-        !vehicleTypeInput ||
-        !washTypeInput ||
-        !totalAmountDisplay
-    ) {
-        return 0;
-    }
-
-
     const vehicleType =
         vehicleTypeInput.value;
 
@@ -232,7 +303,6 @@ function calculatePrice() {
         !washType ||
         NORMAL_WASH_PRICES[vehicleType] === undefined
     ) {
-
         totalAmountDisplay.textContent =
             formatCurrency(0);
 
@@ -258,49 +328,29 @@ function calculatePrice() {
 
 
 /* =========================================================
-   9. BOOKING TYPE
+   14. VISIT TYPE
    ========================================================= */
 
 function updateBookingType() {
-
-    if (
-        !bookingTypeInput ||
-        !futureBookingFields
-    ) {
-        return;
-    }
-
-
-    const isFutureBooking =
+    const futureBooking =
         bookingTypeInput.value ===
         "Future Booking";
 
 
     futureBookingFields.hidden =
-        !isFutureBooking;
+        !futureBooking;
 
 
-    if (bookingDateInput) {
-        bookingDateInput.required =
-            isFutureBooking;
-    }
+    bookingDateInput.required =
+        futureBooking;
+
+    bookingTimeInput.required =
+        futureBooking;
 
 
-    if (bookingTimeInput) {
-        bookingTimeInput.required =
-            isFutureBooking;
-    }
-
-
-    if (!isFutureBooking) {
-
-        if (bookingDateInput) {
-            bookingDateInput.value = "";
-        }
-
-        if (bookingTimeInput) {
-            bookingTimeInput.value = "";
-        }
+    if (!futureBooking) {
+        bookingDateInput.value = "";
+        bookingTimeInput.value = "";
     }
 
 
@@ -309,52 +359,32 @@ function updateBookingType() {
 
 
 /* =========================================================
-   10. MALAYSIA DATE
+   15. MALAYSIA DATE
    ========================================================= */
 
 function getMalaysiaToday() {
-
-    const formatter =
+    const parts =
         new Intl.DateTimeFormat(
             "en-CA",
             {
-                timeZone:
-                    "Asia/Kuala_Lumpur",
-
-                year:
-                    "numeric",
-
-                month:
-                    "2-digit",
-
-                day:
-                    "2-digit"
+                timeZone: "Asia/Kuala_Lumpur",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
             }
-        );
-
-
-    const parts =
-        formatter.formatToParts(
-            new Date()
-        );
+        )
+        .formatToParts(new Date());
 
 
     const values = {};
 
 
-    parts.forEach(
-        (part) => {
-
-            if (
-                part.type !==
-                "literal"
-            ) {
-
-                values[part.type] =
-                    part.value;
-            }
+    parts.forEach((part) => {
+        if (part.type !== "literal") {
+            values[part.type] =
+                part.value;
         }
-    );
+    });
 
 
     return (
@@ -365,50 +395,31 @@ function getMalaysiaToday() {
 }
 
 
-/* =========================================================
-   11. MINIMUM BOOKING DATE
-   ========================================================= */
-
 function setMinimumBookingDate() {
-
-    if (!bookingDateInput) {
-        return;
-    }
-
-
     bookingDateInput.min =
         getMalaysiaToday();
 }
 
 
 /* =========================================================
-   12. NORMALISE PLATE NUMBER
+   16. INPUT NORMALISATION
    ========================================================= */
 
 function normalisePlateNumber() {
-
-    if (!plateNumberInput) {
-        return;
-    }
-
-
     let value =
-        plateNumberInput.value
-            .toUpperCase();
+        plateNumberInput.value.toUpperCase();
 
 
-    value =
-        value.replace(
-            /[^A-Z0-9 -]/g,
-            ""
-        );
+    value = value.replace(
+        /[^A-Z0-9 -]/g,
+        ""
+    );
 
 
-    value =
-        value.replace(
-            /\s+/g,
-            " "
-        );
+    value = value.replace(
+        /\s+/g,
+        " "
+    );
 
 
     plateNumberInput.value =
@@ -416,40 +427,21 @@ function normalisePlateNumber() {
 }
 
 
-/* =========================================================
-   13. NORMALISE PHONE NUMBER
-   ========================================================= */
-
 function normalisePhoneNumber() {
-
-    if (!phoneNumberInput) {
-        return;
-    }
-
-
     let value =
         phoneNumberInput.value;
 
 
-    value =
-        value.replace(
-            /[^\d+]/g,
-            ""
-        );
+    value = value.replace(
+        /[^\d+]/g,
+        ""
+    );
 
-
-    /*
-     * Allow + only at the beginning.
-     */
 
     if (value.includes("+")) {
-
         value =
             "+" +
-            value.replace(
-                /\+/g,
-                ""
-            );
+            value.replace(/\+/g, "");
     }
 
 
@@ -459,11 +451,10 @@ function normalisePhoneNumber() {
 
 
 /* =========================================================
-   14. VALIDATION
+   17. VALIDATION
    ========================================================= */
 
 function validateBooking() {
-
     const phone =
         phoneNumberInput.value.trim();
 
@@ -480,105 +471,59 @@ function validateBooking() {
         bookingTypeInput.value;
 
 
-    /* PHONE */
-
     if (!phone) {
-
         setBookingMessage(
             "Please enter your phone number.",
             "error"
         );
 
         phoneNumberInput.focus();
-
         return false;
     }
 
 
     const phoneDigits =
-        phone.replace(
-            /\D/g,
-            ""
-        );
+        phone.replace(/\D/g, "");
 
 
     if (
         phoneDigits.length < 9 ||
         phoneDigits.length > 15
     ) {
-
         setBookingMessage(
             "Please enter a valid phone number.",
             "error"
         );
 
         phoneNumberInput.focus();
-
         return false;
     }
 
 
-    /* PLATE */
-
-    if (!plate) {
-
+    if (!plate || plate.length < 2) {
         setBookingMessage(
-            "Please enter your vehicle plate number.",
+            "Please enter a valid vehicle plate number.",
             "error"
         );
 
         plateNumberInput.focus();
-
         return false;
     }
 
 
-    if (plate.length < 2) {
-
-        setBookingMessage(
-            "Please check your vehicle plate number.",
-            "error"
-        );
-
-        plateNumberInput.focus();
-
-        return false;
-    }
-
-
-    /* VEHICLE */
-
-    if (!vehicleType) {
-
+    if (
+        NORMAL_WASH_PRICES[vehicleType]
+        === undefined
+    ) {
         setBookingMessage(
             "Please select your vehicle type.",
             "error"
         );
 
         vehicleTypeInput.focus();
-
         return false;
     }
 
-
-    if (
-        NORMAL_WASH_PRICES[
-            vehicleType
-        ] === undefined
-    ) {
-
-        setBookingMessage(
-            "The selected vehicle type is invalid.",
-            "error"
-        );
-
-        vehicleTypeInput.focus();
-
-        return false;
-    }
-
-
-    /* WASH */
 
     if (
         ![
@@ -586,19 +531,15 @@ function validateBooking() {
             "Nano Wash"
         ].includes(washType)
     ) {
-
         setBookingMessage(
             "Please select your wash type.",
             "error"
         );
 
         washTypeInput.focus();
-
         return false;
     }
 
-
-    /* BOOKING TYPE */
 
     if (
         ![
@@ -606,47 +547,38 @@ function validateBooking() {
             "Future Booking"
         ].includes(bookingType)
     ) {
-
         setBookingMessage(
             "Please select your visit type.",
             "error"
         );
 
         bookingTypeInput.focus();
-
         return false;
     }
 
-
-    /* FUTURE BOOKING */
 
     if (
         bookingType ===
         "Future Booking"
     ) {
-
         if (!bookingDateInput.value) {
-
             setBookingMessage(
                 "Please select your booking date.",
                 "error"
             );
 
             bookingDateInput.focus();
-
             return false;
         }
 
 
         if (!bookingTimeInput.value) {
-
             setBookingMessage(
                 "Please select your booking time.",
                 "error"
             );
 
             bookingTimeInput.focus();
-
             return false;
         }
 
@@ -661,29 +593,14 @@ function validateBooking() {
         if (
             Number.isNaN(
                 selectedDateTime.getTime()
-            )
-        ) {
-
-            setBookingMessage(
-                "Please select a valid booking date and time.",
-                "error"
-            );
-
-            return false;
-        }
-
-
-        if (
+            ) ||
             selectedDateTime.getTime() <=
-            Date.now()
+                Date.now()
         ) {
-
             setBookingMessage(
-                "Please select a future booking time.",
+                "Please select a future booking date and time.",
                 "error"
             );
-
-            bookingTimeInput.focus();
 
             return false;
         }
@@ -695,33 +612,26 @@ function validateBooking() {
 
 
 /* =========================================================
-   15. BUILD RPC PARAMETERS
+   18. RPC PARAMETERS
    ========================================================= */
 
 function buildBookingParameters() {
-
     const futureBooking =
         bookingTypeInput.value ===
         "Future Booking";
 
 
     return {
-
         p_phone_number:
-            phoneNumberInput
-                .value
-                .trim(),
+            phoneNumberInput.value.trim(),
 
         p_plate_number:
-            plateNumberInput
-                .value
+            plateNumberInput.value
                 .trim()
                 .toUpperCase(),
 
         p_customer_name:
-            customerNameInput
-                .value
-                .trim(),
+            customerNameInput.value.trim(),
 
         p_vehicle_type:
             vehicleTypeInput.value,
@@ -746,12 +656,12 @@ function buildBookingParameters() {
 
 
 /* =========================================================
-   16. BUSY STATE
+   19. BOOKING BUSY STATE
    ========================================================= */
 
 function setBookingBusy(isBusy) {
-
-    bookingInProgress = isBusy;
+    bookingInProgress =
+        isBusy;
 
 
     const controls = [
@@ -766,44 +676,27 @@ function setBookingBusy(isBusy) {
     ];
 
 
-    controls.forEach(
-        (control) => {
-
-            if (control) {
-                control.disabled =
-                    isBusy;
-            }
-        }
-    );
-
-
-    if (continueButton) {
-
-        continueButton.disabled =
+    controls.forEach((control) => {
+        control.disabled =
             isBusy;
+    });
 
-        continueButton.textContent =
-            isBusy
-                ? "Creating Booking..."
-                : "Continue";
-    }
+
+    continueButton.disabled =
+        isBusy;
+
+    continueButton.textContent =
+        isBusy
+            ? "Creating Booking..."
+            : "Continue";
 }
 
 
 /* =========================================================
-   17. DATABASE SUBMISSION
+   20. CREATE BOOKING
    ========================================================= */
 
 async function createBooking() {
-
-    if (!glsSupabase) {
-
-        throw new Error(
-            "Booking service is unavailable."
-        );
-    }
-
-
     const parameters =
         buildBookingParameters();
 
@@ -811,11 +704,10 @@ async function createBooking() {
     const {
         data,
         error
-    } =
-        await glsSupabase.rpc(
-            "create_gls_booking",
-            parameters
-        );
+    } = await glsSupabase.rpc(
+        "create_gls_booking",
+        parameters
+    );
 
 
     if (error) {
@@ -824,7 +716,6 @@ async function createBooking() {
 
 
     if (!data) {
-
         throw new Error(
             "No booking confirmation was returned."
         );
@@ -836,201 +727,91 @@ async function createBooking() {
 
 
 /* =========================================================
-   18. BOOKING CONFIRMATION
+   21. SHOW BOOKING CONFIRMATION
    ========================================================= */
 
 function showBookingConfirmation(
-    data,
-    submittedData
+    booking,
+    submittedBooking
 ) {
+    latestBooking =
+        booking;
 
-    latestBooking = data;
-
-
-    /*
-     * Hide form and show confirmation.
-     */
-
-    bookingForm.hidden = true;
-
-    bookingConfirmation.hidden =
-        false;
+    latestSubmittedBooking =
+        submittedBooking;
 
 
     confirmationBookingNo.textContent =
-        data.booking_no || "-";
-
+        booking.booking_no || "-";
 
     confirmationPlate.textContent =
-        data.plate_number || "-";
-
+        booking.plate_number || "-";
 
     confirmationVehicle.textContent =
-        data.vehicle_type || "-";
-
+        booking.vehicle_type || "-";
 
     confirmationService.textContent =
-        data.wash_type || "-";
-
+        booking.wash_type || "-";
 
     confirmationAmount.textContent =
         formatCurrency(
-            data.amount
+            booking.amount
         );
 
 
-    /* WALK-IN */
-
     if (
-        data.booking_type ===
+        booking.booking_type ===
         "Walk-In"
     ) {
+        confirmationHeading.textContent =
+            "You're in the queue!";
+
+        confirmationDescription.textContent =
+            "Please keep this screen for reference.";
 
         confirmationQueueSection.hidden =
             false;
 
-
         confirmationQueueNo.textContent =
-            data.queue_no || "-";
-
+            booking.queue_no || "-";
 
         confirmationVisit.textContent =
             "Walk-In / Wash Now";
     }
 
-
-    /* FUTURE BOOKING */
-
     else {
+        confirmationHeading.textContent =
+            "Booking Confirmed!";
+
+        confirmationDescription.textContent =
+            "Your future booking has been registered.";
 
         confirmationQueueSection.hidden =
             true;
 
-
-        if (
-            submittedData.bookingDate &&
-            submittedData.bookingTime
-        ) {
-
-            confirmationVisit.textContent =
-                `${submittedData.bookingDate}` +
-                ` · ` +
-                `${submittedData.bookingTime}`;
-        }
-
-        else {
-
-            confirmationVisit.textContent =
-                "Future Booking";
-        }
+        confirmationVisit.textContent =
+            submittedBooking.bookingDate &&
+            submittedBooking.bookingTime
+                ? (
+                    `${submittedBooking.bookingDate}` +
+                    ` · ` +
+                    `${submittedBooking.bookingTime}`
+                )
+                : "Future Booking";
     }
 
 
-    bookingConfirmation.scrollIntoView({
-        behavior:
-            "smooth",
-
-        block:
-            "start"
-    });
-}
-
-
-/* =========================================================
-   19. RESET FOR NEW BOOKING
-   ========================================================= */
-
-function startNewBooking() {
-
-    latestBooking = null;
-
-
-    bookingForm.reset();
-
-
-    bookingConfirmation.hidden =
-        true;
-
-    bookingForm.hidden =
-        false;
-
-
-    futureBookingFields.hidden =
-        true;
-
-
-    bookingDateInput.required =
-        false;
-
-    bookingTimeInput.required =
-        false;
-
-
-    setBookingMessage("");
-
-
-    calculatePrice();
-
-    updateBookingType();
-
-
-    bookingForm.scrollIntoView({
-        behavior:
-            "smooth",
-
-        block:
-            "start"
-    });
-
-
-    window.setTimeout(
-        () => {
-
-            phoneNumberInput.focus();
-
-        },
-        350
+    showOnlySection(
+        bookingConfirmation
     );
 }
 
 
 /* =========================================================
-   20. PAYMENT BUTTON
+   22. SUBMIT BOOKING
    ========================================================= */
 
-function handlePaymentButton() {
-
-    if (!latestBooking) {
-
-        alert(
-            "Booking information is unavailable."
-        );
-
-        return;
-    }
-
-
-    /*
-     * Payment module will replace this
-     * temporary message in the next development step.
-     */
-
-    alert(
-        `Payment options for ` +
-        `${latestBooking.booking_no} ` +
-        `will be available in the next step.`
-    );
-}
-
-
-/* =========================================================
-   21. SUBMIT HANDLER
-   ========================================================= */
-
-async function handleBookingSubmit(
-    event
-) {
-
+async function handleBookingSubmit(event) {
     event.preventDefault();
 
 
@@ -1047,13 +828,7 @@ async function handleBookingSubmit(
     }
 
 
-    /*
-     * Preserve future booking information
-     * before any form state changes.
-     */
-
-    const submittedData = {
-
+    const submittedBooking = {
         bookingDate:
             bookingDateInput.value,
 
@@ -1072,7 +847,6 @@ async function handleBookingSubmit(
 
 
     try {
-
         const booking =
             await createBooking();
 
@@ -1085,12 +859,11 @@ async function handleBookingSubmit(
 
         showBookingConfirmation(
             booking,
-            submittedData
+            submittedBooking
         );
+    }
 
-
-    } catch (error) {
-
+    catch (error) {
         console.error(
             "GLS booking creation failed:",
             error
@@ -1106,75 +879,44 @@ async function handleBookingSubmit(
             typeof error.message ===
                 "string"
         ) {
-
-            const errorMessage =
-                error.message
-                    .toLowerCase();
+            const databaseMessage =
+                error.message.toLowerCase();
 
 
             if (
-                errorMessage.includes(
+                databaseMessage.includes(
                     "vehicle type is not available"
                 )
             ) {
-
                 message =
                     "The selected vehicle type is currently unavailable.";
             }
 
-
             else if (
-                errorMessage.includes(
+                databaseMessage.includes(
                     "future booking requires"
                 )
             ) {
-
                 message =
                     "Please select your booking date and time.";
             }
 
-
             else if (
-                errorMessage.includes(
+                databaseMessage.includes(
                     "phone number is required"
                 )
             ) {
-
                 message =
                     "Please enter your phone number.";
             }
 
-
             else if (
-                errorMessage.includes(
+                databaseMessage.includes(
                     "plate number is required"
                 )
             ) {
-
                 message =
                     "Please enter your vehicle plate number.";
-            }
-
-
-            else if (
-                errorMessage.includes(
-                    "invalid wash type"
-                )
-            ) {
-
-                message =
-                    "Please select a valid wash type.";
-            }
-
-
-            else if (
-                errorMessage.includes(
-                    "invalid booking type"
-                )
-            ) {
-
-                message =
-                    "Please select a valid visit type.";
             }
         }
 
@@ -1183,61 +925,324 @@ async function handleBookingSubmit(
             message,
             "error"
         );
+    }
 
-
-    } finally {
-
+    finally {
         setBookingBusy(false);
     }
 }
 
 
 /* =========================================================
-   22. SUPABASE INITIALISATION
+   23. PAYMENT MENU
    ========================================================= */
 
-function initialiseSupabase() {
-
-    if (
-        !window.supabase ||
-        typeof
-            window.supabase.createClient
-            !== "function"
-    ) {
-
-        throw new Error(
-            "Supabase library could not be loaded."
-        );
+function openPaymentSection() {
+    if (!latestBooking) {
+        return;
     }
 
 
-    glsSupabase =
-        window.supabase.createClient(
-            GLS_SUPABASE_URL,
-            GLS_SUPABASE_PUBLISHABLE_KEY,
-            {
-                auth: {
-
-                    persistSession:
-                        false,
-
-                    autoRefreshToken:
-                        false,
-
-                    detectSessionInUrl:
-                        false
-                }
-            }
+    paymentAmount.textContent =
+        formatCurrency(
+            latestBooking.amount
         );
+
+
+    showOnlySection(
+        paymentSection
+    );
+}
+
+
+function returnToBookingConfirmation() {
+    showOnlySection(
+        bookingConfirmation
+    );
 }
 
 
 /* =========================================================
-   23. REGISTER EVENTS
+   24. CASH PAYMENT
+   ========================================================= */
+
+function openCashPayment() {
+    if (!latestBooking) {
+        return;
+    }
+
+
+    cashPaymentAmount.textContent =
+        formatCurrency(
+            latestBooking.amount
+        );
+
+
+    showOnlySection(
+        cashPaymentSection
+    );
+}
+
+
+/* =========================================================
+   25. DUITNOW PAYMENT
+   ========================================================= */
+
+function openDuitNowPayment() {
+    if (!latestBooking) {
+        return;
+    }
+
+
+    duitNowPaymentAmount.textContent =
+        formatCurrency(
+            latestBooking.amount
+        );
+
+
+    showOnlySection(
+        duitNowPaymentSection
+    );
+}
+
+
+/* =========================================================
+   26. CUSTOMER PAYMENT PENDING RPC
+   ========================================================= */
+
+async function markPaymentPending() {
+    if (!latestBooking) {
+        throw new Error(
+            "Booking information is unavailable."
+        );
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "mark_gls_payment_pending",
+            {
+                p_booking_id:
+                    latestBooking.id
+            }
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   27. SUBMIT DUITNOW PAYMENT
+   ========================================================= */
+
+async function handlePaymentSubmitted() {
+    if (
+        paymentSubmissionInProgress ||
+        !latestBooking
+    ) {
+        return;
+    }
+
+
+    paymentSubmissionInProgress =
+        true;
+
+
+    paymentSubmittedButton.disabled =
+        true;
+
+    paymentSubmittedButton.textContent =
+        "Submitting...";
+
+
+    try {
+        await markPaymentPending();
+
+
+        latestBooking.payment_status =
+            "pending";
+
+
+        pendingBookingNo.textContent =
+            latestBooking.booking_no ||
+            "-";
+
+        pendingPlate.textContent =
+            latestBooking.plate_number ||
+            "-";
+
+        pendingAmount.textContent =
+            formatCurrency(
+                latestBooking.amount
+            );
+
+
+        showOnlySection(
+            paymentPendingSection
+        );
+
+
+        console.log(
+            "GLS payment marked pending:",
+            latestBooking.booking_no
+        );
+    }
+
+    catch (error) {
+        console.error(
+            "GLS payment pending submission failed:",
+            error
+        );
+
+
+        alert(
+            "Unable to submit payment for verification. " +
+            "Please show your booking to GLS staff."
+        );
+    }
+
+    finally {
+        paymentSubmissionInProgress =
+            false;
+
+        paymentSubmittedButton.disabled =
+            false;
+
+        paymentSubmittedButton.textContent =
+            "I've Made Payment";
+    }
+}
+
+
+/* =========================================================
+   28. START ANOTHER BOOKING
+   ========================================================= */
+
+function startNewBooking() {
+    latestBooking =
+        null;
+
+    latestSubmittedBooking =
+        null;
+
+
+    bookingForm.reset();
+
+
+    futureBookingFields.hidden =
+        true;
+
+    bookingDateInput.required =
+        false;
+
+    bookingTimeInput.required =
+        false;
+
+
+    setBookingMessage("");
+
+
+    calculatePrice();
+
+    updateBookingType();
+
+
+    showOnlySection(
+        bookingFormSection
+    );
+
+
+    window.setTimeout(
+        () => {
+            phoneNumberInput.focus();
+        },
+        300
+    );
+}
+
+
+/* =========================================================
+   29. REQUIRED ELEMENT CHECK
+   ========================================================= */
+
+function requiredElementsExist() {
+    const requiredElements = [
+        bookingFormSection,
+        bookingForm,
+
+        phoneNumberInput,
+        plateNumberInput,
+        customerNameInput,
+
+        vehicleTypeInput,
+        washTypeInput,
+        bookingTypeInput,
+
+        futureBookingFields,
+        bookingDateInput,
+        bookingTimeInput,
+
+        totalAmountDisplay,
+        bookingMessage,
+        continueButton,
+
+        bookingConfirmation,
+        confirmationHeading,
+        confirmationDescription,
+        confirmationQueueSection,
+        confirmationQueueNo,
+        confirmationBookingNo,
+        confirmationPlate,
+        confirmationVehicle,
+        confirmationService,
+        confirmationVisit,
+        confirmationAmount,
+
+        paymentButton,
+        newBookingButton,
+
+        paymentSection,
+        paymentBackButton,
+        paymentAmount,
+        cashPaymentButton,
+        duitNowPaymentButton,
+
+        cashPaymentSection,
+        cashBackButton,
+        cashPaymentAmount,
+
+        duitNowPaymentSection,
+        duitNowBackButton,
+        duitNowPaymentAmount,
+        paymentSubmittedButton,
+
+        paymentPendingSection,
+        pendingBookingNo,
+        pendingPlate,
+        pendingAmount
+    ];
+
+
+    return !requiredElements.some(
+        (element) => !element
+    );
+}
+
+
+/* =========================================================
+   30. EVENT LISTENERS
    ========================================================= */
 
 function registerEventListeners() {
-
     vehicleTypeInput.addEventListener(
         "change",
         calculatePrice
@@ -1274,81 +1279,100 @@ function registerEventListeners() {
     );
 
 
+    paymentButton.addEventListener(
+        "click",
+        openPaymentSection
+    );
+
+
     newBookingButton.addEventListener(
         "click",
         startNewBooking
     );
 
 
-    paymentButton.addEventListener(
+    paymentBackButton.addEventListener(
         "click",
-        handlePaymentButton
+        returnToBookingConfirmation
+    );
+
+
+    cashPaymentButton.addEventListener(
+        "click",
+        openCashPayment
+    );
+
+
+    duitNowPaymentButton.addEventListener(
+        "click",
+        openDuitNowPayment
+    );
+
+
+    cashBackButton.addEventListener(
+        "click",
+        openPaymentSection
+    );
+
+
+    duitNowBackButton.addEventListener(
+        "click",
+        openPaymentSection
+    );
+
+
+    paymentSubmittedButton.addEventListener(
+        "click",
+        handlePaymentSubmitted
     );
 }
 
 
 /* =========================================================
-   24. VERIFY REQUIRED HTML
+   31. SUPABASE
    ========================================================= */
 
-function requiredElementsExist() {
-
-    const requiredElements = [
-
-        bookingForm,
-
-        phoneNumberInput,
-        plateNumberInput,
-        customerNameInput,
-
-        vehicleTypeInput,
-        washTypeInput,
-        bookingTypeInput,
-
-        futureBookingFields,
-
-        bookingDateInput,
-        bookingTimeInput,
-
-        totalAmountDisplay,
-
-        bookingMessage,
-        continueButton,
-
-        bookingConfirmation,
-
-        confirmationQueueSection,
-        confirmationQueueNo,
-
-        confirmationBookingNo,
-        confirmationPlate,
-        confirmationVehicle,
-        confirmationService,
-        confirmationVisit,
-        confirmationAmount,
-
-        paymentButton,
-        newBookingButton
-    ];
+function initialiseSupabase() {
+    if (
+        !window.supabase ||
+        typeof
+            window.supabase.createClient !==
+                "function"
+    ) {
+        throw new Error(
+            "Supabase library could not be loaded."
+        );
+    }
 
 
-    return !requiredElements.some(
-        (element) =>
-            !element
-    );
+    glsSupabase =
+        window.supabase.createClient(
+            GLS_SUPABASE_URL,
+            GLS_SUPABASE_PUBLISHABLE_KEY,
+            {
+                auth: {
+                    persistSession:
+                        false,
+
+                    autoRefreshToken:
+                        false,
+
+                    detectSessionInUrl:
+                        false
+                }
+            }
+        );
 }
 
 
 /* =========================================================
-   25. INITIALISE BOOKING PAGE
+   32. INITIALISE
    ========================================================= */
 
 function initialiseBookingPage() {
-
     if (!requiredElementsExist()) {
-
         console.error(
-            "GLS Booking: one or more required HTML elements are missing."
+            "GLS Booking: required HTML elements are missing."
         );
 
         return;
@@ -1356,13 +1380,12 @@ function initialiseBookingPage() {
 
 
     try {
-
         initialiseSupabase();
+    }
 
-    } catch (error) {
-
+    catch (error) {
         console.error(
-            "GLS Booking: Supabase initialisation failed:",
+            "GLS Booking Supabase initialisation failed:",
             error
         );
 
@@ -1376,53 +1399,48 @@ function initialiseBookingPage() {
         continueButton.disabled =
             true;
 
-
         return;
     }
 
 
     setMinimumBookingDate();
 
-
     updateBookingType();
 
-
     calculatePrice();
-
-
-    bookingConfirmation.hidden =
-        true;
-
 
     registerEventListeners();
 
 
-    setBookingMessage("");
+    /*
+     * Start with booking form only.
+     */
+
+    showOnlySection(
+        bookingFormSection
+    );
 
 
     console.log(
-        "GLS Car Wash V2 booking system ready."
+        "GLS Car Wash V2 booking and payment system ready."
     );
 }
 
 
 /* =========================================================
-   26. START APPLICATION
+   33. START
    ========================================================= */
 
 if (
     document.readyState ===
     "loading"
 ) {
-
     document.addEventListener(
         "DOMContentLoaded",
         initialiseBookingPage
     );
-
 }
 
 else {
-
     initialiseBookingPage();
 }
