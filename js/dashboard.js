@@ -2173,19 +2173,11 @@ async function initialiseDashboard() {
    33. START
    ========================================================= */
 
-if (
-    document.readyState ===
-    "loading"
-) {
-
+if (document.readyState === "loading") {
     document.addEventListener(
         "DOMContentLoaded",
         initialiseDashboard
     );
-
-}
-
-else {
-
+} else {
     initialiseDashboard();
 }
