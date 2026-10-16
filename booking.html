@@ -1,27 +1,70 @@
-Phone Number *
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLS Car Wash Booking</title>
 
-Plate Number *
+    css/main.css
+    css/booking.css
+</head>
+<body>
 
-Customer Name
+    <div class="booking-container">
 
-Vehicle Type
+        assets/logo.png
 
-Small Car
-Sedan
-SUV
-MPV
-Van
+        <h1>Book Car Wash</h1>
+        <p>Register your vehicle and select your wash package.</p>
 
-Wash Type
+        <form id="booking-form">
 
-Normal Wash
-Nano Wash
+            <label>Phone Number *</label>
+            <input type="tel" id="phoneNumber" required>
 
-Booking Type
+            <label>Plate Number *</label>
+            <input type="text" id="plateNumber" required>
 
-Walk-In
-Future Booking
+            <label>Customer Name</label>
+            <input type="text" id="customerName">
 
-Total RM0.00
+            <label>Vehicle Type</label>
+            <select id="vehicleType" required>
+                <option value="">Select Vehicle</option>
+                <option>Small Car</option>
+                <option>Sedan</option>
+                <option>SUV</option>
+                <option>MPV</option>
+                <option>Van</option>
+            </select>
 
-Continue
+            <label>Wash Type</label>
+            <select id="washType" required>
+                <option value="">Select Wash Type</option>
+                <option>Normal Wash</option>
+                <option>Nano Wash</option>
+            </select>
+
+            <label>Booking Type</label>
+            <select id="bookingType">
+                <option>Walk-In</option>
+                <option>Future Booking</option>
+            </select>
+
+            <div class="total-box">
+                <h2>Total Amount</h2>
+                <div id="totalAmount">RM 0.00</div>
+            </div>
+
+            <button type="submit">
+                Continue
+            </button>
+
+        </form>
+
+    </div>
+
+    js/booking.jsscript>
+
+</body>
+</html>
