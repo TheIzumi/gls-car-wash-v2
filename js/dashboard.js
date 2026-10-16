@@ -1449,44 +1449,41 @@ async function updateQueueStatus(
     if (
         !booking ||
         !booking.id ||
-       !action
+        !action
     ) {
         return;
-   }
-
-
-    const actionLabels = {
-       start: "Start Wash",
-       complete: "Complete Wash",
-       collect: "Mark as Collected"
     }
 
+    const actionLabels = {
+        start: "Start Wash",
+        complete: "Complete Wash",
+        collect: "Mark as Collected"
+    };
 
     const actionMessages = {
-       start:
+        start:
             `Start washing ${booking.plate_number}?`,
 
-       complete:
-            `Mark $booking.plate_number} as completed`,
+        complete:
+            `Mark ${booking.plate_number} as completed?`,
 
         collect:
             `Mark ${booking.plate_number} as collected?`
     };
 
-
     const confirmed =
         window.confirm(
-           actionMessages[action] ||
-           "Continue with this queue action?"
+            actionMessages[action] ||
+            "Continue with this queue action?"
         );
 
 
-    if (!confermed) {
+    if (!confirmed) {
         return;
     }
 
 
-   const originalText =
+    const originalText =
         button.textContent;
 
 
@@ -1498,37 +1495,39 @@ async function updateQueueStatus(
         "Updating...";
 
     setMessage(
-        queueMessase,
+        queueMessage,
         `Updating ${booking.queue_no || booking.booking_no}...`,
-       "info"
+        "info"
     );
 
 
     try {
 
-       const {
+        const {
             data,
-           error
+            error
         } =
-           await glsSupabase.rpc(
-               "update_gls_queue_status",                {
-                   p_booking_id:
-                       booking.id,
+            await glsSupabase.rpc(
+                "update_gls_queue_status",
+                {
+                    p_booking_id:
+                        booking.id,
 
-                   p_action:
-                       action
+                    p_action:
+                        action
                 }
-           );
+            );
 
 
         if (error) {
-           throw error;
+            throw error;
         }
 
 
-       console.log(
+        console.log(
             "GLS queue updated:",
-            data        );
+            data
+        );
 
 
         let successMessage =
@@ -1536,10 +1535,10 @@ async function updateQueueStatus(
 
 
         if (
-           action === "start"
+            action === "start"
         ) {
             successMessage =
-               `${booking.queue_no}· ${booking.plate_number} is now WASHING.`;
+                `${booking.queue_no} · ${booking.plate_number} is now WASHING.`;
         }
 
 
@@ -1555,13 +1554,14 @@ async function updateQueueStatus(
             action === "collect"
         ) {
 
-           successMessage =
-               `${booking.queue_no} · ${booking.plate_number} has been COLLECTED.`;
+            successMessage =
+                `${booking.queue_no} · ${booking.plate_number} has been COLLECTED.`;
         }
 
 
-        setMessage(            queueMessage,
-           successMessage,
+        setMessage(
+            queueMessage,
+            successMessage,
             "success"
         );
 
@@ -1572,94 +1572,89 @@ async function updateQueueStatus(
 
     catch (error) {
 
-        console.error(  
-           "GLS queue update failed:",
+        console.error(
+            "GLS queue update failed:",
             error
         );
 
         let message =
-           "Unable to update the queue status.";
+            "Unable to update the queue status.";
 
 
         if (
             error &&
             typeof error.message ===
-                "string"
-       ) {
+            "string"
+        ) {
 
             const errorMessage =
-                (error.messase
-                    .toLowerCase);
-
+                error.message.toLowerCase();
 
             if (
-               errorMessage.includes(
-                   "payment must be confirmed"
+                errorMessage.includes(
+                    "payment must be confirmed"
                 )
-             {
+            ) {
 
                 message =
-                   "Payment must be confirmed before starting the wash.";            }
-
+                    "Payment must be confirmed before starting the wash.";
+            }
 
             else if (
                 errorMessage.includes(
                     "only waiting vehicles"
                 )
-           ) {
+            ) {
 
                 message =
-                    "Only w*iting vehicles can start washing."
+                    "Only waiting vehicles can start washing.";
             }
-
 
             else if (
                 errorMessage.includes(
                     "only washing vehicles"
-                )            ) {
+                )
+            ) {
 
                 message =
                     "Only vehicles currently being washed can be completed.";
             }
 
-
-           else if (
-               errorMessage.includes(
-                   "only completed vehicles"
-               )
-            ) {
-
-               message =
-                   "Only completed vehicles can be marked as collected.";
-           }
-
-
             else if (
-               errorMessage.includes(
-                    "cancelled"
-               )
+                errorMessage.includes(
+                    "only completed vehicles"
+                )
             ) {
 
-               message =
-                   "Cancelled bookings cannot be processed.";
+                message =
+                    "Only completed vehicles can be marked as collected.";
             }
 
-
-           else if (
-               errorMessage.includes(
-                   "not authorised"
-               )
+            else if (
+                errorMessage.includes(
+                    "cancelled"
+                )
             ) {
 
-               message =
-                   "Your account is not authorised to manage the wash queue.";
-           }
+                message =
+                    "Cancelled bookings cannot be processed.";
+            }
+
+            else if (
+                errorMessage.includes(
+                    "not authorised"
+                )
+            ) {
+
+                message =
+                    "Your account is not authorised to manage the wash queue.";
+            }
         }
 
 
         setMessage(
             queueMessage,
-           message,
+            message,
             "error"
         );
 
@@ -1672,12 +1667,11 @@ async function updateQueueStatus(
             )
         ) {
 
-           button.disabled =
-              false;
-
+            button.disabled =
+                false;
 
             button.textContent =
-                actionlabels[action] ||
+                actionLabels[action] ||
                 originalText;
         }
     }
@@ -1739,21 +1733,20 @@ function renderQueue(
     queueList.replaceChildren();
 
 
-    const filtered 
-        getFilteredQueue(
-           rows
-        );
+    const filtered = getFilteredQueue(
+        rows
+    );
 
 
     if (
-       filtered.length === 0
+        filtered.length === 0
     ) {
         queueList.appendChild(
-           createElement(
-               "div",
+            createElement(
+                "div",
                 "empty-state",
                 "No vehicles found for this queue filter."
-           )
+            )
         );
 
 
@@ -1762,75 +1755,76 @@ function renderQueue(
 
 
     filtered.forEach(
-       function (booking) {
+        function (booking) {
 
-           const card =
-               createElement(
-                   "article",
+            const card =
+                createElement(
+                    "article",
                     "operation-card"
                 );
 
 
-           /* ====================*====================
-             * LEFT SIDE
-               ========*================================ */
+            /* ====================*====================
+              * LEFT SIDE
+                ========*================================ */
 
             const main =
-               createElement(
-                   "div",
-                   "operation-main"
-                )
-
+                createElement(
+                    "div",
+                    "operation-main"
+                );
 
             const topLine =
-               createElement(
-                   "div",
-                   "operation-topline"
-               );
+                createElement(
+                    "div",
+                    "operation-topline"
+                );
 
 
             topLine.appendChild(
                 createElement(
                     "strong",
-                   "queue-number",                    booking.queue_no ||
-                    "BOOKING"                )
+                    "queue-number",
+                    booking.queue_no ||
+                    "BOOKING"
+                )
             );
 
             topLine.appendChild(
-               createElement(
-                   "span",
-                   "plate-number",
-                   booking.plate_number
-               )
+                createElement(
+                    "span",
+                    "plate-number",
+                    booking.plate_number
+                )
             );
 
 
-           topLine.appendChild(
-               createStatusBadge(
-                   booking.queue_status
-               )
+            topLine.appendChild(
+                createStatusBadge(
+                    booking.queue_status
+                )
             );
 
 
-           main.appendChild(
-               topLine
+            main.appendChild(
+                topLine
             );
 
 
-           /* ====================*====================
-             * META
-               =============*=========================== */
+            /* ====================*====================
+              * META
+                =============*=========================== */
 
-           const meta =
-               createElement(
-                   "div",
+            const meta =
+                createElement(
+                    "div",
                     "operation-meta"
                 );
 
 
-           const values = [
-               booking.vehicle_type,
-               booking.wash_type,
+            const values = [
+                booking.vehicle_type,
+                booking.wash_type,
                 formatCurrency(
                     booking.amount
                 ),
@@ -2313,7 +2307,7 @@ function showDashboardDataError(
     if (
         error &&
         typeof error.message ===
-            "string" &&
+        "string" &&
         error.message.includes(
             "get_gls_dashboard_data"
         )
@@ -2667,7 +2661,7 @@ function initialiseSupabase() {
         typeof
             window.supabase
                 .createClient !==
-                "function"
+        "function"
     ) {
 
         throw new Error(
