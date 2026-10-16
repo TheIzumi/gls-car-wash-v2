@@ -1440,245 +1440,245 @@ async function confirmPayment(
    QUEUE OPERATIONS
    ========================================================= */
 
-async function updateQueueSt*tus(
+async function updateQueueStatus(
     booking,
     action,
-    *utton
+    button
 ) {
 
     if (
-        !booki*g ||
+        !bookiig ||
         !booking.id ||
-      * !action
+       !action
     ) {
         return;
- *  }
+   }
 
 
     const actionLabels = {
- *      start: "Start Wash",
-       *complete: "Complete Wash",
-       *collect: "Mark as Collected"
-    }*
+       start: "Start Wash",
+       complete: "Complete Wash",
+       collect: "Mark as Collected"
+    }
 
 
     const actionMessages = {
-  *     start:
-            `Start was*ing ${booking.plate_number}?`,
+       start:
+            `Start washing ${booking.plate_number}?`,
 
-  *     complete:
-            `Mark $*booking.plate_number} as completed*`,
+       complete:
+            `Mark $booking.plate_number} as completed`,
 
         collect:
-            `*ark ${booking.plate_number} as col*ected?`
+            `Mark ${booking.plate_number} as collected?`
     };
 
 
-    const confirm*d =
+    const confirmed =
         window.confirm(
-      *     actionMessages[action] ||
-   *        "Continue with this queue *ction?"
+           actionMessages[action] ||
+           "Continue with this queue action?"
         );
 
 
-    if (!conf*rmed) {
+    if (!confermed) {
         return;
     }
 
 
-  * const originalText =
-        butt*n.textContent;
+   const originalText =
+        button.textContent;
 
 
-    button.disabl*d =
+    button.disabled =
         true;
 
 
-    button.tex*Content =
+    button.textContent =
         "Updating...";
 
-*    setMessage(
-        queueMessa*e,
-        `Updating ${booking.que*e_no || booking.booking_no}...`,
- *      "info"
+    setMessage(
+        queueMessase,
+        `Updating ${booking.queue_no || booking.booking_no}...`,
+       "info"
     );
 
 
     try {
 
- *      const {
+       const {
             data,
-  *         error
+           error
         } =
-       *    await glsSupabase.rpc(
-       *        "update_gls_queue_status",*                {
-                *   p_booking_id:
-                 *      booking.id,
+           await glsSupabase.rpc(
+               "update_gls_queue_status",                {
+                   p_booking_id:
+                       booking.id,
 
-               *    p_action:
-                    *   action
+                   p_action:
+                       action
                 }
-      *     );
+           );
 
 
         if (error) {
-   *        throw error;
+           throw error;
         }
 
 
- *      console.log(
-            "GL* queue updated:",
-            data*        );
+       console.log(
+            "GLS queue updated:",
+            data        );
 
 
-        let successMe*sage =
-            "Queue updated *uccessfully.";
+        let successMessage =
+            "Queue updated successfully.";
 
 
         if (
-    *       action === "start"
-        * {
+           action === "start"
+         {
 
             successMessage =
- *              `${booking.queue_no}*· ${booking.plate_number} is now W*SHING.`;
+               `${booking.queue_no}· ${booking.plate_number} is now WASHING.`;
         }
 
 
-        else *f (
-            action === "comple*e"
+        else if (
+            action === "complete"
         ) {
 
-            succes*Message =
-                `${booki*g.queue_no} · ${booking.plate_numb*r} is now COMPLETED.`;
+            successMessage =
+                `${booking.queue_no} · ${booking.plate_number} is now COMPLETED.`;
         }
 
-*        else if (
-            acti*n === "collect"
+        else if (
+            action === "collect"
         ) {
 
-     *      successMessage =
-           *    `${booking.queue_no} · ${booki*g.plate_number} has been COLLECTED*`;
+           successMessage =
+               `${booking.queue_no} · ${booking.plate_number} has been COLLECTED.`;
         }
 
 
-        setMessage(*            queueMessage,
-        *   successMessage,
-            "su*cess"
+        setMessage(            queueMessage,
+           successMessage,
+            "success"
         );
 
 
-        await r*freshDashboard();
+        await refreshDashboard();
 
     }
 
-    catc* (error) {
+    catch (error) {
 
-        console.error(*            "GLS queue update fail*d:",
+        console.error(            "GLS queue update failed:",
             error
         );
-*
+
         let message =
-           *"Unable to update the queue status*";
+           "Unable to update the queue status.";
 
 
         if (
-            erro* &&
-            typeof error.messa*e ===
+            error &&
+            typeof error.message ===
                 "string"
-   *    ) {
+       ) {
 
-            const errorMe*sage =
-                error.messa*e
-                    .toLowerCase*);
+            const errorMessage =
+                error.messase
+                    .toLowerCase);
 
 
             if (
-            *   errorMessage.includes(
-        *           "payment must be confir*ed"
+               errorMessage.includes(
+                   "payment must be confirmed"
                 )
-            * {
+             {
 
                 message =
-    *               "Payment must be co*firmed before starting the wash.";*            }
-
-
-            else i* (
-                errorMessage.in*ludes(
-                    "only w*iting vehicles"
-                )
-*           ) {
-
-                me*sage =
-                    "Only w*iting vehicles can start washing."*
-            }
-
-
-            else *f (
-                errorMessage.i*cludes(
-                    "only *ashing vehicles"
-                )*            ) {
-
-                m*ssage =
-                    "Only *ehicles currently being washed can*be completed.";
-            }
-
-
-  *         else if (
-               *errorMessage.includes(
-           *        "only completed vehicles"
-*               )
-            ) {
-
-*               message =
-         *          "Only completed vehicles*can be marked as collected.";
-    *       }
+                   "Payment must be confirmed before starting the wash.";            }
 
 
             else if (
- *              errorMessage.include*(
-                    "cancelled"
-*               )
-            ) {
+                errorMessage.includes(
+                    "only waiting vehicles"
+                )
+           ) {
 
-*               message =
-         *          "Cancelled bookings cann*t be processed.";
+                message =
+                    "Only w*iting vehicles can start washing."
             }
 
 
-*           else if (
-             *  errorMessage.includes(
-         *          "not authorised"
-       *        )
+            else if (
+                errorMessage.includes(
+                    "only washing vehicles"
+                )            ) {
+
+                message =
+                    "Only vehicles currently being washed can be completed.";
+            }
+
+
+           else if (
+               errorMessage.includes(
+                   "only completed vehicles"
+               )
             ) {
 
-       *        message =
-                *   "Your account is not authorised*to manage the wash queue.";
-      *     }
+               message =
+                   "Only completed vehicles can be marked as collected.";
+           }
+
+
+            else if (
+               errorMessage.includes(
+                    "cancelled"
+               )
+            ) {
+
+               message =
+                   "Cancelled bookings cannot be processed.";
+            }
+
+
+           else if (
+               errorMessage.includes(
+                   "not authorised"
+               )
+            ) {
+
+               message =
+                   "Your account is not authorised to manage the wash queue.";
+           }
         }
 
 
-        setMess*ge(
+        setMessage(
             queueMessage,
-    *       message,
-            "error*
+           message,
+            "error"
         );
 
     }
 
     finally {
-*        if (
-            document.*ody.contains(
-                butt*n
+        if (
+            document.body.contains(
+                button
             )
         ) {
 
-     *      button.disabled =
-          *     false;
+           button.disabled =
+              false;
 
 
-            button.t*xtContent =
-                action*abels[action] ||
-                o*iginalText;
+            button.textContent =
+                actionlabels[action] ||
+                originalText;
         }
     }
 }
