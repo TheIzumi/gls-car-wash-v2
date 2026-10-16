@@ -1,94 +1,731 @@
+/* =========================================================
+   GLS CAR WASH V2
+   Customer Booking Page
+   File: css/booking.css
+   ========================================================= */
+
+
+/* =========================================================
+   1. PAGE
+   ========================================================= */
+
 body {
+    min-height: 100vh;
     margin: 0;
-    padding: 20px;
-    background-color: #f5f7fa;
-    font-family: Arial, Helvetica, sans-serif;
+    padding: 24px 14px;
+
+    background:
+        linear-gradient(
+            180deg,
+            #edf3f8 0%,
+            #f6f8fb 100%
+        );
+
+    color: #172b42;
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
 }
+
+
+/* =========================================================
+   2. BOOKING CARD
+   ========================================================= */
 
 .booking-container {
-    max-width: 500px;
-    margin: 30px auto;
-    background-color: #ffffff;
-    padding: 25px;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-}
-
-h1 {
-    text-align: center;
-    color: #123b66;
-    margin-bottom: 20px;
-}
-
-p {
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-input,
-select {
     width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #cccccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 14px;
+    max-width: 520px;
+
+    margin: 0 auto;
+    padding: 30px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 30px rgba(15, 39, 66, 0.08);
 }
 
-.total-box {
-    background-color: #eef5ff;
-    padding: 15px;
-    border-radius: 10px;
+
+/* =========================================================
+   3. HEADER / BRANDING
+   ========================================================= */
+
+.booking-header {
+    margin-bottom: 30px;
     text-align: center;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-
-.total-box h2 {
-    margin: 0;
-    font-size: 18px;
-}
-
-#totalAmount {
-    font-size: 32px;
-    font-weight: bold;
-    color: #123b66;
-    margin-top: 10px;
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    background-color: #123b66;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    background-color: #0d2d4f;
 }
 
 .logo {
     display: block;
-    width: 140px;
-    margin: 0 auto 20px auto;
+
+    width: 150px;
+    max-width: 60%;
+    height: auto;
+
+    margin:
+        0 auto
+        20px;
 }
 
+.booking-header h1 {
+    margin:
+        0
+        0
+        12px;
+
+    color: #123b66;
+
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+
+    letter-spacing: -0.6px;
+}
+
+.booking-intro {
+    max-width: 430px;
+
+    margin:
+        0 auto;
+
+    color: #566579;
+
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   4. FORM
+   ========================================================= */
+
+#booking-form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 20px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 7px;
+}
+
+.form-field label {
+    color: #172b42;
+
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.required {
+    color: #c0392b;
+}
+
+.optional {
+    color: #8190a3;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+
+/* =========================================================
+   5. FORM INPUTS
+   ========================================================= */
+
+.form-field input,
+.form-field select {
+    width: 100%;
+    min-height: 48px;
+
+    padding:
+        11px
+        14px;
+
+    background-color: #ffffff;
+
+    border:
+        1px solid
+        #cbd5e1;
+
+    border-radius: 10px;
+
+    color: #172b42;
+
+    font-family: inherit;
+    font-size: 15px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.form-field input:hover,
+.form-field select:hover {
+    border-color: #9db2c8;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    border-color: #123b66;
+
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(18, 59, 102, 0.12);
+}
+
+.form-field input::placeholder {
+    color: #98a4b3;
+}
+
+.form-field small {
+    margin-top: 1px;
+
+    color: #748397;
+
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   6. PLATE NUMBER
+   ========================================================= */
+
+#plateNumber {
+    text-transform: uppercase;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   7. SELECT
+   ========================================================= */
+
+select {
+    cursor: pointer;
+}
+
+select:invalid {
+    color: #6f7e90;
+}
+
+
+/* =========================================================
+   8. NANO WASH INFORMATION
+   ========================================================= */
+
+.pricing-note {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-top: -3px;
+    padding: 13px 14px;
+
+    background: #fff8e7;
+
+    border:
+        1px solid
+        #f3dfa3;
+
+    border-radius: 10px;
+
+    color: #755712;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.pricing-note::before {
+    content: "+15";
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 40px;
+    min-height: 28px;
+
+    padding:
+        2px
+        6px;
+
+    background: #f4b942;
+
+    border-radius: 7px;
+
+    color: #382700;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.pricing-note strong {
+    color: #61470d;
+
+    font-weight: 800;
+}
+
+.pricing-note span {
+    color: #755f2c;
+}
+
+
+/* =========================================================
+   9. FUTURE BOOKING
+   ========================================================= */
+
+.future-booking-fields {
+    padding: 18px;
+
+    background: #f7f9fc;
+
+    border:
+        1px solid
+        #dfe6ee;
+
+    border-radius: 14px;
+}
+
+.future-booking-fields[hidden] {
+    display: none !important;
+}
+
+.future-booking-heading {
+    margin-bottom: 17px;
+}
+
+.future-booking-heading h2 {
+    margin:
+        0
+        0
+        5px;
+
+    color: #123b66;
+
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.future-booking-heading p {
+    margin: 0;
+
+    color: #69798c;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.future-booking-fields .form-field + .form-field {
+    margin-top: 15px;
+}
+
+.booking-slot-note {
+    display: block;
+
+    margin-top: 14px;
+
+    color: #748397;
+
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   10. TOTAL
+   ========================================================= */
+
+.total-box {
+    position: relative;
+
+    margin-top: 3px;
+
+    padding:
+        22px
+        18px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf5ff,
+            #e6f0fc
+        );
+
+    border:
+        1px solid
+        #d8e7f8;
+
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+.total-box::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 4px;
+
+    background: #123b66;
+
+    content: "";
+}
+
+.total-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #52657b;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 0.6px;
+}
+
+#totalAmount {
+    margin:
+        2px
+        0
+        7px;
+
+    color: #123b66;
+
+    font-size: 34px;
+    font-weight: 850;
+    line-height: 1.2;
+
+    letter-spacing: -0.8px;
+}
+
+.total-box small {
+    display: block;
+
+    color: #66778b;
+
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   11. BOOKING MESSAGE
+   ========================================================= */
+
+.booking-message {
+    display: block;
+
+    margin: -3px 0 0;
+
+    padding: 0;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.booking-message:empty {
+    display: none;
+}
+
+.booking-message.error {
+    padding: 11px 13px;
+
+    background: #fff0ee;
+
+    border:
+        1px solid
+        #f1c1bb;
+
+    border-radius: 9px;
+
+    color: #b63226;
+
+    font-weight: 600;
+}
+
+.booking-message.success {
+    padding: 11px 13px;
+
+    background: #e9f8f0;
+
+    border:
+        1px solid
+        #bfe6d1;
+
+    border-radius: 9px;
+
+    color: #16724f;
+
+    font-weight: 600;
+}
+
+.booking-message.info {
+    padding: 11px 13px;
+
+    background: #edf5ff;
+
+    border:
+        1px solid
+        #cadef5;
+
+    border-radius: 9px;
+
+    color: #245e9e;
+
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   12. CONTINUE BUTTON
+   ========================================================= */
+
+#continueButton {
+    width: 100%;
+    min-height: 50px;
+
+    padding:
+        13px
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123b66,
+            #174c81
+        );
+
+    border: none;
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(18, 59, 102, 0.16);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#continueButton:hover {
+    background:
+        linear-gradient(
+            135deg,
+            #0d2e51,
+            #123f6c
+        );
+
+    box-shadow:
+        0 7px 16px
+        rgba(18, 59, 102, 0.22);
+}
+
+#continueButton:active {
+    transform: translateY(1px);
+
+    box-shadow:
+        0 3px 8px
+        rgba(18, 59, 102, 0.18);
+}
+
+#continueButton:focus-visible {
+    outline:
+        3px solid
+        rgba(37, 99, 235, 0.25);
+
+    outline-offset: 3px;
+}
+
+#continueButton:disabled {
+    cursor: not-allowed;
+
+    opacity: 0.65;
+}
+
+
+/* =========================================================
+   13. FOOTER NOTE
+   ========================================================= */
+
+.form-footer-note {
+    margin:
+        -6px
+        0
+        0;
+
+    color: #8794a5;
+
+    font-size: 11px;
+    font-weight: 400;
+    line-height: 1.4;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   14. MOBILE
+   ========================================================= */
+
 @media (max-width: 600px) {
+
     body {
-        padding: 10px;
+        padding:
+            10px
+            10px
+            20px;
+
+        background: #f2f5f8;
     }
 
     .booking-container {
-        padding: 20px;
+        padding:
+            24px
+            22px
+            26px;
+
+        border-radius: 17px;
     }
 
-    h1 {
-        font-size: 24px;
+    .logo {
+        width: 135px;
+
+        margin-bottom: 17px;
+    }
+
+    .booking-header {
+        margin-bottom: 25px;
+    }
+
+    .booking-header h1 {
+        margin-bottom: 10px;
+
+        font-size: 28px;
+    }
+
+    .booking-intro {
+        font-size: 13px;
+    }
+
+    #booking-form {
+        gap: 18px;
+    }
+
+    .form-field input,
+    .form-field select {
+        min-height: 48px;
+
+        font-size: 16px;
+    }
+
+    #totalAmount {
+        font-size: 32px;
+    }
+
+    #continueButton {
+        min-height: 51px;
+
+        font-size: 16px;
+    }
+}
+
+
+/* =========================================================
+   15. VERY SMALL PHONES
+   ========================================================= */
+
+@media (max-width: 370px) {
+
+    body {
+        padding:
+            6px
+            6px
+            16px;
+    }
+
+    .booking-container {
+        padding:
+            21px
+            17px
+            23px;
+    }
+
+    .logo {
+        width: 120px;
+    }
+
+    .booking-header h1 {
+        font-size: 25px;
+    }
+
+    #totalAmount {
+        font-size: 29px;
+    }
+}
+
+
+/* =========================================================
+   16. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
     }
 }
