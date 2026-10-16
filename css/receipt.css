@@ -1131,6 +1131,40 @@ button {
 /* =========================================================
    20. PRINT / SAVE PDF
    ========================================================= */
+/* =========================================================
+   COMPUTER GENERATED RECEIPT NOTE
+   ========================================================= */
+
+.computer-generated-note {
+    margin: 0 28px 20px;
+
+    padding: 12px 16px;
+
+    background: #f8fafc;
+
+    border: 1px dashed #d8e0e8;
+
+    border-radius: 9px;
+
+    text-align: center;
+}
+
+.computer-generated-note p {
+    margin: 0;
+
+    color: #788697;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+@media (max-width: 600px) {
+
+    .computer-generated-note {
+        margin: 0 20px 18px;
+    }
+}
 
 @media print {
 
@@ -1267,3 +1301,4 @@ button {
             none;
     }
 }
+
