@@ -2,86 +2,32 @@ body {
     margin: 0;
     padding: 20px;
     background: #f5f7fa;
-    font-family: Segoe UI, sans-serif;
+    font-family: Arial, sans-serif;
 }
 
 .booking-container {
     max-width: 500px;
     margin: auto;
     background: white;
-    padding: 24px;
-    border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-}
-
-.logo {
-    display: block;
-    width: 140px;
-    margin: 0 auto 20px;
-}
-
-h1 {
-    text-align: center;
-    color: #123b66;
-    margin-bottom: 10px;
-}
-
-p {
-    text-align: center;
-    color: #666;
-    margin-bottom: 24px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-label {
-    font-weight: 600;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
 }
 
 input,
 select {
+    width: 100%;
     padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 14px;
-}
-
-.total-box {
-    margin-top: 10px;
-    background: #eef5ff;
-    padding: 16px;
-    border-radius: 12px;
-    text-align: center;
-}
-
-.total-box h2 {
-    margin: 0;
-    font-size: 18px;
-}
-
-#totalAmount {
-    margin-top: 10px;
-    font-size: 32px;
-    font-weight: bold;
-    color: #123b66;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
 button {
-    margin-top: 12px;
-    border: none;
+    width: 100%;
+    padding: 12px;
     background: #123b66;
     color: white;
-    padding: 14px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #0f3152;
+    border: none;
+    border-radius: 8px;
 }
