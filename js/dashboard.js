@@ -1737,7 +1737,6 @@ function renderRecentBookings(
                 )
             );
 
-
         return;
     }
 
@@ -1751,6 +1750,10 @@ function renderRecentBookings(
                     "operation-card"
                 );
 
+
+            /* =========================================
+               LEFT SIDE
+               ========================================= */
 
             const main =
                 createElement(
@@ -1833,6 +1836,17 @@ function renderRecentBookings(
             );
 
 
+            /* =========================================
+               RIGHT SIDE
+               ========================================= */
+
+            const side =
+                createElement(
+                    "div",
+                    "recent-booking-side"
+                );
+
+
             const amount =
                 createElement(
                     "div",
@@ -1843,13 +1857,66 @@ function renderRecentBookings(
                 );
 
 
+            side.appendChild(
+                amount
+            );
+
+
+            /* =========================================
+               VIEW RECEIPT
+               Only PAID bookings get this button
+               ========================================= */
+
+            if (
+                booking.payment_status ===
+                "paid"
+            ) {
+
+                const receiptButton =
+                    createElement(
+                        "button",
+                        "view-receipt-button",
+                        "View Receipt"
+                    );
+
+
+                receiptButton.type =
+                    "button";
+
+
+                receiptButton.addEventListener(
+                    "click",
+                    function () {
+
+                        const receiptUrl =
+                            `receipt.html?booking=${encodeURIComponent(
+                                booking.id
+                            )}`;
+
+
+                        window.location.href =
+                            receiptUrl;
+                    }
+                );
+
+
+                side.appendChild(
+                    receiptButton
+                );
+            }
+
+
+            /* =========================================
+               BUILD CARD
+               ========================================= */
+
             card.appendChild(
                 main
             );
 
 
             card.appendChild(
-                amount
+                side
             );
 
 
