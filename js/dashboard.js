@@ -1538,7 +1538,6 @@ async function updateQueueStatus(
         if (
            action === "start"
         ) {
-
             successMessage =
                `${booking.queue_no}· ${booking.plate_number} is now WASHING.`;
         }
@@ -1573,7 +1572,8 @@ async function updateQueueStatus(
 
     catch (error) {
 
-        console.error(            "GLS queue update failed:",
+        console.error(  
+           "GLS queue update failed:",
             error
         );
 
@@ -1588,7 +1588,7 @@ async function updateQueueStatus(
        ) {
 
             const errorMessage =
-                error.messase
+                (error.messase
                     .toLowerCase);
 
 
