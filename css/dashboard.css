@@ -1704,6 +1704,110 @@ button:disabled {
     }
 }
 
+/* =========================================================
+   QUEUE OPERATIONS
+   ========================================================= */
+
+.queue-card-side {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+
+    gap: 8px;
+}
+
+
+.payment-required-button {
+    background: #f1f3f5 !important;
+
+    border:
+        1px solid
+        #d9dfe6 !important;
+
+    color:
+        #8995a3 !important;
+
+    cursor:
+        not-allowed !important;
+}
+
+
+.operation-actions .start-button {
+    background:
+        #123b66;
+
+    border-color:
+        #123b66;
+
+    color:
+        #ffffff;
+}
+
+
+.operation-actions .start-button:hover {
+    background:
+        #0b2948;
+}
+
+
+.operation-actions .complete-button {
+    background:
+        #986800;
+
+    border-color:
+        #986800;
+
+    color:
+        #ffffff;
+}
+
+
+.operation-actions .complete-button:hover {
+    background:
+        #765100;
+}
+
+
+.operation-actions .collect-button {
+    background:
+        #16835d;
+
+    border-color:
+        #16835d;
+
+    color:
+        #ffffff;
+}
+
+
+.operation-actions .collect-button:hover {
+    background:
+        #116b4c;
+}
+
+
+@media (max-width: 760px) {
+
+    .queue-card-side {
+        align-items:
+            stretch;
+    }
+
+
+    .queue-card-side .operation-amount {
+        text-align:
+            left;
+    }
+
+
+    .operation-actions button {
+        width:
+            100%;
+    }
+}
+
 
 /* =========================================================
    REDUCED MOTION
