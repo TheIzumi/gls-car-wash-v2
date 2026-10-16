@@ -729,3 +729,407 @@ select:invalid {
             1 !important;
     }
 }
+
+/* =========================================================
+   17. BOOKING CONFIRMATION
+   ========================================================= */
+
+.booking-confirmation {
+    text-align: center;
+}
+
+.booking-confirmation[hidden] {
+    display: none !important;
+}
+
+
+.confirmation-success-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 58px;
+    height: 58px;
+
+    margin:
+        0 auto
+        16px;
+
+    background: #e8f7ef;
+
+    border:
+        1px solid
+        #bae5cd;
+
+    border-radius: 50%;
+
+    color: #16835d;
+
+    font-size: 28px;
+    font-weight: 900;
+}
+
+
+.confirmation-eyebrow {
+    margin:
+        0
+        0
+        7px;
+
+    color: #16835d;
+
+    font-size: 11px;
+    font-weight: 850;
+
+    letter-spacing: 1px;
+}
+
+
+.booking-confirmation h2 {
+    margin:
+        0
+        0
+        7px;
+
+    color: #123b66;
+
+    font-size: 26px;
+    font-weight: 850;
+
+    letter-spacing: -0.5px;
+}
+
+
+.confirmation-description {
+    margin:
+        0
+        0
+        24px;
+
+    color: #718096;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   QUEUE NUMBER
+   ========================================================= */
+
+.queue-number-card {
+    position: relative;
+
+    margin-bottom: 20px;
+
+    padding:
+        22px
+        18px;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123b66,
+            #174f87
+        );
+
+    border-radius: 16px;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 8px 20px
+        rgba(18, 59, 102, 0.18);
+}
+
+
+.queue-number-card span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color:
+        rgba(255, 255, 255, 0.78);
+
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 1px;
+}
+
+
+.queue-number-card strong {
+    display: block;
+
+    color: #ffffff;
+
+    font-size: 44px;
+    font-weight: 900;
+
+    line-height: 1.1;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   BOOKING DETAILS
+   ========================================================= */
+
+.confirmation-details {
+    margin-bottom: 18px;
+
+    overflow: hidden;
+
+    background: #f8fafc;
+
+    border:
+        1px solid
+        #e2e8f0;
+
+    border-radius: 13px;
+
+    text-align: left;
+}
+
+
+.confirmation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        12px
+        15px;
+
+    border-bottom:
+        1px solid
+        #e8edf3;
+}
+
+
+.confirmation-row:last-child {
+    border-bottom: none;
+}
+
+
+.confirmation-row span {
+    color: #718096;
+
+    font-size: 12px;
+}
+
+
+.confirmation-row strong {
+    color: #172b42;
+
+    font-size: 13px;
+    font-weight: 750;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+
+#confirmationPlate {
+    color: #123b66;
+
+    font-size: 15px;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   CONFIRMED TOTAL
+   ========================================================= */
+
+.confirmation-total {
+    margin-bottom: 16px;
+
+    padding:
+        18px;
+
+    background: #edf5ff;
+
+    border:
+        1px solid
+        #d8e7f8;
+
+    border-radius: 13px;
+}
+
+
+.confirmation-total span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #62758a;
+
+    font-size: 12px;
+    font-weight: 650;
+}
+
+
+.confirmation-total strong {
+    display: block;
+
+    color: #123b66;
+
+    font-size: 31px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   PAYMENT STATUS
+   ========================================================= */
+
+.payment-status-card {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    margin-bottom: 18px;
+
+    padding:
+        15px;
+
+    background: #fff8e7;
+
+    border:
+        1px solid
+        #f1dda4;
+
+    border-radius: 12px;
+}
+
+
+.payment-status-card span {
+    color: #76622c;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.payment-status-card strong {
+    color: #9a6800;
+
+    font-size: 17px;
+    font-weight: 850;
+}
+
+
+.payment-status-card small {
+    color: #776638;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   CONFIRMATION BUTTONS
+   ========================================================= */
+
+.payment-button {
+    width: 100%;
+    min-height: 50px;
+
+    padding:
+        13px
+        18px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #123b66,
+            #174c81
+        );
+
+    border: none;
+    border-radius: 11px;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 800;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 12px
+        rgba(18, 59, 102, 0.16);
+}
+
+
+.payment-button:hover {
+    background: #0d2e51;
+}
+
+
+.new-booking-button {
+    width: 100%;
+    min-height: 45px;
+
+    margin-top: 10px;
+
+    padding:
+        11px
+        16px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #d6dee8;
+
+    border-radius: 10px;
+
+    color: #536579;
+
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.new-booking-button:hover {
+    background: #f5f8fb;
+}
+
+
+/* =========================================================
+   MOBILE CONFIRMATION
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .queue-number-card strong {
+        font-size: 42px;
+    }
+
+    .booking-confirmation h2 {
+        font-size: 24px;
+    }
+
+    .confirmation-row {
+        padding:
+            11px
+            13px;
+    }
+
+    .confirmation-total strong {
+        font-size: 29px;
+    }
+}
