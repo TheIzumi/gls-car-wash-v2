@@ -1537,7 +1537,7 @@ async function updateQueueStatus(
 
         if (
            action === "start"
-         {
+        ) {
 
             successMessage =
                `${booking.queue_no}· ${booking.plate_number} is now WASHING.`;
