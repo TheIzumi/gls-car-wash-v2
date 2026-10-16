@@ -1436,6 +1436,253 @@ async function confirmPayment(
     }
 }
 
+/* =========================================================
+   QUEUE OPERATIONS
+   ========================================================= */
+
+async function updateQueueSt*tus(
+    booking,
+    action,
+    *utton
+) {
+
+    if (
+        !booki*g ||
+        !booking.id ||
+      * !action
+    ) {
+        return;
+ *  }
+
+
+    const actionLabels = {
+ *      start: "Start Wash",
+       *complete: "Complete Wash",
+       *collect: "Mark as Collected"
+    }*
+
+
+    const actionMessages = {
+  *     start:
+            `Start was*ing ${booking.plate_number}?`,
+
+  *     complete:
+            `Mark $*booking.plate_number} as completed*`,
+
+        collect:
+            `*ark ${booking.plate_number} as col*ected?`
+    };
+
+
+    const confirm*d =
+        window.confirm(
+      *     actionMessages[action] ||
+   *        "Continue with this queue *ction?"
+        );
+
+
+    if (!conf*rmed) {
+        return;
+    }
+
+
+  * const originalText =
+        butt*n.textContent;
+
+
+    button.disabl*d =
+        true;
+
+
+    button.tex*Content =
+        "Updating...";
+
+*    setMessage(
+        queueMessa*e,
+        `Updating ${booking.que*e_no || booking.booking_no}...`,
+ *      "info"
+    );
+
+
+    try {
+
+ *      const {
+            data,
+  *         error
+        } =
+       *    await glsSupabase.rpc(
+       *        "update_gls_queue_status",*                {
+                *   p_booking_id:
+                 *      booking.id,
+
+               *    p_action:
+                    *   action
+                }
+      *     );
+
+
+        if (error) {
+   *        throw error;
+        }
+
+
+ *      console.log(
+            "GL* queue updated:",
+            data*        );
+
+
+        let successMe*sage =
+            "Queue updated *uccessfully.";
+
+
+        if (
+    *       action === "start"
+        * {
+
+            successMessage =
+ *              `${booking.queue_no}*· ${booking.plate_number} is now W*SHING.`;
+        }
+
+
+        else *f (
+            action === "comple*e"
+        ) {
+
+            succes*Message =
+                `${booki*g.queue_no} · ${booking.plate_numb*r} is now COMPLETED.`;
+        }
+
+*        else if (
+            acti*n === "collect"
+        ) {
+
+     *      successMessage =
+           *    `${booking.queue_no} · ${booki*g.plate_number} has been COLLECTED*`;
+        }
+
+
+        setMessage(*            queueMessage,
+        *   successMessage,
+            "su*cess"
+        );
+
+
+        await r*freshDashboard();
+
+    }
+
+    catc* (error) {
+
+        console.error(*            "GLS queue update fail*d:",
+            error
+        );
+*
+        let message =
+           *"Unable to update the queue status*";
+
+
+        if (
+            erro* &&
+            typeof error.messa*e ===
+                "string"
+   *    ) {
+
+            const errorMe*sage =
+                error.messa*e
+                    .toLowerCase*);
+
+
+            if (
+            *   errorMessage.includes(
+        *           "payment must be confir*ed"
+                )
+            * {
+
+                message =
+    *               "Payment must be co*firmed before starting the wash.";*            }
+
+
+            else i* (
+                errorMessage.in*ludes(
+                    "only w*iting vehicles"
+                )
+*           ) {
+
+                me*sage =
+                    "Only w*iting vehicles can start washing."*
+            }
+
+
+            else *f (
+                errorMessage.i*cludes(
+                    "only *ashing vehicles"
+                )*            ) {
+
+                m*ssage =
+                    "Only *ehicles currently being washed can*be completed.";
+            }
+
+
+  *         else if (
+               *errorMessage.includes(
+           *        "only completed vehicles"
+*               )
+            ) {
+
+*               message =
+         *          "Only completed vehicles*can be marked as collected.";
+    *       }
+
+
+            else if (
+ *              errorMessage.include*(
+                    "cancelled"
+*               )
+            ) {
+
+*               message =
+         *          "Cancelled bookings cann*t be processed.";
+            }
+
+
+*           else if (
+             *  errorMessage.includes(
+         *          "not authorised"
+       *        )
+            ) {
+
+       *        message =
+                *   "Your account is not authorised*to manage the wash queue.";
+      *     }
+        }
+
+
+        setMess*ge(
+            queueMessage,
+    *       message,
+            "error*
+        );
+
+    }
+
+    finally {
+*        if (
+            document.*ody.contains(
+                butt*n
+            )
+        ) {
+
+     *      button.disabled =
+          *     false;
+
+
+            button.t*xtContent =
+                action*abels[action] ||
+                o*iginalText;
+        }
+    }
+}
+
 
 /* =========================================================
    26. FILTER QUEUE
@@ -1489,102 +1736,107 @@ function renderQueue(
     rows
 ) {
 
-    queueList.replaceChildren();
+    queueList.repla*eChildren();
 
 
-    const filtered =
+    const filtered *
         getFilteredQueue(
-            rows
+       *    rows
         );
 
 
     if (
-        filtered.length === 0
+   *    filtered.length === 0
     ) {
-
-        queueList.appendChild(
-            createElement(
-                "div",
-                "empty-state",
-                "No vehicles found for this queue filter."
-            )
+*        queueList.appendChild(
+   *        createElement(
+           *    "div",
+                "empty-*tate",
+                "No vehicle* found for this queue filter."
+   *        )
         );
 
 
-        return;
+        ret*rn;
     }
 
 
     filtered.forEach(
-        function (booking) {
+*       function (booking) {
 
-            const card =
-                createElement(
-                    "article",
-                    "operation-card"
+     *      const card =
+               *createElement(
+                   *"article",
+                    "op*ration-card"
                 );
 
+
+*           /* ====================*====================
+             * LEFT SIDE
+               ========*================================ **
 
             const main =
-                createElement(
-                    "div",
-                    "operation-main"
-                );
+       *        createElement(
+           *        "div",
+                   *"operation-main"
+                )*
 
 
             const topLine =
-                createElement(
-                    "div",
-                    "operation-topline"
-                );
+   *            createElement(
+       *            "div",
+               *    "operation-topline"
+          *     );
 
 
-            topLine.appendChild(
-                createElement(
+            topLine.appe*dChild(
+                createElem*nt(
                     "strong",
-                    "queue-number",
-                    booking.queue_no ||
-                    "BOOKING"
-                )
+*                   "queue-number",*                    booking.queue_*o ||
+                    "BOOKING"*                )
+            );
+
+*            topLine.appendChild(
+ *              createElement(
+     *              "span",
+            *       "plate-number",
+           *        booking.plate_number
+     *          )
             );
 
 
-            topLine.appendChild(
-                createElement(
-                    "span",
-                    "plate-number",
-                    booking.plate_number
-                )
+     *      topLine.appendChild(
+       *        createStatusBadge(
+       *            booking.queue_status
+ *              )
             );
 
 
-            topLine.appendChild(
-                createStatusBadge(
-                    booking.queue_status
-                )
+ *          main.appendChild(
+      *         topLine
             );
 
 
-            main.appendChild(
-                topLine
-            );
+*           /* ====================*====================
+             * META
+               =============*=========================== */
 
-
-            const meta =
-                createElement(
-                    "div",
-                    "operation-meta"
+  *         const meta =
+            *   createElement(
+                *   "div",
+                    "ope*ation-meta"
                 );
 
 
-            const values = [
-                booking.vehicle_type,
-                booking.wash_type,
+ *          const values = [
+       *        booking.vehicle_type,
+    *           booking.wash_type,
                 formatCurrency(
                     booking.amount
                 ),
                 String(
-                    booking.payment_status
+                    booking.payment_status ||
+                    ""
                 ).toUpperCase()
             ];
 
@@ -1608,10 +1860,14 @@ function renderQueue(
             );
 
 
+            /* =========================================
+               RIGHT SIDE
+               ========================================= */
+
             const side =
                 createElement(
                     "div",
-                    ""
+                    "queue-card-side"
                 );
 
 
@@ -1633,34 +1889,91 @@ function renderQueue(
                 );
 
 
+            /* =========================================
+               WAITING
+               ========================================= */
+
             if (
                 booking.queue_status ===
                 "waiting"
             ) {
 
-                const startButton =
-                    createElement(
-                        "button",
-                        "start-button",
-                        "Start Wash"
+                /*
+                 * PAID booking may start wash.
+                 */
+
+                if (
+                    booking.payment_status ===
+                    "paid"
+                ) {
+
+                    const startButton =
+                        createElement(
+                            "button",
+                            "start-button",
+                            "Start Wash"
+                        );
+
+
+                    startButton.type =
+                        "button";
+
+
+                    startButton.addEventListener(
+                        "click",
+                        function () {
+
+                            updateQueueStatus(
+                                booking,
+                                "start",
+                                startButton
+                            );
+                        }
                     );
 
 
-                startButton.type =
-                    "button";
+                    actions.appendChild(
+                        startButton
+                    );
 
-                startButton.disabled =
-                    true;
-
-                startButton.title =
-                    "Queue actions will be enabled after the secure queue RPC is created.";
+                }
 
 
-                actions.appendChild(
-                    startButton
-                );
+                /*
+                 * Unpaid/pending vehicle cannot start.
+                 */
+
+                else {
+
+                    const paymentRequiredButton =
+                        createElement(
+                            "button",
+                            "payment-required-button",
+                            "Payment Required"
+                        );
+
+
+                    paymentRequiredButton.type =
+                        "button";
+
+                    paymentRequiredButton.disabled =
+                        true;
+
+
+                    paymentRequiredButton.title =
+                        "Payment must be confirmed before starting the wash.";
+
+
+                    actions.appendChild(
+                        paymentRequiredButton
+                    );
+                }
             }
 
+
+            /* =========================================
+               WASHING
+               ========================================= */
 
             else if (
                 booking.queue_status ===
@@ -1678,12 +1991,62 @@ function renderQueue(
                 completeButton.type =
                     "button";
 
-                completeButton.disabled =
-                    true;
+
+                completeButton.addEventListener(
+                    "click",
+                    function () {
+
+                        updateQueueStatus(
+                            booking,
+                            "complete",
+                            completeButton
+                        );
+                    }
+                );
 
 
                 actions.appendChild(
                     completeButton
+                );
+            }
+
+
+            /* =========================================
+               COMPLETED
+               ========================================= */
+
+            else if (
+                booking.queue_status ===
+                "completed"
+            ) {
+
+                const collectButton =
+                    createElement(
+                        "button",
+                        "collect-button",
+                        "Collected"
+                    );
+
+
+                collectButton.type =
+                    "button";
+
+
+                collectButton.addEventListener(
+                    "click",
+                    function () {
+
+                        updateQueueStatus(
+                            booking,
+                            "collect",
+                            collectButton
+                        );
+                    }
+                );
+
+
+                actions.appendChild(
+                    collectButton
                 );
             }
 
