@@ -42,9 +42,9 @@ let latestDashboardData = null;
 let dashboardRefreshTimer = null;
 
 
-/* =========================================================
+/ =========================================================
    3. LOGIN ELEMENTS
-   ========================================================= */
+   ========================================================= /
 
 const loginScreen =
     document.getElementById(
@@ -1736,101 +1736,101 @@ function renderQueue(
     rows
 ) {
 
-    queueList.repla*eChildren();
+    queueList.replaceChildren();
 
 
-    const filtered *
+    const filtered 
         getFilteredQueue(
-       *    rows
+           rows
         );
 
 
     if (
-   *    filtered.length === 0
+       filtered.length === 0
     ) {
-*        queueList.appendChild(
-   *        createElement(
-           *    "div",
-                "empty-*tate",
-                "No vehicle* found for this queue filter."
-   *        )
+        queueList.appendChild(
+           createElement(
+               "div",
+                "empty-state",
+                "No vehicles found for this queue filter."
+           )
         );
 
 
-        ret*rn;
+        return;
     }
 
 
     filtered.forEach(
-*       function (booking) {
+       function (booking) {
 
-     *      const card =
-               *createElement(
-                   *"article",
-                    "op*ration-card"
+           const card =
+               createElement(
+                   "article",
+                    "operation-card"
                 );
 
 
-*           /* ====================*====================
+           /* ====================*====================
              * LEFT SIDE
-               ========*================================ **
+               ========*================================ */
 
             const main =
-       *        createElement(
-           *        "div",
-                   *"operation-main"
-                )*
+               createElement(
+                   "div",
+                   "operation-main"
+                )
 
 
             const topLine =
-   *            createElement(
-       *            "div",
-               *    "operation-topline"
-          *     );
+               createElement(
+                   "div",
+                   "operation-topline"
+               );
 
 
-            topLine.appe*dChild(
-                createElem*nt(
+            topLine.appendChild(
+                createElement(
                     "strong",
-*                   "queue-number",*                    booking.queue_*o ||
-                    "BOOKING"*                )
+                   "queue-number",                    booking.queue_no ||
+                    "BOOKING"                )
             );
 
-*            topLine.appendChild(
- *              createElement(
-     *              "span",
-            *       "plate-number",
-           *        booking.plate_number
-     *          )
-            );
-
-
-     *      topLine.appendChild(
-       *        createStatusBadge(
-       *            booking.queue_status
- *              )
+            topLine.appendChild(
+               createElement(
+                   "span",
+                   "plate-number",
+                   booking.plate_number
+               )
             );
 
 
- *          main.appendChild(
-      *         topLine
+           topLine.appendChild(
+               createStatusBadge(
+                   booking.queue_status
+               )
             );
 
 
-*           /* ====================*====================
+           main.appendChild(
+               topLine
+            );
+
+
+           /* ====================*====================
              * META
                =============*=========================== */
 
-  *         const meta =
-            *   createElement(
-                *   "div",
-                    "ope*ation-meta"
+           const meta =
+               createElement(
+                   "div",
+                    "operation-meta"
                 );
 
 
- *          const values = [
-       *        booking.vehicle_type,
-    *           booking.wash_type,
+           const values = [
+               booking.vehicle_type,
+               booking.wash_type,
                 formatCurrency(
                     booking.amount
                 ),
