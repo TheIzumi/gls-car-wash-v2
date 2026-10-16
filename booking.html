@@ -5,4 +5,400 @@
     <meta charset="UTF-8">
 
     <meta
-        name="viewport
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="theme-color"
+        content="#123b66"
+    >
+
+    <meta
+        name="description"
+        content="GLS Car Wash customer registration and booking system."
+    >
+
+    <title>GLS Car Wash Booking</title>
+
+    <link rel="stylesheet" href="css/main.css">
+
+    <link rel="stylesheet" href="css/booking.css">
+    
+</head>
+
+
+<body>
+
+    <main class="booking-container">
+
+        <!-- ==========================================
+             GLS BRANDING
+        =========================================== -->
+
+        <header class="booking-header">
+
+            <img src="assets/logo.png" alt="Global Line Services Logo" class="logo">
+
+            <p class="brand-name">
+                GLOBAL LINE SERVICES
+            </p>
+
+            <h1>
+                GLS Car Wash
+            </h1>
+
+            <p class="booking-intro">
+                Register your vehicle and select your
+                preferred car wash service.
+            </p>
+
+        </header>
+
+
+        <!-- ==========================================
+             BOOKING FORM
+        =========================================== -->
+
+        <form
+            id="booking-form"
+            novalidate
+        >
+
+
+            <!-- PHONE NUMBER -->
+
+            <div class="form-field">
+
+                <label for="phoneNumber">
+                    Phone Number
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="tel"
+                    id="phoneNumber"
+                    name="phoneNumber"
+                    placeholder="Example: 0123456789"
+                    autocomplete="tel"
+                    inputmode="tel"
+                    maxlength="15"
+                    required
+                >
+
+                <small>
+                    Required for booking and receipt reference.
+                </small>
+
+            </div>
+
+
+            <!-- PLATE NUMBER -->
+
+            <div class="form-field">
+
+                <label for="plateNumber">
+                    Plate Number
+                    <span class="required">*</span>
+                </label>
+
+                <input
+                    type="text"
+                    id="plateNumber"
+                    name="plateNumber"
+                    placeholder="Example: VBL1234"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    maxlength="15"
+                    required
+                >
+
+                <small>
+                    Your plate number will also be used
+                    for the wash queue display.
+                </small>
+
+            </div>
+
+
+            <!-- CUSTOMER NAME -->
+
+            <div class="form-field">
+
+                <label for="customerName">
+                    Customer Name
+                    <span class="optional">
+                        (Optional)
+                    </span>
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    name="customerName"
+                    placeholder="Enter your name"
+                    autocomplete="name"
+                    maxlength="100"
+                >
+
+            </div>
+
+
+            <!-- ==========================================
+                 VEHICLE
+            =========================================== -->
+
+            <div class="form-field">
+
+                <label for="vehicleType">
+                    Vehicle Type
+                    <span class="required">*</span>
+                </label>
+
+                <select
+                    id="vehicleType"
+                    name="vehicleType"
+                    required
+                >
+
+                    <option value="">
+                        Select Vehicle
+                    </option>
+
+                    <option value="Small Car">
+                        Small Car - RM25
+                    </option>
+
+                    <option value="Sedan">
+                        Sedan - RM28
+                    </option>
+
+                    <option value="SUV">
+                        SUV - RM35
+                    </option>
+
+                    <option value="MPV">
+                        MPV - RM40
+                    </option>
+
+                    <option value="Van">
+                        Van - RM50
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ==========================================
+                 WASH TYPE
+            =========================================== -->
+
+            <div class="form-field">
+
+                <label for="washType">
+                    Wash Type
+                    <span class="required">*</span>
+                </label>
+
+                <select
+                    id="washType"
+                    name="washType"
+                    required
+                >
+
+                    <option value="">
+                        Select Wash Type
+                    </option>
+
+                    <option value="Normal Wash">
+                        Normal Wash
+                    </option>
+
+                    <option value="Nano Wash">
+                        Nano Wash (+RM15)
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- PRICE INFORMATION -->
+
+            <div class="pricing-note">
+
+                <strong>
+                    Nano Wash
+                </strong>
+
+                <span>
+                    Additional RM15.00 from the
+                    Normal Wash price.
+                </span>
+
+            </div>
+
+
+            <!-- ==========================================
+                 BOOKING TYPE
+            =========================================== -->
+
+            <div class="form-field">
+
+                <label for="bookingType">
+                    Visit Type
+                    <span class="required">*</span>
+                </label>
+
+                <select
+                    id="bookingType"
+                    name="bookingType"
+                    required
+                >
+
+                    <option value="Walk-In">
+                        Walk-In / Wash Now
+                    </option>
+
+                    <option value="Future Booking">
+                        Book for Later
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- ==========================================
+                 FUTURE BOOKING
+            =========================================== -->
+
+            <div
+                id="futureBookingFields"
+                class="future-booking-fields"
+                hidden
+            >
+
+                <div class="future-booking-heading">
+
+                    <h2>
+                        Select Your Slot
+                    </h2>
+
+                    <p>
+                        Choose your preferred booking
+                        date and time.
+                    </p>
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="bookingDate">
+                        Booking Date
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="bookingDate"
+                        name="bookingDate"
+                    >
+
+                </div>
+
+
+                <div class="form-field">
+
+                    <label for="bookingTime">
+                        Booking Time
+                        <span class="required">*</span>
+                    </label>
+
+                    <input
+                        type="time"
+                        id="bookingTime"
+                        name="bookingTime"
+                    >
+
+                </div>
+
+                <small class="booking-slot-note">
+                    Slot availability will be confirmed
+                    before final booking confirmation.
+                </small>
+
+            </div>
+
+
+            <!-- ==========================================
+                 TOTAL
+            =========================================== -->
+
+            <section
+                class="total-box"
+                aria-live="polite"
+            >
+
+                <span class="total-label">
+                    Estimated Total
+                </span>
+
+                <div id="totalAmount">
+                    RM 0.00
+                </div>
+
+                <small>
+                    Final amount is based on the
+                    selected vehicle and wash type.
+                </small>
+
+            </section>
+
+
+            <!-- ==========================================
+                 STATUS MESSAGE
+            =========================================== -->
+
+            <p
+                id="bookingMessage"
+                class="booking-message"
+                role="status"
+                aria-live="polite"
+            ></p>
+
+
+            <!-- ==========================================
+                 CONTINUE
+            =========================================== -->
+
+            <button
+                id="continueButton"
+                type="submit"
+            >
+                Continue
+            </button>
+
+
+            <p class="form-footer-note">
+                Please check your vehicle details
+                before continuing.
+            </p>
+
+        </form>
+
+    </main>
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
+    <script src="js/booking.js">
+        </script>
+
+</body>
+
+</html>
