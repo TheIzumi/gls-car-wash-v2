@@ -1447,7 +1447,7 @@ async function updateQueueStatus(
 ) {
 
     if (
-        !bookiig ||
+        !booking ||
         !booking.id ||
        !action
     ) {
