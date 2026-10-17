@@ -263,7 +263,7 @@ select:invalid {
 }
 
 .pricing-note::before {
-    content: "+15";
+    content: "+RM15";
 
     display: inline-flex;
     align-items: center;
