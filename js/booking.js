@@ -242,6 +242,49 @@ const pendingPlate =
 const pendingAmount =
     document.getElementById("pendingAmount");
 
+/* =========================================================
+   PAYMENT SUCCESS ELEMENTS
+   ========================================================= */
+
+const paymentSuccessSection =
+    document.getElementById(
+        "paymentSuccessSection"
+    );
+
+const successBookingNo =
+    document.getElementById(
+        "successBookingNo"
+    );
+
+const successQueueNo =
+    document.getElementById(
+        "successQueueNo"
+    );
+
+const successPlate =
+    document.getElementById(
+        "successPlate"
+    );
+
+const successAmount =
+    document.getElementById(
+        "successAmount"
+    );
+
+const successReceiptNo =
+    document.getElementById(
+        "successReceiptNo"
+    );
+
+const viewCustomerReceiptButton =
+    document.getElementById(
+        "viewCustomerReceiptButton"
+    );
+
+const successNewBookingButton =
+    document.getElementById(
+        "successNewBookingButton"
+    );
 
 /* =========================================================
    10. CURRENCY
@@ -277,7 +320,8 @@ const applicationSections = [
     cashPaymentSection,
     duitNowPaymentSection,
     bankTransferPaymentSection,
-    paymentPendingSection
+    paymentPendingSection,
+    paymentSuccessSection
 ];
 
 
@@ -1284,6 +1328,7 @@ async function submitPaymentForVerification(
             paymentPendingSection
         );
 
+       startPaymentStatusPolling();
 
         console.log(
             "GLS payment submitted for verification:",
@@ -1328,6 +1373,204 @@ async function submitPaymentForVerification(
                 originalText;
         }
     }
+}
+
+/* =========================================================
+   CUSTOMER PAYMENT STATUS
+   ========================================================= */
+
+async function getCustomerPaymentStatus() {
+
+    if (
+        !latestBooking ||
+        !latestBooking.id
+    ) {
+        return null;
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "get_gls_customer_payment_status",
+            {
+                p_booking_id:
+                    latestBooking.id
+            }
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    return data;
+}
+
+function stopPaymentStatusPolling() {
+
+    if (
+        paymentStatusTimer !== null
+    ) {
+
+        window.clearInterval(
+            paymentStatusTimer
+        );
+
+
+        paymentStatusTimer =
+            null;
+    }
+}
+
+function showPaymentSuccess(
+    paymentStatus
+) {
+
+    stopPaymentStatusPolling();
+
+
+    latestBooking.payment_status =
+        "paid";
+
+
+    latestBooking.receipt_no =
+        paymentStatus.receipt_no;
+
+
+    latestBooking.receipt_token =
+        paymentStatus.receipt_token;
+
+
+    successBookingNo.textContent =
+        paymentStatus.booking_no ||
+        latestBooking.booking_no ||
+        "-";
+
+
+    successQueueNo.textContent =
+        paymentStatus.queue_no ||
+        latestBooking.queue_no ||
+        "-";
+
+
+    successPlate.textContent =
+        paymentStatus.plate_number ||
+        latestBooking.plate_number ||
+        "-";
+
+
+    successAmount.textContent =
+        formatCurrency(
+            paymentStatus.amount ||
+            latestBooking.amount
+        );
+
+
+    successReceiptNo.textContent =
+        paymentStatus.receipt_no ||
+        "-";
+
+
+    viewCustomerReceiptButton.disabled =
+        !paymentStatus.receipt_token;
+
+
+    showOnlySection(
+        paymentSuccessSection
+    );
+}
+
+async function checkPaymentStatus() {
+
+    if (
+        paymentStatusCheckInProgress ||
+        !latestBooking ||
+        latestBooking.payment_status ===
+            "paid"
+    ) {
+        return;
+    }
+
+
+    paymentStatusCheckInProgress =
+        true;
+
+
+    try {
+
+        const paymentStatus =
+            await getCustomerPaymentStatus();
+
+
+        if (!paymentStatus) {
+            return;
+        }
+
+
+        console.log(
+            "GLS payment status:",
+            paymentStatus.payment_status
+        );
+
+
+        if (
+            paymentStatus.payment_status ===
+            "paid"
+        ) {
+
+            showPaymentSuccess(
+                paymentStatus
+            );
+        }
+
+    }
+
+    catch (error) {
+
+        /*
+         * A temporary polling failure should
+         * not interrupt the customer page.
+         */
+
+        console.warn(
+            "GLS payment status check failed:",
+            error
+        );
+
+    }
+
+    finally {
+
+        paymentStatusCheckInProgress =
+            false;
+    }
+}
+
+function startPaymentStatusPolling() {
+
+    stopPaymentStatusPolling();
+
+
+    /*
+     * Check immediately.
+     */
+
+    checkPaymentStatus();
+
+
+    /*
+     * Then check every 5 seconds.
+     */
+
+    paymentStatusTimer =
+        window.setInterval(
+            checkPaymentStatus,
+            PAYMENT_STATUS_INTERVAL
+        );
 }
 
 
@@ -1697,11 +1940,21 @@ function initialiseBookingPage() {
      */
 
     showOnlySection(
-        bookingFormSection
-    );
+    paymentPendingSection
+);
 
 
-    console.log(
+/*
+ * Start monitoring payment status.
+ * When staff confirms the payment,
+ * customer screen will automatically
+ * change to Payment Successful.
+ */
+
+startPaymentStatusPolling();
+
+
+console.log(
         "GLS Car Wash V2 booking and payment system ready."
     );
 }
