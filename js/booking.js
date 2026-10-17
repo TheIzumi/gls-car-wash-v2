@@ -17,6 +17,10 @@ const GLS_SUPABASE_URL =
 const GLS_SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_WJtd9t5EUqqIU1SM2UigiQ__wJsQVF8";
 
+const GLS_TIMEZONE =
+    "Asia/Kuala_Lumpur";
+
+
 let glsSupabase = null;
 
 
@@ -40,19 +44,28 @@ const NANO_WASH_EXTRA = 15;
    3. APPLICATION STATE
    ========================================================= */
 
-let bookingInProgress = false;
+let bookingInProgress =
+    false;
 
-let paymentSubmissionInProgress = false;
+let paymentSubmissionInProgress =
+    false;
 
-let latestBooking = null;
+let latestBooking =
+    null;
 
-let latestSubmittedBooking = null;
+let latestSubmittedBooking =
+    null;
 
-let paymentStatusTimer = null;
 
-let paymentStatusCheckInProgress = false;
+let paymentStatusTimer =
+    null;
 
-const PAYMENT_STATUS_INTERVAL = 5000;
+let paymentStatusCheckInProgress =
+    false;
+
+
+const PAYMENT_STATUS_INTERVAL =
+    5000;
 
 
 /* =========================================================
@@ -388,10 +401,17 @@ const currencyFormatter =
     new Intl.NumberFormat(
         "en-MY",
         {
-            style: "currency",
-            currency: "MYR",
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+            style:
+                "currency",
+
+            currency:
+                "MYR",
+
+            minimumFractionDigits:
+                2,
+
+            maximumFractionDigits:
+                2
         }
     );
 
@@ -428,6 +448,7 @@ function showOnlySection(
         function (item) {
 
             if (item) {
+
                 item.hidden =
                     item !== section;
             }
@@ -438,8 +459,11 @@ function showOnlySection(
     if (section) {
 
         section.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
+            behavior:
+                "smooth",
+
+            block:
+                "start"
         });
     }
 }
@@ -467,6 +491,7 @@ function setBookingMessage(
 
 
     if (type) {
+
         bookingMessage.classList.add(
             type
         );
@@ -497,6 +522,7 @@ function calculatePrice() {
 
         totalAmountDisplay.textContent =
             formatCurrency(0);
+
 
         return 0;
     }
@@ -529,7 +555,7 @@ function calculatePrice() {
 
 
 /* =========================================================
-   16. BOOKING TYPE
+   16. VISIT TYPE
    ========================================================= */
 
 function updateBookingType() {
@@ -575,7 +601,7 @@ function getMalaysiaToday() {
             "en-CA",
             {
                 timeZone:
-                    "Asia/Kuala_Lumpur",
+                    GLS_TIMEZONE,
 
                 year:
                     "numeric",
@@ -634,8 +660,7 @@ function setMinimumBookingDate() {
 function normalisePlateNumber() {
 
     let value =
-        plateNumberInput
-            .value
+        plateNumberInput.value
             .toUpperCase();
 
 
@@ -696,13 +721,11 @@ function normalisePhoneNumber() {
 function validateBooking() {
 
     const phone =
-        phoneNumberInput
-            .value
+        phoneNumberInput.value
             .trim();
 
     const plate =
-        plateNumberInput
-            .value
+        plateNumberInput.value
             .trim();
 
     const vehicleType =
@@ -721,6 +744,7 @@ function validateBooking() {
             "Please enter your phone number.",
             "error"
         );
+
 
         phoneNumberInput.focus();
 
@@ -745,6 +769,7 @@ function validateBooking() {
             "error"
         );
 
+
         phoneNumberInput.focus();
 
         return false;
@@ -760,6 +785,7 @@ function validateBooking() {
             "Please enter a valid vehicle plate number.",
             "error"
         );
+
 
         plateNumberInput.focus();
 
@@ -777,6 +803,7 @@ function validateBooking() {
             "Please select your vehicle type.",
             "error"
         );
+
 
         vehicleTypeInput.focus();
 
@@ -798,6 +825,7 @@ function validateBooking() {
             "error"
         );
 
+
         washTypeInput.focus();
 
         return false;
@@ -817,6 +845,7 @@ function validateBooking() {
             "Please select your visit type.",
             "error"
         );
+
 
         bookingTypeInput.focus();
 
@@ -838,6 +867,7 @@ function validateBooking() {
                 "error"
             );
 
+
             bookingDateInput.focus();
 
             return false;
@@ -852,6 +882,7 @@ function validateBooking() {
                 "Please select your booking time.",
                 "error"
             );
+
 
             bookingTimeInput.focus();
 
@@ -868,11 +899,9 @@ function validateBooking() {
 
         if (
             Number.isNaN(
-                selectedDateTime
-                    .getTime()
+                selectedDateTime.getTime()
             ) ||
-            selectedDateTime
-                .getTime() <=
+            selectedDateTime.getTime() <=
                 Date.now()
         ) {
 
@@ -880,6 +909,7 @@ function validateBooking() {
                 "Please select a future booking date and time.",
                 "error"
             );
+
 
             return false;
         }
@@ -902,20 +932,18 @@ function buildBookingParameters() {
 
 
     return {
+
         p_phone_number:
-            phoneNumberInput
-                .value
+            phoneNumberInput.value
                 .trim(),
 
         p_plate_number:
-            plateNumberInput
-                .value
+            plateNumberInput.value
                 .trim()
                 .toUpperCase(),
 
         p_customer_name:
-            customerNameInput
-                .value
+            customerNameInput.value
                 .trim(),
 
         p_vehicle_type:
@@ -967,10 +995,8 @@ function setBookingBusy(
     controls.forEach(
         function (control) {
 
-            if (control) {
-                control.disabled =
-                    isBusy;
-            }
+            control.disabled =
+                isBusy;
         }
     );
 
@@ -1032,6 +1058,9 @@ function showBookingConfirmation(
     submittedBooking
 ) {
 
+    stopPaymentStatusPolling();
+
+
     latestBooking =
         booking;
 
@@ -1069,18 +1098,23 @@ function showBookingConfirmation(
         confirmationHeading.textContent =
             "You're in the queue!";
 
+
         confirmationDescription.textContent =
             "Please keep this screen for reference.";
 
+
         confirmationQueueSection.hidden =
             false;
+
 
         confirmationQueueNo.textContent =
             booking.queue_no ||
             "-";
 
+
         confirmationVisit.textContent =
             "Walk-In / Wash Now";
+
     }
 
     else {
@@ -1088,30 +1122,26 @@ function showBookingConfirmation(
         confirmationHeading.textContent =
             "Booking Confirmed!";
 
+
         confirmationDescription.textContent =
             "Your future booking has been registered.";
+
 
         confirmationQueueSection.hidden =
             true;
 
 
-        if (
-            submittedBooking.bookingDate &&
-            submittedBooking.bookingTime
-        ) {
-
-            confirmationVisit.textContent =
-                `${submittedBooking.bookingDate}` +
-                ` · ` +
-                `${submittedBooking.bookingTime}`;
-
-        }
-
-        else {
-
-            confirmationVisit.textContent =
-                "Future Booking";
-        }
+        confirmationVisit.textContent =
+            (
+                submittedBooking.bookingDate &&
+                submittedBooking.bookingTime
+            )
+                ? (
+                    `${submittedBooking.bookingDate}` +
+                    ` · ` +
+                    `${submittedBooking.bookingTime}`
+                )
+                : "Future Booking";
     }
 
 
@@ -1132,9 +1162,7 @@ async function handleBookingSubmit(
     event.preventDefault();
 
 
-    if (
-        bookingInProgress
-    ) {
+    if (bookingInProgress) {
         return;
     }
 
@@ -1142,14 +1170,13 @@ async function handleBookingSubmit(
     setBookingMessage("");
 
 
-    if (
-        !validateBooking()
-    ) {
+    if (!validateBooking()) {
         return;
     }
 
 
     const submittedBooking = {
+
         bookingDate:
             bookingDateInput.value,
 
@@ -1221,7 +1248,6 @@ async function handleBookingSubmit(
                     "The selected vehicle type is currently unavailable.";
             }
 
-
             else if (
                 databaseMessage.includes(
                     "future booking requires"
@@ -1232,7 +1258,6 @@ async function handleBookingSubmit(
                     "Please select your booking date and time.";
             }
 
-
             else if (
                 databaseMessage.includes(
                     "phone number is required"
@@ -1242,7 +1267,6 @@ async function handleBookingSubmit(
                 message =
                     "Please enter your phone number.";
             }
-
 
             else if (
                 databaseMessage.includes(
@@ -1278,12 +1302,12 @@ async function handleBookingSubmit(
 
 function openPaymentSection() {
 
+    stopPaymentStatusPolling();
+
+
     if (!latestBooking) {
         return;
     }
-
-
-    stopPaymentStatusPolling();
 
 
     paymentAmount.textContent =
@@ -1310,7 +1334,7 @@ function returnToBookingConfirmation() {
 
 
 /* =========================================================
-   26. SAVE SELECTED PAYMENT METHOD
+   26. SAVE CUSTOMER PAYMENT METHOD
    ========================================================= */
 
 async function saveSelectedPaymentMethod(
@@ -1349,8 +1373,9 @@ async function saveSelectedPaymentMethod(
     }
 
 
-    latestBooking.selected_payment_method =
-        paymentMethod;
+    latestBooking
+        .selected_payment_method =
+            paymentMethod;
 
 
     return data;
@@ -1370,10 +1395,6 @@ async function openCashPayment() {
 
     try {
 
-        /*
-         * Store that the customer selected Cash.
-         */
-
         await saveSelectedPaymentMethod(
             "cash"
         );
@@ -1391,17 +1412,11 @@ async function openCashPayment() {
 
 
         /*
-         * IMPORTANT:
+         * Cash has no "I've Made Payment"
+         * button.
          *
-         * Cash has no customer-side
-         * "I've Made Payment" button.
-         *
-         * Start checking the payment status
-         * immediately.
-         *
-         * Once staff confirms Cash payment,
-         * this page automatically changes
-         * from AWAITING PAYMENT to PAID.
+         * Start monitoring immediately while
+         * customer pays at the counter.
          */
 
         startPaymentStatusPolling();
@@ -1429,15 +1444,15 @@ async function openCashPayment() {
 
 async function openDuitNowPayment() {
 
+    stopPaymentStatusPolling();
+
+
     if (!latestBooking) {
         return;
     }
 
 
     try {
-
-        stopPaymentStatusPolling();
-
 
         await saveSelectedPaymentMethod(
             "duitnow"
@@ -1477,15 +1492,15 @@ async function openDuitNowPayment() {
 
 async function openBankTransferPayment() {
 
+    stopPaymentStatusPolling();
+
+
     if (!latestBooking) {
         return;
     }
 
 
     try {
-
-        stopPaymentStatusPolling();
-
 
         await saveSelectedPaymentMethod(
             "transfer"
@@ -1525,7 +1540,7 @@ async function openBankTransferPayment() {
 
 
 /* =========================================================
-   30. MARK CUSTOMER PAYMENT PENDING
+   30. MARK DIGITAL PAYMENT PENDING
    ========================================================= */
 
 async function markPaymentPending() {
@@ -1573,6 +1588,7 @@ async function submitPaymentForVerification(
         paymentSubmissionInProgress ||
         !latestBooking
     ) {
+
         return;
     }
 
@@ -1588,12 +1604,22 @@ async function submitPaymentForVerification(
     button.disabled =
         true;
 
-
     button.textContent =
         "Submitting...";
 
 
     try {
+
+        /*
+         * Ensure selected method remains aligned
+         * with the digital method customer is
+         * submitting.
+         */
+
+        await saveSelectedPaymentMethod(
+            paymentMethod
+        );
+
 
         await markPaymentPending();
 
@@ -1602,8 +1628,9 @@ async function submitPaymentForVerification(
             "pending";
 
 
-        latestBooking.submitted_payment_method =
-            paymentMethod;
+        latestBooking
+            .selected_payment_method =
+                paymentMethod;
 
 
         pendingBookingNo.textContent =
@@ -1626,11 +1653,6 @@ async function submitPaymentForVerification(
             paymentPendingSection
         );
 
-
-        /*
-         * Start monitoring after customer
-         * submits DuitNow / Transfer.
-         */
 
         startPaymentStatusPolling();
 
@@ -1682,7 +1704,33 @@ async function submitPaymentForVerification(
 
 
 /* =========================================================
-   32. CUSTOMER PAYMENT STATUS
+   32. DUITNOW SUBMITTED
+   ========================================================= */
+
+async function handlePaymentSubmitted() {
+
+    await submitPaymentForVerification(
+        "duitnow",
+        paymentSubmittedButton
+    );
+}
+
+
+/* =========================================================
+   33. BANK TRANSFER SUBMITTED
+   ========================================================= */
+
+async function handleBankTransferSubmitted() {
+
+    await submitPaymentForVerification(
+        "transfer",
+        bankTransferSubmittedButton
+    );
+}
+
+
+/* =========================================================
+   34. CUSTOMER PAYMENT STATUS RPC
    ========================================================= */
 
 async function getCustomerPaymentStatus() {
@@ -1691,6 +1739,7 @@ async function getCustomerPaymentStatus() {
         !latestBooking ||
         !latestBooking.id
     ) {
+
         return null;
     }
 
@@ -1717,6 +1766,10 @@ async function getCustomerPaymentStatus() {
 }
 
 
+/* =========================================================
+   35. STOP PAYMENT STATUS POLLING
+   ========================================================= */
+
 function stopPaymentStatusPolling() {
 
     if (
@@ -1735,6 +1788,10 @@ function stopPaymentStatusPolling() {
 }
 
 
+/* =========================================================
+   36. SHOW PAYMENT SUCCESS
+   ========================================================= */
+
 function showPaymentSuccess(
     paymentStatus
 ) {
@@ -1742,16 +1799,26 @@ function showPaymentSuccess(
     stopPaymentStatusPolling();
 
 
+    if (
+        !latestBooking
+    ) {
+
+        return;
+    }
+
+
     latestBooking.payment_status =
         "paid";
 
 
     latestBooking.receipt_no =
-        paymentStatus.receipt_no;
+        paymentStatus.receipt_no ||
+        null;
 
 
     latestBooking.receipt_token =
-        paymentStatus.receipt_token;
+        paymentStatus.receipt_token ||
+        null;
 
 
     successBookingNo.textContent =
@@ -1774,7 +1841,7 @@ function showPaymentSuccess(
 
     successAmount.textContent =
         formatCurrency(
-            paymentStatus.amount ||
+            paymentStatus.amount ??
             latestBooking.amount
         );
 
@@ -1783,6 +1850,12 @@ function showPaymentSuccess(
         paymentStatus.receipt_no ||
         "-";
 
+
+    /*
+     * Receipt button should only become
+     * usable once a secure receipt token
+     * exists.
+     */
 
     viewCustomerReceiptButton.disabled =
         !paymentStatus.receipt_token;
@@ -1794,6 +1867,10 @@ function showPaymentSuccess(
 }
 
 
+/* =========================================================
+   37. CHECK PAYMENT STATUS
+   ========================================================= */
+
 async function checkPaymentStatus() {
 
     if (
@@ -1802,6 +1879,7 @@ async function checkPaymentStatus() {
         latestBooking.payment_status ===
             "paid"
     ) {
+
         return;
     }
 
@@ -1842,8 +1920,8 @@ async function checkPaymentStatus() {
     catch (error) {
 
         /*
-         * Temporary polling failure should
-         * not interrupt the customer page.
+         * A temporary polling failure must
+         * not interrupt the customer.
          */
 
         console.warn(
@@ -1861,6 +1939,10 @@ async function checkPaymentStatus() {
 }
 
 
+/* =========================================================
+   38. START PAYMENT STATUS POLLING
+   ========================================================= */
+
 function startPaymentStatusPolling() {
 
     stopPaymentStatusPolling();
@@ -1874,7 +1956,7 @@ function startPaymentStatusPolling() {
 
 
     /*
-     * Then every 5 seconds.
+     * Then check every 5 seconds.
      */
 
     paymentStatusTimer =
@@ -1886,33 +1968,7 @@ function startPaymentStatusPolling() {
 
 
 /* =========================================================
-   33. SUBMIT DUITNOW
-   ========================================================= */
-
-async function handlePaymentSubmitted() {
-
-    await submitPaymentForVerification(
-        "duitnow",
-        paymentSubmittedButton
-    );
-}
-
-
-/* =========================================================
-   34. SUBMIT BANK TRANSFER
-   ========================================================= */
-
-async function handleBankTransferSubmitted() {
-
-    await submitPaymentForVerification(
-        "transfer",
-        bankTransferSubmittedButton
-    );
-}
-
-
-/* =========================================================
-   35. CUSTOMER RECEIPT
+   39. OPEN CUSTOMER RECEIPT
    ========================================================= */
 
 function openCustomerReceipt() {
@@ -1921,19 +1977,13 @@ function openCustomerReceipt() {
         !latestBooking ||
         !latestBooking.receipt_token
     ) {
+
         return;
     }
 
 
-    /*
-     * Customer receipt token flow.
-     *
-     * receipt.html / receipt.js must support
-     * ?token= for this button to work.
-     */
-
     const receiptUrl =
-        `receipt.html?token=${encodeURIComponent(
+        `receipt.html?t=${encodeURIComponent(
             latestBooking.receipt_token
         )}`;
 
@@ -1944,12 +1994,16 @@ function openCustomerReceipt() {
 
 
 /* =========================================================
-   36. START ANOTHER BOOKING
+   40. START ANOTHER BOOKING
    ========================================================= */
 
 function startNewBooking() {
 
     stopPaymentStatusPolling();
+
+
+    paymentStatusCheckInProgress =
+        false;
 
 
     latestBooking =
@@ -1979,6 +2033,8 @@ function startNewBooking() {
 
     updateBookingType();
 
+    setMinimumBookingDate();
+
 
     showOnlySection(
         bookingFormSection
@@ -1989,7 +2045,6 @@ function startNewBooking() {
         function () {
 
             phoneNumberInput.focus();
-
         },
         300
     );
@@ -1997,12 +2052,13 @@ function startNewBooking() {
 
 
 /* =========================================================
-   37. REQUIRED ELEMENT CHECK
+   41. REQUIRED ELEMENT CHECK
    ========================================================= */
 
 function requiredElementsExist() {
 
     const requiredElements = {
+
         bookingFormSection,
         bookingForm,
 
@@ -2117,7 +2173,7 @@ function requiredElementsExist() {
 
 
 /* =========================================================
-   38. EVENT LISTENERS
+   42. EVENT LISTENERS
    ========================================================= */
 
 function registerEventListeners() {
@@ -2188,10 +2244,11 @@ function registerEventListeners() {
     );
 
 
-    bankTransferPaymentButton.addEventListener(
-        "click",
-        openBankTransferPayment
-    );
+    bankTransferPaymentButton
+        .addEventListener(
+            "click",
+            openBankTransferPayment
+        );
 
 
     cashBackButton.addEventListener(
@@ -2206,50 +2263,87 @@ function registerEventListeners() {
     );
 
 
-    bankTransferBackButton.addEventListener(
-        "click",
-        openPaymentSection
-    );
+    bankTransferBackButton
+        .addEventListener(
+            "click",
+            openPaymentSection
+        );
 
 
-    paymentSubmittedButton.addEventListener(
-        "click",
-        handlePaymentSubmitted
-    );
+    paymentSubmittedButton
+        .addEventListener(
+            "click",
+            handlePaymentSubmitted
+        );
 
 
-    bankTransferSubmittedButton.addEventListener(
-        "click",
-        handleBankTransferSubmitted
-    );
+    bankTransferSubmittedButton
+        .addEventListener(
+            "click",
+            handleBankTransferSubmitted
+        );
 
 
-    viewCustomerReceiptButton.addEventListener(
-        "click",
-        openCustomerReceipt
-    );
+    viewCustomerReceiptButton
+        .addEventListener(
+            "click",
+            openCustomerReceipt
+        );
 
 
-    successNewBookingButton.addEventListener(
-        "click",
-        startNewBooking
-    );
+    successNewBookingButton
+        .addEventListener(
+            "click",
+            startNewBooking
+        );
 
 
     /*
-     * Stop background polling if customer
-     * leaves the page.
+     * Mobile users may switch to banking apps.
+     *
+     * Stop polling while this browser tab is hidden
+     * and resume when they return to the relevant
+     * payment screen.
      */
 
-    window.addEventListener(
-        "beforeunload",
-        stopPaymentStatusPolling
+    document.addEventListener(
+        "visibilitychange",
+        function () {
+
+            if (
+                document.hidden
+            ) {
+
+                stopPaymentStatusPolling();
+
+                return;
+            }
+
+
+            if (
+                !latestBooking ||
+                latestBooking.payment_status ===
+                    "paid"
+            ) {
+
+                return;
+            }
+
+
+            if (
+                !cashPaymentSection.hidden ||
+                !paymentPendingSection.hidden
+            ) {
+
+                startPaymentStatusPolling();
+            }
+        }
     );
 }
 
 
 /* =========================================================
-   39. SUPABASE
+   43. SUPABASE
    ========================================================= */
 
 function initialiseSupabase() {
@@ -2276,8 +2370,8 @@ function initialiseSupabase() {
                 auth: {
 
                     /*
-                     * Customer booking page does not
-                     * require a staff Auth session.
+                     * Customer booking page does
+                     * not need a persisted Auth session.
                      */
 
                     persistSession:
@@ -2295,7 +2389,7 @@ function initialiseSupabase() {
 
 
 /* =========================================================
-   40. INITIALISE
+   44. INITIALISE BOOKING PAGE
    ========================================================= */
 
 function initialiseBookingPage() {
@@ -2351,14 +2445,8 @@ function initialiseBookingPage() {
 
 
     /*
-     * IMPORTANT:
-     *
-     * Fresh customer visit always begins
-     * at the Booking Form.
-     *
-     * Payment polling starts only after
-     * customer reaches Cash waiting screen
-     * or submits DuitNow / Transfer.
+     * Fresh visits always begin
+     * on the booking form.
      */
 
     showOnlySection(
@@ -2373,7 +2461,7 @@ function initialiseBookingPage() {
 
 
 /* =========================================================
-   41. START
+   45. START APPLICATION
    ========================================================= */
 
 if (
