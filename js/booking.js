@@ -995,26 +995,95 @@ function returnToBookingConfirmation() {
     );
 }
 
+/* =========================================================
+   CUSTOMER SELECT PAYMENT METHOD
+   ========================================================= */
+
+async function saveSelectedPaymentMethod(
+    paymentMethod
+) {
+
+    if (
+        !latestBooking ||
+        !latestBooking.id
+    ) {
+        throw new Error(
+            "Booking information is unavailable."
+        );
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "select_gls_payment_method",
+            {
+                p_booking_id:
+                    latestBooking.id,
+
+                p_payment_method:
+                    paymentMethod
+            }
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    latestBooking.selected_payment_method =
+        paymentMethod;
+
+
+    return data;
+}
+
 
 /* =========================================================
    24. CASH PAYMENT
    ========================================================= */
 
-function openCashPayment() {
+async function openCashPayment() {
+
     if (!latestBooking) {
         return;
     }
 
 
-    cashPaymentAmount.textContent =
-        formatCurrency(
-            latestBooking.amount
+    try {
+
+        await saveSelectedPaymentMethod(
+            "cash"
         );
 
 
-    showOnlySection(
-        cashPaymentSection
-    );
+        cashPaymentAmount.textContent =
+            formatCurrency(
+                latestBooking.amount
+            );
+
+
+        showOnlySection(
+            cashPaymentSection
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to select cash payment:",
+            error
+        );
+
+
+        alert(
+            "Unable to select Cash payment. Please try again."
+        );
+    }
 }
 
 
@@ -1022,48 +1091,97 @@ function openCashPayment() {
    25. DUITNOW PAYMENT
    ========================================================= */
 
-function openDuitNowPayment() {
+/* =========================================================
+   25. DUITNOW PAYMENT
+   ========================================================= */
+
+async function openDuitNowPayment() {
+
     if (!latestBooking) {
         return;
     }
 
 
-    duitNowPaymentAmount.textContent =
-        formatCurrency(
-            latestBooking.amount
+    try {
+
+        await saveSelectedPaymentMethod(
+            "duitnow"
         );
 
 
-    showOnlySection(
-        duitNowPaymentSection
-    );
+        duitNowPaymentAmount.textContent =
+            formatCurrency(
+                latestBooking.amount
+            );
+
+
+        showOnlySection(
+            duitNowPaymentSection
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to select DuitNow payment:",
+            error
+        );
+
+
+        alert(
+            "Unable to select DuitNow QR. Please try again."
+        );
+    }
 }
 
 /* =========================================================
-   BANK TRANSFER
+   BANK TRANSFER PAYMENT
    ========================================================= */
 
-function openBankTransferPayment() {
+async function openBankTransferPayment() {
 
     if (!latestBooking) {
         return;
     }
 
 
-    bankTransferAmount.textContent =
-        formatCurrency(
-            latestBooking.amount
+    try {
+
+        await saveSelectedPaymentMethod(
+            "transfer"
         );
 
 
-    bankTransferReference.textContent =
-        latestBooking.booking_no ||
-        "-";
+        bankTransferAmount.textContent =
+            formatCurrency(
+                latestBooking.amount
+            );
 
 
-    showOnlySection(
-        bankTransferPaymentSection
-    );
+        bankTransferReference.textContent =
+            latestBooking.booking_no ||
+            "-";
+
+
+        showOnlySection(
+            bankTransferPaymentSection
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Unable to select Bank Transfer:",
+            error
+        );
+
+
+        alert(
+            "Unable to select Bank Transfer. Please try again."
+        );
+    }
 }
 
 /* =========================================================
