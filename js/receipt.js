@@ -1,7 +1,7 @@
-
 /* =========================================================
    GLS CAR WASH V2
    Official Receipt
+   Staff + Customer Secure Access
    File: js/receipt.js
    ========================================================= */
 
@@ -29,6 +29,8 @@ let glsSupabase = null;
    ========================================================= */
 
 let currentReceipt = null;
+
+let receiptAccessMode = null;
 
 
 /* =========================================================
@@ -122,7 +124,7 @@ const printReceiptButton =
 
 
 /* =========================================================
-   5. CURRENCY FORMATTER
+   5. CURRENCY
    ========================================================= */
 
 const currencyFormatter =
@@ -146,7 +148,7 @@ function formatCurrency(value) {
 
 
 /* =========================================================
-   6. MALAYSIA DATE / TIME FORMATTER
+   6. MALAYSIA DATE / TIME
    ========================================================= */
 
 function formatMalaysiaDateTime(
@@ -167,7 +169,6 @@ function formatMalaysiaDateTime(
             date.getTime()
         )
     ) {
-
         return "—";
     }
 
@@ -209,6 +210,7 @@ function formatPaymentMethod(
 ) {
 
     const methods = {
+
         cash:
             "Cash",
 
@@ -223,12 +225,14 @@ function formatPaymentMethod(
     };
 
 
+    const normalizedMethod =
+        String(
+            method || ""
+        ).toLowerCase();
+
+
     return (
-        methods[
-            String(
-                method || ""
-            ).toLowerCase()
-        ] ||
+        methods[normalizedMethod] ||
         method ||
         "—"
     );
@@ -286,10 +290,10 @@ function showReceipt() {
 
 
 /* =========================================================
-   9. GET BOOKING ID FROM URL
+   9. URL PARAMETERS
    ========================================================= */
 
-function getBookingIdFromUrl() {
+function getReceiptParameters() {
 
     const parameters =
         new URLSearchParams(
@@ -303,17 +307,29 @@ function getBookingIdFromUrl() {
         );
 
 
-    if (!bookingId) {
-        return null;
-    }
+    const publicToken =
+        parameters.get(
+            "t"
+        );
 
 
-    return bookingId.trim();
+    return {
+
+        bookingId:
+            bookingId
+                ? bookingId.trim()
+                : null,
+
+        publicToken:
+            publicToken
+                ? publicToken.trim()
+                : null
+    };
 }
 
 
 /* =========================================================
-   10. BASIC UUID VALIDATION
+   10. UUID VALIDATION
    ========================================================= */
 
 function isValidUuid(
@@ -324,7 +340,6 @@ function isValidUuid(
         typeof value !==
         "string"
     ) {
-
         return false;
     }
 
@@ -340,7 +355,7 @@ function isValidUuid(
 
 
 /* =========================================================
-   11. GET AUTHENTICATED SESSION
+   11. GET STAFF SESSION
    ========================================================= */
 
 async function getAuthenticatedSession() {
@@ -375,7 +390,7 @@ async function getAuthenticatedSession() {
 
 
 /* =========================================================
-   12. VERIFY GLS STAFF PROFILE
+   12. VERIFY STAFF PROFILE
    ========================================================= */
 
 async function verifyStaffProfile(
@@ -421,10 +436,10 @@ async function verifyStaffProfile(
 
 
 /* =========================================================
-   13. LOAD RECEIPT FROM DATABASE
+   13. STAFF RECEIPT
    ========================================================= */
 
-async function getOrCreateReceipt(
+async function getStaffReceipt(
     bookingId
 ) {
 
@@ -459,7 +474,45 @@ async function getOrCreateReceipt(
 
 
 /* =========================================================
-   14. POPULATE RECEIPT
+   14. CUSTOMER PUBLIC RECEIPT
+   ========================================================= */
+
+async function getPublicReceipt(
+    token
+) {
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "get_gls_public_receipt",
+            {
+                p_token:
+                    token
+            }
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    if (!data) {
+
+        throw new Error(
+            "No receipt data was returned."
+        );
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   15. POPULATE RECEIPT
    ========================================================= */
 
 function populateReceipt(
@@ -476,8 +529,8 @@ function populateReceipt(
 
 
     /*
-     * Official receipt uses payment date
-     * as the transaction date.
+     * Use confirmed payment time as
+     * transaction date.
      */
 
     receiptDate.textContent =
@@ -537,8 +590,7 @@ function populateReceipt(
 
 
     /*
-     * Give browser print/PDF output
-     * a meaningful document title.
+     * Meaningful PDF / print filename title.
      */
 
     document.title =
@@ -549,7 +601,7 @@ function populateReceipt(
 
 
 /* =========================================================
-   15. RECEIPT ERROR TRANSLATION
+   16. FRIENDLY ERROR
    ========================================================= */
 
 function getFriendlyErrorMessage(
@@ -581,8 +633,7 @@ function getFriendlyErrorMessage(
     ) {
 
         return (
-            "Staff sign-in is required to view this receipt. " +
-            "Please return to the dashboard and sign in."
+            "Staff sign-in is required to view this receipt from the dashboard."
         );
     }
 
@@ -600,12 +651,36 @@ function getFriendlyErrorMessage(
 
     if (
         message.includes(
-            "authentication required"
+            "receipt token is required"
         )
     ) {
 
         return (
-            "Staff sign-in is required to view this receipt."
+            "The receipt link is incomplete."
+        );
+    }
+
+
+    if (
+        message.includes(
+            "receipt not found"
+        )
+    ) {
+
+        return (
+            "This receipt link is invalid or the receipt could not be found."
+        );
+    }
+
+
+    if (
+        message.includes(
+            "receipt is unavailable"
+        )
+    ) {
+
+        return (
+            "This official receipt is currently unavailable."
         );
     }
 
@@ -617,7 +692,19 @@ function getFriendlyErrorMessage(
     ) {
 
         return (
-            "The requested booking could not be found."
+            "The booking associated with this receipt could not be found."
+        );
+    }
+
+
+    if (
+        message.includes(
+            "payment record not found"
+        )
+    ) {
+
+        return (
+            "The confirmed payment record for this receipt could not be found."
         );
     }
 
@@ -636,12 +723,12 @@ function getFriendlyErrorMessage(
 
     if (
         message.includes(
-            "confirmed payment record not found"
+            "authentication required"
         )
     ) {
 
         return (
-            "The booking is marked paid, but its confirmed payment record could not be found."
+            "Staff sign-in is required to view this receipt from the dashboard."
         );
     }
 
@@ -671,14 +758,13 @@ function getFriendlyErrorMessage(
 
 
     return (
-        "Unable to retrieve this official receipt. " +
-        "Please return to the dashboard and try again."
+        "Unable to retrieve this official receipt. Please check the receipt link and try again."
     );
 }
 
 
 /* =========================================================
-   16. PRINT / SAVE PDF
+   17. PRINT / SAVE PDF
    ========================================================= */
 
 function handlePrintReceipt() {
@@ -687,14 +773,6 @@ function handlePrintReceipt() {
         return;
     }
 
-
-    /*
-     * window.print() opens the browser / operating
-     * system print interface.
-     *
-     * On supported mobile browsers, users can
-     * choose Save as PDF from the print interface.
-     */
 
     try {
 
@@ -719,12 +797,13 @@ function handlePrintReceipt() {
 
 
 /* =========================================================
-   17. REQUIRED HTML CHECK
+   18. REQUIRED HTML CHECK
    ========================================================= */
 
 function requiredElementsExist() {
 
     const required = {
+
         receiptLoading,
         receiptError,
         receiptErrorMessage,
@@ -791,7 +870,7 @@ function requiredElementsExist() {
 
 
 /* =========================================================
-   18. SUPABASE INITIALISATION
+   19. SUPABASE INITIALISATION
    ========================================================= */
 
 function initialiseSupabase() {
@@ -817,6 +896,11 @@ function initialiseSupabase() {
             {
                 auth: {
 
+                    /*
+                     * Keep staff session available
+                     * for dashboard-launched receipts.
+                     */
+
                     persistSession:
                         true,
 
@@ -832,7 +916,7 @@ function initialiseSupabase() {
 
 
 /* =========================================================
-   19. REGISTER EVENTS
+   20. REGISTER EVENTS
    ========================================================= */
 
 function registerEvents() {
@@ -846,7 +930,82 @@ function registerEvents() {
 
 
 /* =========================================================
-   20. INITIALISE RECEIPT
+   21. LOAD STAFF RECEIPT MODE
+   ========================================================= */
+
+async function loadStaffReceipt(
+    bookingId
+) {
+
+    receiptAccessMode =
+        "staff";
+
+
+    if (
+        !isValidUuid(
+            bookingId
+        )
+    ) {
+
+        throw new Error(
+            "INVALID_BOOKING_ID"
+        );
+    }
+
+
+    const session =
+        await getAuthenticatedSession();
+
+
+    await verifyStaffProfile(
+        session
+    );
+
+
+    return await getStaffReceipt(
+        bookingId
+    );
+}
+
+
+/* =========================================================
+   22. LOAD CUSTOMER RECEIPT MODE
+   ========================================================= */
+
+async function loadCustomerReceipt(
+    token
+) {
+
+    receiptAccessMode =
+        "customer";
+
+
+    if (
+        !isValidUuid(
+            token
+        )
+    ) {
+
+        throw new Error(
+            "INVALID_RECEIPT_TOKEN"
+        );
+    }
+
+
+    /*
+     * No staff authentication is required.
+     * The random receipt token is validated
+     * by get_gls_public_receipt().
+     */
+
+    return await getPublicReceipt(
+        token
+    );
+}
+
+
+/* =========================================================
+   23. INITIALISE RECEIPT
    ========================================================= */
 
 async function initialiseReceipt() {
@@ -893,29 +1052,25 @@ async function initialiseReceipt() {
     registerEvents();
 
 
-    const bookingId =
-        getBookingIdFromUrl();
+    const {
+        bookingId,
+        publicToken
+    } =
+        getReceiptParameters();
 
 
-    if (!bookingId) {
-
-        showError(
-            "No booking reference was provided. Please open the receipt from the GLS dashboard."
-        );
-
-
-        return;
-    }
-
+    /*
+     * Customer secure token takes priority
+     * if both parameters somehow exist.
+     */
 
     if (
-        !isValidUuid(
-            bookingId
-        )
+        !publicToken &&
+        !bookingId
     ) {
 
         showError(
-            "The booking reference in this receipt link is invalid."
+            "No receipt reference was provided. Please open the receipt using a valid GLS receipt link."
         );
 
 
@@ -925,57 +1080,39 @@ async function initialiseReceipt() {
 
     try {
 
-        /*
-         * Step 1:
-         * Restore authenticated staff session.
-         */
-
-        const session =
-            await getAuthenticatedSession();
+        let receipt;
 
 
-        /*
-         * Step 2:
-         * Verify active GLS admin/staff profile.
-         */
+        if (publicToken) {
 
-        await verifyStaffProfile(
-            session
-        );
+            receipt =
+                await loadCustomerReceipt(
+                    publicToken
+                );
 
+        }
 
-        /*
-         * Step 3:
-         * Request official receipt from secure RPC.
-         */
+        else {
 
-        const receipt =
-            await getOrCreateReceipt(
-                bookingId
-            );
+            receipt =
+                await loadStaffReceipt(
+                    bookingId
+                );
+        }
 
-
-        /*
-         * Step 4:
-         * Populate receipt UI.
-         */
 
         populateReceipt(
             receipt
         );
 
 
-        /*
-         * Step 5:
-         * Display official receipt.
-         */
-
         showReceipt();
 
 
         console.log(
             "GLS official receipt loaded:",
-            receipt.receipt_no
+            receipt.receipt_no,
+            `(${receiptAccessMode})`
         );
 
     }
@@ -988,6 +1125,43 @@ async function initialiseReceipt() {
         );
 
 
+        const rawMessage =
+            String(
+                error &&
+                error.message
+                    ? error.message
+                    : ""
+            );
+
+
+        if (
+            rawMessage ===
+            "INVALID_RECEIPT_TOKEN"
+        ) {
+
+            showError(
+                "The secure receipt link is invalid."
+            );
+
+
+            return;
+        }
+
+
+        if (
+            rawMessage ===
+            "INVALID_BOOKING_ID"
+        ) {
+
+            showError(
+                "The booking reference in this receipt link is invalid."
+            );
+
+
+            return;
+        }
+
+
         showError(
             getFriendlyErrorMessage(
                 error
@@ -998,7 +1172,7 @@ async function initialiseReceipt() {
 
 
 /* =========================================================
-   21. START APPLICATION
+   24. START APPLICATION
    ========================================================= */
 
 if (
