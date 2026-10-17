@@ -1103,16 +1103,33 @@ function renderPendingPayments(
                 );
 
 
-            const metadata = [
-                booking.customer_name ||
-                    "Walk-in customer",
+            const paymentMethodLabels = {
+    cash:
+        "Customer selected: Cash",
 
-                booking.vehicle_type,
+    duitnow:
+        "Customer selected: DuitNow QR",
 
-                booking.wash_type,
+    transfer:
+        "Customer selected: Bank Transfer"
+};
 
-                booking.booking_no
-            ];
+
+const metadata = [
+    booking.customer_name ||
+        "Walk-in customer",
+
+    booking.vehicle_type,
+
+    booking.wash_type,
+
+    paymentMethodLabels[
+        booking.selected_payment_method
+    ] ||
+        "Payment method not recorded",
+
+    booking.booking_no
+];
 
 
             metadata.forEach(
@@ -1210,8 +1227,30 @@ function renderPendingPayments(
             );
 
 
-            methodSelect.value =
-                "duitnow";
+            const customerSelectedMethod =
+    booking.selected_payment_method;
+
+
+if (
+    [
+        "cash",
+        "duitnow",
+        "transfer"
+    ].includes(
+        customerSelectedMethod
+    )
+) {
+
+    methodSelect.value =
+        customerSelectedMethod;
+
+}
+
+else {
+
+    methodSelect.value =
+        "duitnow";
+}
 
 
             const confirmButton =
