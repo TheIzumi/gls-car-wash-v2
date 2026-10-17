@@ -1221,3 +1221,491 @@ select:invalid {
         max-width: 250px;
     }
 }
+
+/* =========================================================
+   PAYMENT UI - FINAL POLISH
+   ========================================================= */
+
+
+/* PAYMENT SCREEN */
+
+.payment-section,
+.payment-detail-section {
+    width: 100%;
+}
+
+
+.payment-heading {
+    margin-bottom: 20px;
+}
+
+
+.payment-heading h2,
+.payment-detail-section h2 {
+    margin:
+        6px 0 8px;
+
+    color: #123b66;
+
+    font-size: 24px;
+    font-weight: 850;
+
+    line-height: 1.2;
+}
+
+
+.payment-heading > p:not(.confirmation-eyebrow),
+.payment-detail-description {
+    margin:
+        0 0 18px;
+
+    color: #66778b;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   BACK BUTTON
+   ========================================================= */
+
+.payment-back-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+
+    margin-bottom: 18px;
+
+    padding:
+        8px
+        13px;
+
+    background: #f7f9fc;
+
+    border:
+        1px solid
+        #d6e0ea;
+
+    border-radius: 9px;
+
+    color: #123b66;
+
+    font-size: 12px;
+    font-weight: 750;
+
+    cursor: pointer;
+}
+
+
+.payment-back-button:hover {
+    background: #edf5ff;
+
+    border-color: #b9cee3;
+}
+
+
+/* =========================================================
+   AMOUNT DUE
+   ========================================================= */
+
+.payment-total-card {
+    margin-bottom: 20px;
+
+    padding:
+        18px
+        20px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #edf5ff,
+            #e7f1fc
+        );
+
+    border:
+        1px solid
+        #d4e5f7;
+
+    border-radius: 13px;
+}
+
+
+.payment-total-card span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #62758a;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+
+.payment-total-card strong {
+    display: block;
+
+    color: #123b66;
+
+    font-size: 28px;
+    font-weight: 900;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD GRID
+   ========================================================= */
+
+.payment-method-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
+
+    gap: 12px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   PAYMENT METHOD CARD
+   ========================================================= */
+
+.payment-method-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+    justify-content: flex-start;
+
+    gap: 6px;
+
+    width: 100%;
+    min-height: 135px;
+
+    padding:
+        17px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #dbe4ed;
+
+    border-radius: 13px;
+
+    color: #172b42;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 3px 10px
+        rgba(15, 39, 66, 0.04);
+
+    transition:
+        transform 0.15s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.payment-method-card:hover {
+    transform:
+        translateY(-2px);
+
+    background: #f8fbff;
+
+    border-color: #9fbeda;
+
+    box-shadow:
+        0 7px 18px
+        rgba(15, 39, 66, 0.09);
+}
+
+
+.payment-method-icon {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 38px;
+    height: 38px;
+
+    margin-bottom: 4px;
+
+    background: #edf5ff;
+
+    border-radius: 9px;
+
+    font-size: 19px;
+}
+
+
+.payment-method-card strong {
+    display: block;
+
+    color: #123b66;
+
+    font-size: 14px;
+    font-weight: 850;
+}
+
+
+.payment-method-card small {
+    display: block;
+
+    color: #718096;
+
+    font-size: 11px;
+    font-weight: 400;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   PAYMENT DETAILS
+   ========================================================= */
+
+.payment-detail-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 52px;
+    height: 52px;
+
+    margin:
+        4px auto
+        14px;
+
+    background: #edf5ff;
+
+    border-radius: 50%;
+
+    font-size: 24px;
+}
+
+
+.payment-help-text {
+    margin:
+        15px 0 0;
+
+    color: #748397;
+
+    font-size: 11px;
+    line-height: 1.55;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   BANK TRANSFER DETAILS
+   ========================================================= */
+
+.bank-transfer-card {
+    margin:
+        18px 0;
+
+    overflow: hidden;
+
+    background: #f8fafc;
+
+    border:
+        1px solid
+        #dfe6ee;
+
+    border-radius: 12px;
+}
+
+
+.bank-transfer-row {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding:
+        13px
+        15px;
+
+    border-bottom:
+        1px solid
+        #e5ebf1;
+}
+
+
+.bank-transfer-row:last-child {
+    border-bottom: none;
+}
+
+
+.bank-transfer-row span {
+    color: #718096;
+
+    font-size: 11px;
+}
+
+
+.bank-transfer-row strong {
+    color: #172b42;
+
+    font-size: 12px;
+    font-weight: 800;
+
+    text-align: right;
+
+    overflow-wrap: anywhere;
+}
+
+
+#bankAccountNumber {
+    color: #123b66;
+
+    font-size: 14px;
+
+    letter-spacing: 0.5px;
+}
+
+
+#bankTransferReference {
+    color: #123b66;
+}
+
+
+/* =========================================================
+   PAYMENT NOTICE
+   ========================================================= */
+
+.duitnow-notice {
+    margin:
+        18px 0;
+
+    padding:
+        14px;
+
+    background: #fff8e7;
+
+    border:
+        1px solid
+        #f1dda4;
+
+    border-radius: 10px;
+}
+
+
+.duitnow-notice strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #76570d;
+
+    font-size: 12px;
+}
+
+
+.duitnow-notice p {
+    margin: 0;
+
+    color: #776638;
+
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* =========================================================
+   PAYMENT MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .payment-method-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .payment-method-card {
+        display: grid;
+
+        grid-template-columns:
+            44px 1fr;
+
+        grid-template-rows:
+            auto auto;
+
+        column-gap: 12px;
+
+        min-height: 0;
+
+        padding:
+            14px;
+    }
+
+
+    .payment-method-icon {
+        grid-row:
+            1 / 3;
+
+        width: 42px;
+        height: 42px;
+
+        margin: 0;
+    }
+
+
+    .payment-method-card strong {
+        align-self: end;
+    }
+
+
+    .payment-method-card small {
+        align-self: start;
+    }
+
+
+    .payment-heading h2,
+    .payment-detail-section h2 {
+        font-size: 22px;
+    }
+
+
+    .payment-total-card strong {
+        font-size: 26px;
+    }
+
+
+    .bank-transfer-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+
+        gap: 4px;
+    }
+
+
+    .bank-transfer-row strong {
+        text-align: left;
+    }
+}
