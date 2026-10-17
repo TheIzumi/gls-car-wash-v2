@@ -1166,6 +1166,37 @@ button {
     }
 }
 
+/* =========================================================
+   MOBILE PRINT HELP
+   ========================================================= */
+
+.mobile-print-help {
+    grid-column: 1 / -1;
+
+    margin:
+        4px 0 0;
+
+    color:
+        #8794a5;
+
+    font-size:
+        9px;
+
+    line-height:
+        1.5;
+
+    text-align:
+        center;
+}
+
+
+@media (min-width: 761px) {
+
+    .mobile-print-help {
+        display: none;
+    }
+}
+
 @media print {
 
     @page {
@@ -1269,6 +1300,10 @@ button {
     .receipt-footer {
         padding-bottom:
             12px;
+    }
+
+   .mobile-print-help {
+        display: none !important;
     }
 }
 
