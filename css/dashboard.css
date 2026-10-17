@@ -2002,6 +2002,174 @@ button:disabled {
     }
 }
 
+/* =========================================================
+   BOOKING HISTORY - FINAL UI OVERRIDE
+   ========================================================= */
+
+#bookingHistoryPanel .history-search-form {
+    display: grid;
+    grid-template-columns: minmax(240px, 1fr) auto auto;
+    gap: 9px;
+
+    width: 100%;
+
+    margin: 18px 0 13px;
+}
+
+
+#bookingHistoryPanel .history-search-form input {
+    width: 100%;
+    min-height: 42px;
+
+    padding: 9px 12px;
+
+    background: #ffffff;
+
+    border: 1px solid #d4dee8;
+    border-radius: 9px;
+
+    color: #172b42;
+
+    font-size: 11px;
+}
+
+
+#bookingHistoryPanel .history-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+
+    align-items: center;
+
+    gap: 7px;
+
+    margin: 0 0 14px;
+}
+
+
+#bookingHistoryPanel .history-filter {
+    appearance: none;
+    -webkit-appearance: none;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 36px;
+
+    margin: 0;
+
+    padding: 7px 13px;
+
+    background: #ffffff;
+
+    border: 1px solid #d6e0e9;
+    border-radius: 8px;
+
+    color: #5d7084;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 750;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow: none;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+
+#bookingHistoryPanel .history-filter:hover {
+    background: #edf5ff;
+
+    border-color: #b7cee4;
+
+    color: #123b66;
+}
+
+
+#bookingHistoryPanel .history-filter.active {
+    background: #123b66;
+
+    border-color: #123b66;
+
+    color: #ffffff;
+}
+
+
+#bookingHistoryPanel .history-summary {
+    margin: 10px 0 12px;
+
+    color: #66778b;
+
+    font-size: 10px;
+    font-weight: 650;
+}
+
+
+#bookingHistoryPanel .history-pagination {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 16px;
+
+    padding-top: 14px;
+
+    border-top: 1px solid #e8edf2;
+}
+
+
+#bookingHistoryPanel .history-pagination span {
+    color: #526579;
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+@media (max-width: 760px) {
+
+    #bookingHistoryPanel .history-search-form {
+        grid-template-columns: 1fr 1fr;
+    }
+
+
+    #bookingHistoryPanel .history-search-form input {
+        grid-column: 1 / -1;
+    }
+
+
+    #bookingHistoryPanel .history-filter {
+        flex: 1 1 auto;
+    }
+}
+
+
+@media (max-width: 460px) {
+
+    #bookingHistoryPanel .history-filter-bar {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    #bookingHistoryPanel .history-filter {
+        width: 100%;
+    }
+}
+
 
 /* =========================================================
    32. REDUCED MOTION
