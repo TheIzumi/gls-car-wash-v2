@@ -286,6 +286,7 @@ const successNewBookingButton =
         "successNewBookingButton"
     );
 
+
 /* =========================================================
    10. CURRENCY
    ========================================================= */
@@ -1714,7 +1715,16 @@ function requiredElementsExist() {
         paymentPendingSection,
         pendingBookingNo,
         pendingPlate,
-        pendingAmount
+        pendingAmount,
+
+       paymentSuccessSection,
+       successBookingNo,
+       successQueueNo,
+       successPlate,
+       successAmount,
+       successReceiptNo,
+       viewCustomerReceiptButton,
+       successNewBookingButton
     };
 
 
@@ -1935,23 +1945,9 @@ function initialiseBookingPage() {
     registerEventListeners();
 
 
-    /*
-     * Start with booking form only.
-     */
-
     showOnlySection(
-    paymentPendingSection
+    bookingFormSection
 );
-
-
-/*
- * Start monitoring payment status.
- * When staff confirms the payment,
- * customer screen will automatically
- * change to Payment Successful.
- */
-
-startPaymentStatusPolling();
 
 
 console.log(
