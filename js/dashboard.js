@@ -1282,6 +1282,76 @@ function renderSummary(
    22. UPCOMING BOOKING FILTERS
    ========================================================= */
 
+function updateUpcomingCounts(
+    rows
+) {
+
+    const bookings =
+        Array.isArray(rows)
+            ? rows
+            : [];
+
+
+    const today =
+        getMalaysiaDateString(0);
+
+    const tomorrow =
+        getMalaysiaDateString(1);
+
+    const sevenDaysLater =
+        getMalaysiaDateString(7);
+
+
+    const todayCount =
+        bookings.filter(
+            function (booking) {
+
+                return (
+                    booking.booking_date ===
+                    today
+                );
+            }
+        ).length;
+
+
+    const tomorrowCount =
+        bookings.filter(
+            function (booking) {
+
+                return (
+                    booking.booking_date ===
+                    tomorrow
+                );
+            }
+        ).length;
+
+
+    const sevenDaysCount =
+        bookings.filter(
+            function (booking) {
+
+                return (
+                    booking.booking_date >=
+                        today &&
+                    booking.booking_date <=
+                        sevenDaysLater
+                );
+            }
+        ).length;
+
+
+    upcomingTodayCount.textContent =
+        String(todayCount);
+
+
+    upcomingTomorrowCount.textContent =
+        String(tomorrowCount);
+
+
+    upcomingSevenDaysCount.textContent =
+        String(sevenDaysCount);
+}
+
 function getFilteredUpcomingBookings(
     rows
 ) {
@@ -1536,6 +1606,11 @@ function renderUpcomingBookings(
 
     upcomingBookingsList
         .replaceChildren();
+
+
+    updateUpcomingCounts(
+        rows
+    );
 
 
     const filtered =
