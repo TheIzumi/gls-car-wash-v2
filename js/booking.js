@@ -1288,7 +1288,8 @@ function startNewBooking() {
    ========================================================= */
 
 function requiredElementsExist() {
-    const requiredElements = [
+
+    const requiredElements = {
         bookingFormSection,
         bookingForm,
 
@@ -1338,31 +1339,50 @@ function requiredElementsExist() {
         duitNowPaymentAmount,
         paymentSubmittedButton,
 
-      bankTransferPaymentButton,
-      bankTransferPaymentSection,
-      bankTransferBackButton,
-      bankTransferAmount,
-      bankTransferReference,
-      bankTransferSubmittedButton,
+        bankTransferPaymentButton,
+        bankTransferPaymentSection,
+        bankTransferBackButton,
+        bankTransferAmount,
+        bankTransferReference,
+        bankTransferSubmittedButton,
 
         paymentPendingSection,
         pendingBookingNo,
         pendingPlate,
         pendingAmount
-    ];
+    };
 
 
-    return !requiredElements.some(
-        (element) => !element
-    );
+    const missing =
+        Object.entries(requiredElements)
+            .filter(function ([name, element]) {
+                return !element;
+            })
+            .map(function ([name]) {
+                return name;
+            });
+
+
+    if (missing.length > 0) {
+
+        console.error(
+            "GLS Booking missing HTML elements:",
+            missing
+        );
+
+        return false;
+    }
+
+
+    return true;
 }
-
 
 /* =========================================================
    30. EVENT LISTENERS
    ========================================================= */
 
 function registerEventListeners() {
+
     vehicleTypeInput.addEventListener(
         "change",
         calculatePrice
@@ -1429,6 +1449,12 @@ function registerEventListeners() {
     );
 
 
+    bankTransferPaymentButton.addEventListener(
+        "click",
+        openBankTransferPayment
+    );
+
+
     cashBackButton.addEventListener(
         "click",
         openPaymentSection
@@ -1441,27 +1467,22 @@ function registerEventListeners() {
     );
 
 
+    bankTransferBackButton.addEventListener(
+        "click",
+        openPaymentSection
+    );
+
+
     paymentSubmittedButton.addEventListener(
         "click",
         handlePaymentSubmitted
     );
 
-   bankTransferPaymentButton.addEventListener(
-    "click",
-    openBankTransferPayment
-);
 
-
-bankTransferBackButton.addEventListener(
-    "click",
-    openPaymentSection
-);
-
-
-bankTransferSubmittedButton.addEventListener(
-    "click",
-    handleBankTransferSubmitted
-);
+    bankTransferSubmittedButton.addEventListener(
+        "click",
+        handleBankTransferSubmitted
+    );
 }
 
 
