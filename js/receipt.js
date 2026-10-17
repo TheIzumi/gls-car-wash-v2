@@ -688,7 +688,33 @@ function handlePrintReceipt() {
     }
 
 
-    window.print();
+    /*
+     * window.print() opens the browser / operating
+     * system print interface.
+     *
+     * On supported mobile browsers, users can
+     * choose Save as PDF from the print interface.
+     */
+
+    try {
+
+        window.print();
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "GLS receipt printing failed:",
+            error
+        );
+
+
+        alert(
+            "Unable to open the print menu. " +
+            "Please use your browser menu and select Print or Save as PDF."
+        );
+    }
 }
 
 
