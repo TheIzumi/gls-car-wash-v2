@@ -23,7 +23,12 @@ const GLS_TIMEZONE =
 const DASHBOARD_REFRESH_INTERVAL =
     20000;
 
-let glsSupabase = null;
+const BOOKING_HISTORY_PAGE_SIZE =
+    50;
+
+
+let glsSupabase =
+    null;
 
 
 /* =========================================================
@@ -35,6 +40,7 @@ let currentProfile =
 
 let latestDashboardData =
     null;
+
 
 let loginInProgress =
     false;
@@ -54,11 +60,29 @@ let queueActionInProgress =
 let checkInInProgress =
     false;
 
+let historyLoading =
+    false;
+
+
 let activeQueueFilter =
     "active";
 
 let activeUpcomingFilter =
     "today";
+
+let activeHistoryFilter =
+    "all";
+
+
+let historySearchValue =
+    "";
+
+let historyOffset =
+    0;
+
+let historyTotal =
+    0;
+
 
 let dashboardRefreshTimer =
     null;
@@ -260,7 +284,72 @@ const recentBookingsList =
 
 
 /* =========================================================
-   10. CURRENCY FORMATTER
+   10. BOOKING HISTORY ELEMENTS
+   ========================================================= */
+
+const bookingHistoryPanel =
+    document.getElementById(
+        "bookingHistoryPanel"
+    );
+
+const bookingHistorySearchForm =
+    document.getElementById(
+        "bookingHistorySearchForm"
+    );
+
+const bookingHistorySearch =
+    document.getElementById(
+        "bookingHistorySearch"
+    );
+
+const bookingHistorySearchButton =
+    document.getElementById(
+        "bookingHistorySearchButton"
+    );
+
+const bookingHistoryClearButton =
+    document.getElementById(
+        "bookingHistoryClearButton"
+    );
+
+const bookingHistoryMessage =
+    document.getElementById(
+        "bookingHistoryMessage"
+    );
+
+const bookingHistorySummary =
+    document.getElementById(
+        "bookingHistorySummary"
+    );
+
+const bookingHistoryList =
+    document.getElementById(
+        "bookingHistoryList"
+    );
+
+const bookingHistoryPreviousButton =
+    document.getElementById(
+        "bookingHistoryPreviousButton"
+    );
+
+const bookingHistoryPageInfo =
+    document.getElementById(
+        "bookingHistoryPageInfo"
+    );
+
+const bookingHistoryNextButton =
+    document.getElementById(
+        "bookingHistoryNextButton"
+    );
+
+const historyFilterButtons =
+    document.querySelectorAll(
+        ".history-filter"
+    );
+
+
+/* =========================================================
+   11. FORMATTERS
    ========================================================= */
 
 const currencyFormatter =
@@ -282,7 +371,9 @@ const currencyFormatter =
     );
 
 
-function formatCurrency(value) {
+function formatCurrency(
+    value
+) {
 
     return currencyFormatter.format(
         Number(value) || 0
@@ -291,7 +382,7 @@ function formatCurrency(value) {
 
 
 /* =========================================================
-   11. MALAYSIA DATE HELPERS
+   12. DATE HELPERS
    ========================================================= */
 
 function getMalaysiaDateParts(
@@ -361,7 +452,7 @@ function getMalaysiaDateString(
         getMalaysiaDateParts();
 
 
-    const utcDate =
+    const date =
         new Date(
             Date.UTC(
                 parts.year,
@@ -372,19 +463,21 @@ function getMalaysiaDateString(
 
 
     const year =
-        utcDate.getUTCFullYear();
+        date.getUTCFullYear();
+
 
     const month =
         String(
-            utcDate.getUTCMonth() + 1
+            date.getUTCMonth() + 1
         ).padStart(
             2,
             "0"
         );
 
+
     const day =
         String(
-            utcDate.getUTCDate()
+            date.getUTCDate()
         ).padStart(
             2,
             "0"
@@ -415,6 +508,7 @@ function formatMalaysiaDateTime(
             date.getTime()
         )
     ) {
+
         return "—";
     }
 
@@ -443,7 +537,9 @@ function formatMalaysiaDateTime(
             hour12:
                 true
         }
-    ).format(date);
+    ).format(
+        date
+    );
 }
 
 
@@ -464,6 +560,7 @@ function formatBookingDate(
     if (
         parts.length !== 3
     ) {
+
         return value;
     }
 
@@ -506,7 +603,9 @@ function formatBookingDate(
             timeZone:
                 "UTC"
         }
-    ).format(date);
+    ).format(
+        date
+    );
 }
 
 
@@ -565,7 +664,9 @@ function formatBookingTime(
             timeZone:
                 "UTC"
         }
-    ).format(date);
+    ).format(
+        date
+    );
 }
 
 
@@ -611,7 +712,7 @@ function updateCurrentDate() {
 
 
 /* =========================================================
-   12. MESSAGE HELPER
+   13. MESSAGE HELPER
    ========================================================= */
 
 function setMessage(
@@ -642,7 +743,7 @@ function setMessage(
 
 
 /* =========================================================
-   13. DOM HELPERS
+   14. DOM HELPERS
    ========================================================= */
 
 function createElement(
@@ -697,7 +798,7 @@ function createStatusBadge(
 
 
 /* =========================================================
-   14. AUTO REFRESH
+   15. AUTO REFRESH
    ========================================================= */
 
 function stopDashboardRefresh() {
@@ -735,6 +836,7 @@ function startDashboardRefresh() {
 
                     refreshDashboard();
                 }
+
             },
             DASHBOARD_REFRESH_INTERVAL
         );
@@ -742,7 +844,7 @@ function startDashboardRefresh() {
 
 
 /* =========================================================
-   15. LOGIN SCREEN
+   16. LOGIN SCREEN
    ========================================================= */
 
 function showLoginScreen(
@@ -760,38 +862,25 @@ function showLoginScreen(
     stopDashboardRefresh();
 
 
-    if (loginScreen) {
+    loginScreen.hidden =
+        false;
 
-        loginScreen.hidden =
-            false;
-    }
-
-
-    if (dashboardScreen) {
-
-        dashboardScreen.hidden =
-            true;
-    }
+    dashboardScreen.hidden =
+        true;
 
 
-    if (authStatus) {
-
-        authStatus.textContent =
-            "Please sign in";
-    }
+    authStatus.textContent =
+        "Please sign in";
 
 
-    if (logoutButton) {
+    logoutButton.hidden =
+        true;
 
-        logoutButton.hidden =
-            true;
+    logoutButton.disabled =
+        false;
 
-        logoutButton.disabled =
-            false;
-
-        logoutButton.textContent =
-            "Log Out";
-    }
+    logoutButton.textContent =
+        "Log Out";
 
 
     setMessage(
@@ -803,7 +892,7 @@ function showLoginScreen(
 
 
 /* =========================================================
-   16. DASHBOARD SCREEN
+   17. SHOW DASHBOARD
    ========================================================= */
 
 function showDashboard(
@@ -820,7 +909,11 @@ function showDashboard(
     dashboardScreen.hidden =
         false;
 
+
     logoutButton.hidden =
+        false;
+
+    logoutButton.disabled =
         false;
 
 
@@ -844,11 +937,8 @@ function showDashboard(
         `Welcome back, ${displayName}.`;
 
 
-    if (loginPassword) {
-
-        loginPassword.value =
-            "";
-    }
+    loginPassword.value =
+        "";
 
 
     setMessage(
@@ -864,7 +954,7 @@ function showDashboard(
 
 
 /* =========================================================
-   17. STAFF PROFILE
+   18. STAFF PROFILE
    ========================================================= */
 
 async function getMyProfile() {
@@ -958,9 +1048,7 @@ async function verifyUserProfile(
 
         }
 
-        catch (
-            signOutError
-        ) {
+        catch (signOutError) {
 
             console.warn(
                 "GLS cleanup sign-out failed:",
@@ -981,7 +1069,7 @@ async function verifyUserProfile(
 
 
 /* =========================================================
-   18. LOGIN
+   19. LOGIN
    ========================================================= */
 
 function setLoginBusy(
@@ -1122,7 +1210,7 @@ async function handleLogin(
 
 
 /* =========================================================
-   19. LOGOUT
+   20. LOGOUT
    ========================================================= */
 
 async function handleLogout() {
@@ -1204,7 +1292,7 @@ async function handleLogout() {
 
 
 /* =========================================================
-   20. GET DASHBOARD DATA
+   21. GET DASHBOARD DATA
    ========================================================= */
 
 async function getDashboardData() {
@@ -1236,7 +1324,7 @@ async function getDashboardData() {
 
 
 /* =========================================================
-   21. SUMMARY
+   22. SUMMARY
    ========================================================= */
 
 function renderSummary(
@@ -1244,7 +1332,8 @@ function renderSummary(
 ) {
 
     const summary =
-        data.summary || {};
+        data.summary ||
+        {};
 
 
     vehiclesToday.textContent =
@@ -1279,7 +1368,7 @@ function renderSummary(
 
 
 /* =========================================================
-   22. UPCOMING BOOKING FILTERS
+   23. UPCOMING COUNTS
    ========================================================= */
 
 function updateUpcomingCounts(
@@ -1343,20 +1432,26 @@ function updateUpcomingCounts(
     upcomingTodayCount.textContent =
         String(todayCount);
 
-
     upcomingTomorrowCount.textContent =
         String(tomorrowCount);
-
 
     upcomingSevenDaysCount.textContent =
         String(sevenDaysCount);
 }
 
+
+/* =========================================================
+   24. UPCOMING FILTER
+   ========================================================= */
+
 function getFilteredUpcomingBookings(
     rows
 ) {
 
-    if (!Array.isArray(rows)) {
+    if (
+        !Array.isArray(rows)
+    ) {
+
         return [];
     }
 
@@ -1420,7 +1515,7 @@ function getFilteredUpcomingBookings(
 
 
 /* =========================================================
-   23. UPCOMING CHECK-IN
+   25. CHECK IN FUTURE BOOKING
    ========================================================= */
 
 async function checkInUpcomingBooking(
@@ -1523,46 +1618,33 @@ async function checkInUpcomingBooking(
             "Unable to check in this booking.";
 
 
+        const value =
+            String(
+                error &&
+                error.message
+                    ? error.message
+                    : ""
+            ).toLowerCase();
+
+
         if (
-            error &&
-            typeof error.message ===
-                "string"
+            value.includes(
+                "before its scheduled date"
+            )
         ) {
 
-            const value =
-                error.message
-                    .toLowerCase();
+            message =
+                "This booking cannot be checked in before its scheduled date.";
+        }
 
+        else if (
+            value.includes(
+                "already been checked in"
+            )
+        ) {
 
-            if (
-                value.includes(
-                    "before its scheduled date"
-                )
-            ) {
-
-                message =
-                    "This booking cannot be checked in before its scheduled date.";
-            }
-
-            else if (
-                value.includes(
-                    "already been checked in"
-                )
-            ) {
-
-                message =
-                    "This booking has already been checked in.";
-            }
-
-            else if (
-                value.includes(
-                    "not authorised"
-                )
-            ) {
-
-                message =
-                    "Your account is not authorised to check in bookings.";
-            }
+            message =
+                "This booking has already been checked in.";
         }
 
 
@@ -1597,7 +1679,7 @@ async function checkInUpcomingBooking(
 
 
 /* =========================================================
-   24. RENDER UPCOMING BOOKINGS
+   26. RENDER UPCOMING BOOKINGS
    ========================================================= */
 
 function renderUpcomingBookings(
@@ -1801,12 +1883,6 @@ function renderUpcomingBookings(
                 "button";
 
 
-            /*
-             * UI disables early check-in.
-             * Database RPC also independently
-             * enforces the scheduled-date rule.
-             */
-
             if (
                 booking.booking_date >
                 today
@@ -1869,7 +1945,7 @@ function renderUpcomingBookings(
 
 
 /* =========================================================
-   25. PAYMENT CARDS
+   27. PAYMENT VERIFICATION
    ========================================================= */
 
 function renderPendingPayments(
@@ -1974,7 +2050,7 @@ function renderPendingPayments(
                 );
 
 
-            const metadata = [
+            const values = [
 
                 booking.customer_name ||
                     "Walk-in customer",
@@ -1992,7 +2068,7 @@ function renderPendingPayments(
             ];
 
 
-            metadata.forEach(
+            values.forEach(
                 function (value) {
 
                     meta.appendChild(
@@ -2091,22 +2167,18 @@ function renderPendingPayments(
             );
 
 
-            const customerSelectedMethod =
-                booking.selected_payment_method;
-
-
             if (
                 [
                     "cash",
                     "duitnow",
                     "transfer"
                 ].includes(
-                    customerSelectedMethod
+                    booking.selected_payment_method
                 )
             ) {
 
                 methodSelect.value =
-                    customerSelectedMethod;
+                    booking.selected_payment_method;
 
             }
 
@@ -2121,10 +2193,7 @@ function renderPendingPayments(
                 createElement(
                     "button",
                     "confirm-button",
-                    booking.payment_status ===
-                        "unpaid"
-                        ? "Confirm Payment"
-                        : "Confirm Payment"
+                    "Confirm Payment"
                 );
 
 
@@ -2181,7 +2250,7 @@ function renderPendingPayments(
 
 
 /* =========================================================
-   26. CONFIRM PAYMENT
+   28. CONFIRM PAYMENT
    ========================================================= */
 
 async function confirmPayment(
@@ -2221,7 +2290,7 @@ async function confirmPayment(
     }
 
 
-    const paymentLabel = {
+    const labels = {
 
         cash:
             "CASH",
@@ -2234,14 +2303,14 @@ async function confirmPayment(
 
         other:
             "OTHER"
-    }[paymentMethod];
+    };
 
 
     const confirmed =
         window.confirm(
             `Confirm ${formatCurrency(
                 booking.amount
-            )} ${paymentLabel} payment for ` +
+            )} ${labels[paymentMethod]} payment for ` +
             `${booking.plate_number}?`
         );
 
@@ -2263,13 +2332,6 @@ async function confirmPayment(
 
     button.textContent =
         "Confirming...";
-
-
-    setMessage(
-        paymentMessage,
-        `Confirming payment for ${booking.booking_no}...`,
-        "info"
-    );
 
 
     try {
@@ -2295,16 +2357,9 @@ async function confirmPayment(
         }
 
 
-        console.log(
-            "GLS payment confirmed:",
-            data
-        );
-
-
         setMessage(
             paymentMessage,
-            `Payment confirmed for ${booking.booking_no}. ` +
-            `Receipt ${data.receipt_no || ""} is ready.`,
+            `Payment confirmed. Receipt ${data.receipt_no || ""} is ready.`,
             "success"
         );
 
@@ -2321,56 +2376,9 @@ async function confirmPayment(
         );
 
 
-        let message =
-            "Unable to confirm payment.";
-
-
-        if (
-            error &&
-            typeof error.message ===
-                "string"
-        ) {
-
-            const value =
-                error.message
-                    .toLowerCase();
-
-
-            if (
-                value.includes(
-                    "already been confirmed"
-                )
-            ) {
-
-                message =
-                    "This payment has already been confirmed.";
-            }
-
-            else if (
-                value.includes(
-                    "not authorised"
-                )
-            ) {
-
-                message =
-                    "Your account is not authorised to confirm payment.";
-            }
-
-            else if (
-                value.includes(
-                    "inactive"
-                )
-            ) {
-
-                message =
-                    "Your GLS staff account is inactive.";
-            }
-        }
-
-
         setMessage(
             paymentMessage,
-            message,
+            "Unable to confirm payment.",
             "error"
         );
 
@@ -2410,7 +2418,7 @@ async function confirmPayment(
 
 
 /* =========================================================
-   27. QUEUE OPERATIONS
+   29. QUEUE OPERATION
    ========================================================= */
 
 async function updateQueueStatus(
@@ -2422,15 +2430,14 @@ async function updateQueueStatus(
     if (
         queueActionInProgress ||
         !booking ||
-        !booking.id ||
-        !action
+        !booking.id
     ) {
 
         return;
     }
 
 
-    const actionMessages = {
+    const messages = {
 
         start:
             `Start washing ${booking.plate_number}?`,
@@ -2443,14 +2450,13 @@ async function updateQueueStatus(
     };
 
 
-    const confirmed =
-        window.confirm(
-            actionMessages[action] ||
-            "Continue with this queue action?"
-        );
+    if (
+        !window.confirm(
+            messages[action] ||
+            "Continue?"
+        )
+    ) {
 
-
-    if (!confirmed) {
         return;
     }
 
@@ -2470,17 +2476,9 @@ async function updateQueueStatus(
         "Updating...";
 
 
-    setMessage(
-        queueMessage,
-        `Updating ${booking.queue_no || booking.booking_no}...`,
-        "info"
-    );
-
-
     try {
 
         const {
-            data,
             error
         } =
             await glsSupabase.rpc(
@@ -2500,51 +2498,6 @@ async function updateQueueStatus(
         }
 
 
-        let successMessage =
-            "Queue updated successfully.";
-
-
-        if (
-            action ===
-            "start"
-        ) {
-
-            successMessage =
-                `${booking.queue_no} · ${booking.plate_number} is now WASHING.`;
-        }
-
-        else if (
-            action ===
-            "complete"
-        ) {
-
-            successMessage =
-                `${booking.queue_no} · ${booking.plate_number} is now COMPLETED.`;
-        }
-
-        else if (
-            action ===
-            "collect"
-        ) {
-
-            successMessage =
-                `${booking.queue_no} · ${booking.plate_number} has been COLLECTED.`;
-        }
-
-
-        setMessage(
-            queueMessage,
-            successMessage,
-            "success"
-        );
-
-
-        console.log(
-            "GLS queue updated:",
-            data
-        );
-
-
         await refreshDashboard();
 
     }
@@ -2557,66 +2510,9 @@ async function updateQueueStatus(
         );
 
 
-        let message =
-            "Unable to update the queue status.";
-
-
-        if (
-            error &&
-            typeof error.message ===
-                "string"
-        ) {
-
-            const value =
-                error.message
-                    .toLowerCase();
-
-
-            if (
-                value.includes(
-                    "payment must be confirmed"
-                )
-            ) {
-
-                message =
-                    "Payment must be confirmed before starting the wash.";
-            }
-
-            else if (
-                value.includes(
-                    "only waiting vehicles"
-                )
-            ) {
-
-                message =
-                    "Only waiting vehicles can start washing.";
-            }
-
-            else if (
-                value.includes(
-                    "only washing vehicles"
-                )
-            ) {
-
-                message =
-                    "Only washing vehicles can be completed.";
-            }
-
-            else if (
-                value.includes(
-                    "only completed vehicles"
-                )
-            ) {
-
-                message =
-                    "Only completed vehicles can be collected.";
-            }
-        }
-
-
         setMessage(
             queueMessage,
-            message,
+            "Unable to update queue status.",
             "error"
         );
 
@@ -2645,14 +2541,17 @@ async function updateQueueStatus(
 
 
 /* =========================================================
-   28. QUEUE FILTER
+   30. QUEUE FILTER
    ========================================================= */
 
 function getFilteredQueue(
     rows
 ) {
 
-    if (!Array.isArray(rows)) {
+    if (
+        !Array.isArray(rows)
+    ) {
+
         return [];
     }
 
@@ -2689,7 +2588,7 @@ function getFilteredQueue(
 
 
 /* =========================================================
-   29. RENDER QUEUE
+   31. RENDER QUEUE
    ========================================================= */
 
 function renderQueue(
@@ -2784,24 +2683,17 @@ function renderQueue(
                 );
 
 
-            const values = [
-
+            [
                 booking.vehicle_type,
-
                 booking.wash_type,
-
                 formatCurrency(
                     booking.amount
                 ),
-
                 String(
                     booking.payment_status ||
                     ""
                 ).toUpperCase()
-            ];
-
-
-            values.forEach(
+            ].forEach(
                 function (value) {
 
                     meta.appendChild(
@@ -2855,7 +2747,7 @@ function renderQueue(
                     "paid"
                 ) {
 
-                    const startButton =
+                    const button =
                         createElement(
                             "button",
                             "start-button",
@@ -2863,32 +2755,32 @@ function renderQueue(
                         );
 
 
-                    startButton.type =
+                    button.type =
                         "button";
 
 
-                    startButton.addEventListener(
+                    button.addEventListener(
                         "click",
                         function () {
 
                             updateQueueStatus(
                                 booking,
                                 "start",
-                                startButton
+                                button
                             );
                         }
                     );
 
 
                     actions.appendChild(
-                        startButton
+                        button
                     );
 
                 }
 
                 else {
 
-                    const paymentRequiredButton =
+                    const button =
                         createElement(
                             "button",
                             "payment-required-button",
@@ -2896,15 +2788,15 @@ function renderQueue(
                         );
 
 
-                    paymentRequiredButton.type =
+                    button.type =
                         "button";
 
-                    paymentRequiredButton.disabled =
+                    button.disabled =
                         true;
 
 
                     actions.appendChild(
-                        paymentRequiredButton
+                        button
                     );
                 }
             }
@@ -2914,7 +2806,7 @@ function renderQueue(
                 "washing"
             ) {
 
-                const completeButton =
+                const button =
                     createElement(
                         "button",
                         "complete-button",
@@ -2922,25 +2814,25 @@ function renderQueue(
                     );
 
 
-                completeButton.type =
+                button.type =
                     "button";
 
 
-                completeButton.addEventListener(
+                button.addEventListener(
                     "click",
                     function () {
 
                         updateQueueStatus(
                             booking,
                             "complete",
-                            completeButton
+                            button
                         );
                     }
                 );
 
 
                 actions.appendChild(
-                    completeButton
+                    button
                 );
             }
 
@@ -2949,7 +2841,7 @@ function renderQueue(
                 "completed"
             ) {
 
-                const collectButton =
+                const button =
                     createElement(
                         "button",
                         "collect-button",
@@ -2957,25 +2849,25 @@ function renderQueue(
                     );
 
 
-                collectButton.type =
+                button.type =
                     "button";
 
 
-                collectButton.addEventListener(
+                button.addEventListener(
                     "click",
                     function () {
 
                         updateQueueStatus(
                             booking,
                             "collect",
-                            collectButton
+                            button
                         );
                     }
                 );
 
 
                 actions.appendChild(
-                    collectButton
+                    button
                 );
             }
 
@@ -3004,7 +2896,53 @@ function renderQueue(
 
 
 /* =========================================================
-   30. RECENT BOOKINGS
+   32. RECEIPT BUTTON HELPER
+   ========================================================= */
+
+function createReceiptButton(
+    booking
+) {
+
+    if (
+        !booking ||
+        booking.payment_status !==
+            "paid"
+    ) {
+
+        return null;
+    }
+
+
+    const button =
+        createElement(
+            "button",
+            "view-receipt-button",
+            "View Receipt"
+        );
+
+
+    button.type =
+        "button";
+
+
+    button.addEventListener(
+        "click",
+        function () {
+
+            window.location.href =
+                `receipt.html?booking=${encodeURIComponent(
+                    booking.id
+                )}`;
+        }
+    );
+
+
+    return button;
+}
+
+
+/* =========================================================
+   33. RECENT BOOKINGS
    ========================================================= */
 
 function renderRecentBookings(
@@ -3101,14 +3039,7 @@ function renderRecentBookings(
                 );
 
 
-            const values = [
-
-                booking.booking_no,
-
-                booking.vehicle_type,
-
-                booking.wash_type,
-
+            const dateValue =
                 booking.booking_type ===
                     "Future Booking"
                     ? (
@@ -3121,11 +3052,15 @@ function renderRecentBookings(
                     )
                     : formatMalaysiaDateTime(
                         booking.created_at
-                    )
-            ];
+                    );
 
 
-            values.forEach(
+            [
+                booking.booking_no,
+                booking.vehicle_type,
+                booking.wash_type,
+                dateValue
+            ].forEach(
                 function (value) {
 
                     meta.appendChild(
@@ -3162,38 +3097,13 @@ function renderRecentBookings(
             );
 
 
-            if (
-                booking.payment_status ===
-                "paid"
-            ) {
-
-                const receiptButton =
-                    createElement(
-                        "button",
-                        "view-receipt-button",
-                        "View Receipt"
-                    );
-
-
-                receiptButton.type =
-                    "button";
-
-
-                receiptButton.addEventListener(
-                    "click",
-                    function () {
-
-                        const receiptUrl =
-                            `receipt.html?booking=${encodeURIComponent(
-                                booking.id
-                            )}`;
-
-
-                        window.location.href =
-                            receiptUrl;
-                    }
+            const receiptButton =
+                createReceiptButton(
+                    booking
                 );
 
+
+            if (receiptButton) {
 
                 side.appendChild(
                     receiptButton
@@ -3221,7 +3131,615 @@ function renderRecentBookings(
 
 
 /* =========================================================
-   31. UPCOMING FILTER HANDLER
+   34. BOOKING HISTORY RPC
+   ========================================================= */
+
+async function getBookingHistory() {
+
+    const {
+        data,
+        error
+    } =
+        await glsSupabase.rpc(
+            "search_gls_booking_history",
+            {
+                p_search:
+                    historySearchValue ||
+                    null,
+
+                p_status:
+                    activeHistoryFilter,
+
+                p_limit:
+                    BOOKING_HISTORY_PAGE_SIZE,
+
+                p_offset:
+                    historyOffset
+            }
+        );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    if (!data) {
+
+        throw new Error(
+            "No history data returned."
+        );
+    }
+
+
+    return data;
+}
+
+
+/* =========================================================
+   35. RENDER BOOKING HISTORY
+   ========================================================= */
+
+function renderBookingHistory(
+    payload
+) {
+
+    bookingHistoryList
+        .replaceChildren();
+
+
+    const results =
+        Array.isArray(
+            payload.results
+        )
+            ? payload.results
+            : [];
+
+
+    historyTotal =
+        Number(
+            payload.total
+        ) || 0;
+
+
+    const page =
+        Math.floor(
+            historyOffset /
+            BOOKING_HISTORY_PAGE_SIZE
+        ) + 1;
+
+
+    const totalPages =
+        Math.max(
+            1,
+            Math.ceil(
+                historyTotal /
+                BOOKING_HISTORY_PAGE_SIZE
+            )
+        );
+
+
+    bookingHistoryPageInfo.textContent =
+        `Page ${page} of ${totalPages}`;
+
+
+    bookingHistoryPreviousButton.disabled =
+        historyOffset <= 0;
+
+
+    bookingHistoryNextButton.disabled =
+        (
+            historyOffset +
+            BOOKING_HISTORY_PAGE_SIZE
+        ) >= historyTotal;
+
+
+    if (
+        historyTotal === 0
+    ) {
+
+        bookingHistorySummary.textContent =
+            historySearchValue
+                ? `No records found for "${historySearchValue}".`
+                : "No booking records found.";
+
+
+        bookingHistoryList
+            .appendChild(
+                createElement(
+                    "div",
+                    "empty-state",
+                    "No matching bookings."
+                )
+            );
+
+
+        return;
+    }
+
+
+    const firstRecord =
+        historyOffset + 1;
+
+
+    const lastRecord =
+        Math.min(
+            historyOffset +
+                results.length,
+            historyTotal
+        );
+
+
+    bookingHistorySummary.textContent =
+        `Showing ${firstRecord}-${lastRecord} of ${historyTotal} booking records.`;
+
+
+    results.forEach(
+        function (booking) {
+
+            const card =
+                createElement(
+                    "article",
+                    "operation-card history-card"
+                );
+
+
+            const main =
+                createElement(
+                    "div",
+                    "operation-main"
+                );
+
+
+            const topLine =
+                createElement(
+                    "div",
+                    "operation-topline"
+                );
+
+
+            topLine.appendChild(
+                createElement(
+                    "strong",
+                    "queue-number",
+                    booking.queue_no ||
+                    (
+                        booking.booking_type ===
+                        "Future Booking"
+                            ? "SCHEDULED"
+                            : "BOOKING"
+                    )
+                )
+            );
+
+
+            topLine.appendChild(
+                createElement(
+                    "span",
+                    "plate-number",
+                    booking.plate_number ||
+                    "-"
+                )
+            );
+
+
+            topLine.appendChild(
+                createStatusBadge(
+                    booking.payment_status
+                )
+            );
+
+
+            if (
+                booking.queue_status
+            ) {
+
+                topLine.appendChild(
+                    createStatusBadge(
+                        booking.queue_status
+                    )
+                );
+            }
+
+
+            main.appendChild(
+                topLine
+            );
+
+
+            const meta =
+                createElement(
+                    "div",
+                    "operation-meta"
+                );
+
+
+            const customer =
+                booking.customer_name ||
+                "Customer name not provided";
+
+
+            const visit =
+                booking.booking_type ===
+                    "Future Booking"
+                    ? (
+                        `${formatBookingDate(
+                            booking.booking_date
+                        )} · ` +
+                        `${formatBookingTime(
+                            booking.booking_time
+                        )}`
+                    )
+                    : formatMalaysiaDateTime(
+                        booking.created_at
+                    );
+
+
+            [
+                booking.booking_no,
+                customer,
+                booking.vehicle_type,
+                booking.wash_type,
+                visit
+            ].forEach(
+                function (value) {
+
+                    meta.appendChild(
+                        createElement(
+                            "span",
+                            "",
+                            value
+                        )
+                    );
+                }
+            );
+
+
+            main.appendChild(
+                meta
+            );
+
+
+            const side =
+                createElement(
+                    "div",
+                    "recent-booking-side"
+                );
+
+
+            side.appendChild(
+                createElement(
+                    "div",
+                    "operation-amount",
+                    formatCurrency(
+                        booking.amount
+                    )
+                )
+            );
+
+
+            const receiptButton =
+                createReceiptButton(
+                    booking
+                );
+
+
+            if (receiptButton) {
+
+                side.appendChild(
+                    receiptButton
+                );
+            }
+
+
+            card.appendChild(
+                main
+            );
+
+
+            card.appendChild(
+                side
+            );
+
+
+            bookingHistoryList
+                .appendChild(
+                    card
+                );
+        }
+    );
+}
+
+
+/* =========================================================
+   36. SEARCH BOOKING HISTORY
+   ========================================================= */
+
+async function searchBookingHistory() {
+
+    if (
+        historyLoading ||
+        !currentProfile
+    ) {
+
+        return;
+    }
+
+
+    historyLoading =
+        true;
+
+
+    bookingHistorySearchButton.disabled =
+        true;
+
+    bookingHistoryClearButton.disabled =
+        true;
+
+    bookingHistoryPreviousButton.disabled =
+        true;
+
+    bookingHistoryNextButton.disabled =
+        true;
+
+
+    setMessage(
+        bookingHistoryMessage,
+        "Searching booking records...",
+        "info"
+    );
+
+
+    try {
+
+        const data =
+            await getBookingHistory();
+
+
+        renderBookingHistory(
+            data
+        );
+
+
+        setMessage(
+            bookingHistoryMessage,
+            ""
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "GLS booking history search failed:",
+            error
+        );
+
+
+        setMessage(
+            bookingHistoryMessage,
+            "Unable to search booking history.",
+            "error"
+        );
+
+    }
+
+    finally {
+
+        historyLoading =
+            false;
+
+
+        bookingHistorySearchButton.disabled =
+            false;
+
+        bookingHistoryClearButton.disabled =
+            false;
+
+
+        /*
+         * Pagination state is recalculated
+         * after a successful render.
+         *
+         * If search failed, allow Previous when
+         * current offset is not zero.
+         */
+
+        if (
+            historyTotal === 0
+        ) {
+
+            bookingHistoryPreviousButton.disabled =
+                true;
+
+            bookingHistoryNextButton.disabled =
+                true;
+        }
+    }
+}
+
+
+/* =========================================================
+   37. HISTORY SEARCH SUBMIT
+   ========================================================= */
+
+function handleBookingHistorySearch(
+    event
+) {
+
+    event.preventDefault();
+
+
+    historySearchValue =
+        bookingHistorySearch.value
+            .trim();
+
+
+    historyOffset =
+        0;
+
+
+    searchBookingHistory();
+}
+
+
+/* =========================================================
+   38. CLEAR HISTORY SEARCH
+   ========================================================= */
+
+function clearBookingHistorySearch() {
+
+    bookingHistorySearch.value =
+        "";
+
+    historySearchValue =
+        "";
+
+    activeHistoryFilter =
+        "all";
+
+    historyOffset =
+        0;
+
+    historyTotal =
+        0;
+
+
+    historyFilterButtons.forEach(
+        function (button) {
+
+            button.classList.toggle(
+                "active",
+                button.dataset
+                    .historyFilter ===
+                    "all"
+            );
+        }
+    );
+
+
+    bookingHistoryList
+        .replaceChildren();
+
+
+    bookingHistorySummary.textContent =
+        "Search or select a filter to view booking records.";
+
+
+    bookingHistoryPageInfo.textContent =
+        "Page 1";
+
+
+    bookingHistoryPreviousButton.disabled =
+        true;
+
+    bookingHistoryNextButton.disabled =
+        true;
+
+
+    setMessage(
+        bookingHistoryMessage,
+        ""
+    );
+}
+
+
+/* =========================================================
+   39. HISTORY FILTER
+   ========================================================= */
+
+function handleHistoryFilter(
+    event
+) {
+
+    const button =
+        event.currentTarget;
+
+
+    activeHistoryFilter =
+        button.dataset
+            .historyFilter ||
+        "all";
+
+
+    historyOffset =
+        0;
+
+
+    historySearchValue =
+        bookingHistorySearch.value
+            .trim();
+
+
+    historyFilterButtons.forEach(
+        function (item) {
+
+            item.classList.toggle(
+                "active",
+                item === button
+            );
+        }
+    );
+
+
+    searchBookingHistory();
+}
+
+
+/* =========================================================
+   40. HISTORY PREVIOUS PAGE
+   ========================================================= */
+
+function showPreviousHistoryPage() {
+
+    if (
+        historyLoading ||
+        historyOffset <= 0
+    ) {
+
+        return;
+    }
+
+
+    historyOffset =
+        Math.max(
+            0,
+            historyOffset -
+            BOOKING_HISTORY_PAGE_SIZE
+        );
+
+
+    searchBookingHistory();
+}
+
+
+/* =========================================================
+   41. HISTORY NEXT PAGE
+   ========================================================= */
+
+function showNextHistoryPage() {
+
+    if (
+        historyLoading ||
+        historyOffset +
+            BOOKING_HISTORY_PAGE_SIZE >=
+            historyTotal
+    ) {
+
+        return;
+    }
+
+
+    historyOffset +=
+        BOOKING_HISTORY_PAGE_SIZE;
+
+
+    searchBookingHistory();
+}
+
+
+/* =========================================================
+   42. UPCOMING FILTER HANDLER
    ========================================================= */
 
 function handleUpcomingFilter(
@@ -3238,16 +3756,15 @@ function handleUpcomingFilter(
         "today";
 
 
-    upcomingFilterButtons
-        .forEach(
-            function (item) {
+    upcomingFilterButtons.forEach(
+        function (item) {
 
-                item.classList.toggle(
-                    "active",
-                    item === button
-                );
-            }
-        );
+            item.classList.toggle(
+                "active",
+                item === button
+            );
+        }
+    );
 
 
     if (
@@ -3264,7 +3781,7 @@ function handleUpcomingFilter(
 
 
 /* =========================================================
-   32. QUEUE FILTER HANDLER
+   43. QUEUE FILTER HANDLER
    ========================================================= */
 
 function handleQueueFilter(
@@ -3280,16 +3797,15 @@ function handleQueueFilter(
         "active";
 
 
-    queueFilterButtons
-        .forEach(
-            function (item) {
+    queueFilterButtons.forEach(
+        function (item) {
 
-                item.classList.toggle(
-                    "active",
-                    item === button
-                );
-            }
-        );
+            item.classList.toggle(
+                "active",
+                item === button
+            );
+        }
+    );
 
 
     if (
@@ -3305,7 +3821,7 @@ function handleQueueFilter(
 
 
 /* =========================================================
-   33. DASHBOARD ERROR
+   44. DASHBOARD DATA ERROR
    ========================================================= */
 
 function showDashboardDataError(
@@ -3319,29 +3835,29 @@ function showDashboardDataError(
 
 
     setMessage(
+        upcomingBookingsMessage,
+        "Unable to refresh upcoming bookings.",
+        "error"
+    );
+
+
+    setMessage(
         paymentMessage,
-        "Unable to refresh dashboard data.",
+        "Unable to refresh payment data.",
         "error"
     );
 
 
     setMessage(
         queueMessage,
-        "Unable to refresh dashboard data.",
-        "error"
-    );
-
-
-    setMessage(
-        upcomingBookingsMessage,
-        "Unable to refresh upcoming bookings.",
+        "Unable to refresh queue data.",
         "error"
     );
 }
 
 
 /* =========================================================
-   34. REFRESH DASHBOARD
+   45. REFRESH DASHBOARD
    ========================================================= */
 
 async function refreshDashboard() {
@@ -3459,7 +3975,7 @@ async function refreshDashboard() {
 
 
 /* =========================================================
-   35. RESTORE SESSION
+   46. RESTORE SESSION
    ========================================================= */
 
 async function restoreSession() {
@@ -3514,7 +4030,7 @@ async function restoreSession() {
 
 
 /* =========================================================
-   36. REQUIRED ELEMENT CHECK
+   47. REQUIRED ELEMENT CHECK
    ========================================================= */
 
 function requiredElementsExist() {
@@ -3531,7 +4047,6 @@ function requiredElementsExist() {
         dashboardScreen,
         authStatus,
         logoutButton,
-
         welcomeText,
         currentDate,
 
@@ -3545,6 +4060,9 @@ function requiredElementsExist() {
         refreshUpcomingButton,
         upcomingBookingsMessage,
         upcomingBookingsList,
+        upcomingTodayCount,
+        upcomingTomorrowCount,
+        upcomingSevenDaysCount,
 
         refreshPaymentsButton,
         paymentMessage,
@@ -3554,7 +4072,19 @@ function requiredElementsExist() {
         queueMessage,
         queueList,
 
-        recentBookingsList
+        recentBookingsList,
+
+        bookingHistoryPanel,
+        bookingHistorySearchForm,
+        bookingHistorySearch,
+        bookingHistorySearchButton,
+        bookingHistoryClearButton,
+        bookingHistoryMessage,
+        bookingHistorySummary,
+        bookingHistoryList,
+        bookingHistoryPreviousButton,
+        bookingHistoryPageInfo,
+        bookingHistoryNextButton
     };
 
 
@@ -3599,7 +4129,7 @@ function requiredElementsExist() {
 
 
 /* =========================================================
-   37. EVENT LISTENERS
+   48. EVENT LISTENERS
    ========================================================= */
 
 function registerEvents() {
@@ -3637,27 +4167,64 @@ function registerEvents() {
         );
 
 
-    upcomingFilterButtons
-        .forEach(
-            function (button) {
+    upcomingFilterButtons.forEach(
+        function (button) {
 
-                button.addEventListener(
-                    "click",
-                    handleUpcomingFilter
-                );
-            }
+            button.addEventListener(
+                "click",
+                handleUpcomingFilter
+            );
+        }
+    );
+
+
+    queueFilterButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                handleQueueFilter
+            );
+        }
+    );
+
+
+    bookingHistorySearchForm
+        .addEventListener(
+            "submit",
+            handleBookingHistorySearch
         );
 
 
-    queueFilterButtons
-        .forEach(
-            function (button) {
+    bookingHistoryClearButton
+        .addEventListener(
+            "click",
+            clearBookingHistorySearch
+        );
 
-                button.addEventListener(
-                    "click",
-                    handleQueueFilter
-                );
-            }
+
+    historyFilterButtons.forEach(
+        function (button) {
+
+            button.addEventListener(
+                "click",
+                handleHistoryFilter
+            );
+        }
+    );
+
+
+    bookingHistoryPreviousButton
+        .addEventListener(
+            "click",
+            showPreviousHistoryPage
+        );
+
+
+    bookingHistoryNextButton
+        .addEventListener(
+            "click",
+            showNextHistoryPage
         );
 
 
@@ -3678,7 +4245,7 @@ function registerEvents() {
 
 
 /* =========================================================
-   38. SUPABASE INITIALISATION
+   49. SUPABASE
    ========================================================= */
 
 function initialiseSupabase() {
@@ -3719,7 +4286,7 @@ function initialiseSupabase() {
 
 
 /* =========================================================
-   39. INITIALISE DASHBOARD
+   50. INITIALISE
    ========================================================= */
 
 async function initialiseDashboard() {
@@ -3781,7 +4348,7 @@ async function initialiseDashboard() {
 
 
 /* =========================================================
-   40. START APPLICATION
+   51. START APPLICATION
    ========================================================= */
 
 if (
