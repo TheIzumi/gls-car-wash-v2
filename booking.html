@@ -181,6 +181,119 @@
             <p class="payment-help-text">Payment will remain pending until verified by GLS staff.</p>
         </section>
 
+                <!-- =================================================
+             BANK TRANSFER PAYMENT
+        ================================================== -->
+
+        <section
+            id="bankTransferPaymentSection"
+            class="payment-detail-section"
+            hidden
+        >
+
+            <button
+                id="bankTransferBackButton"
+                class="payment-back-button"
+                type="button"
+            >
+                ← Back
+            </button>
+
+
+            <p class="confirmation-eyebrow">
+                BANK TRANSFER
+            </p>
+
+
+            <h2>
+                Transfer to GLS
+            </h2>
+
+
+            <p class="payment-detail-description">
+                Please transfer the exact amount shown below
+                using your banking application.
+            </p>
+
+
+            <div class="confirmation-total">
+
+                <span>
+                    Amount Due
+                </span>
+
+                <strong id="bankTransferAmount">
+                    RM 0.00
+                </strong>
+
+            </div>
+
+
+            <div class="bank-transfer-card">
+
+                <div class="bank-transfer-row">
+                    <span>Bank</span>
+                    <strong>Maybank</strong>
+                </div>
+
+
+                <div class="bank-transfer-row">
+                    <span>Account Name</span>
+                    <strong>Global Line Services</strong>
+                </div>
+
+
+                <div class="bank-transfer-row">
+                    <span>Account Number</span>
+
+                    <strong id="bankAccountNumber">
+                        11013010074129
+                    </strong>
+                </div>
+
+
+                <div class="bank-transfer-row">
+                    <span>Payment Reference</span>
+
+                    <strong id="bankTransferReference">
+                        -
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="duitnow-notice">
+
+                <strong>
+                    Important
+                </strong>
+
+                <p>
+                    Please use the booking number above as your
+                    payment reference and verify the recipient
+                    details before confirming the transfer.
+                </p>
+
+            </div>
+
+
+            <button
+                id="bankTransferSubmittedButton"
+                class="payment-button"
+                type="button"
+            >
+                I've Made Payment
+            </button>
+
+
+            <p class="payment-help-text">
+                Payment will remain pending until verified
+                by GLS staff.
+            </p>
+
+        </section>
+
         <section id="paymentPendingSection" class="payment-detail-section" hidden>
             <div class="confirmation-success-icon">✓</div>
             <p class="confirmation-eyebrow">PAYMENT SUBMITTED</p>
