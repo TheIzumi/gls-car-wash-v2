@@ -188,6 +188,39 @@ const duitNowPaymentAmount =
 const paymentSubmittedButton =
     document.getElementById("paymentSubmittedButton");
 
+/* =========================================================
+   BANK TRANSFER ELEMENTS
+   ========================================================= */
+
+const bankTransferPaymentButton =
+    document.getElementById(
+        "bankTransferPaymentButton"
+    );
+
+const bankTransferPaymentSection =
+    document.getElementById(
+        "bankTransferPaymentSection"
+    );
+
+const bankTransferBackButton =
+    document.getElementById(
+        "bankTransferBackButton"
+    );
+
+const bankTransferAmount =
+    document.getElementById(
+        "bankTransferAmount"
+    );
+
+const bankTransferReference =
+    document.getElementById(
+        "bankTransferReference"
+    );
+
+const bankTransferSubmittedButton =
+    document.getElementById(
+        "bankTransferSubmittedButton"
+    );
 
 /* =========================================================
    9. PAYMENT PENDING ELEMENTS
@@ -239,6 +272,7 @@ const applicationSections = [
     paymentSection,
     cashPaymentSection,
     duitNowPaymentSection,
+    bankTransferPaymentSection,
     paymentPendingSection
 ];
 
@@ -1005,6 +1039,32 @@ function openDuitNowPayment() {
     );
 }
 
+/* =========================================================
+   BANK TRANSFER
+   ========================================================= */
+
+function openBankTransferPayment() {
+
+    if (!latestBooking) {
+        return;
+    }
+
+
+    bankTransferAmount.textContent =
+        formatCurrency(
+            latestBooking.amount
+        );
+
+
+    bankTransferReference.textContent =
+        latestBooking.booking_no ||
+        "-";
+
+
+    showOnlySection(
+        bankTransferPaymentSection
+    );
+}
 
 /* =========================================================
    26. CUSTOMER PAYMENT PENDING RPC
@@ -1044,13 +1104,13 @@ async function markPaymentPending() {
    27. SUBMIT DUITNOW PAYMENT
    ========================================================= */
 
-async function handlePaymentSubmitted() {
-    if (
-        paymentSubmissionInProgress ||
-        !latestBooking
-    ) {
-        return;
-    }
+async function handleBankTransferSubmitted() {
+
+    await submitPaymentForVerification(
+        "transfer",
+        bankTransferSubmittedButton
+    );
+}
 
 
     paymentSubmissionInProgress =
@@ -1119,6 +1179,116 @@ async function handlePaymentSubmitted() {
 
         paymentSubmittedButton.textContent =
             "I've Made Payment";
+    }
+}
+
+async function submitPaymentForVerification(
+    paymentMethod,
+    button
+) {
+
+    if (
+        paymentSubmissionInProgress ||
+        !latestBooking
+    ) {
+        return;
+    }
+
+
+    paymentSubmissionInProgress =
+        true;
+
+
+    button.disabled =
+        true;
+
+    const originalText =
+        button.textContent;
+
+    button.textContent =
+        "Submitting...";
+
+
+    try {
+
+        await markPaymentPending();
+
+
+        latestBooking.payment_status =
+            "pending";
+
+
+        /*
+         * Remember how customer says they paid.
+         * Staff still performs final verification.
+         */
+
+        latestBooking.submitted_payment_method =
+            paymentMethod;
+
+
+        pendingBookingNo.textContent =
+            latestBooking.booking_no ||
+            "-";
+
+
+        pendingPlate.textContent =
+            latestBooking.plate_number ||
+            "-";
+
+
+        pendingAmount.textContent =
+            formatCurrency(
+                latestBooking.amount
+            );
+
+
+        showOnlySection(
+            paymentPendingSection
+        );
+
+
+        console.log(
+            "GLS payment submitted for verification:",
+            latestBooking.booking_no,
+            paymentMethod
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "GLS payment verification submission failed:",
+            error
+        );
+
+
+        alert(
+            "Unable to submit payment for verification. " +
+            "Please show your booking to GLS staff."
+        );
+
+    }
+
+    finally {
+
+        paymentSubmissionInProgress =
+            false;
+
+
+        if (
+            document.body.contains(
+                button
+            )
+        ) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                originalText;
+        }
     }
 }
 
@@ -1225,6 +1395,13 @@ function requiredElementsExist() {
         duitNowPaymentAmount,
         paymentSubmittedButton,
 
+      bankTransferPaymentButton,
+      bankTransferPaymentSection,
+      bankTransferBackButton,
+      bankTransferAmount,
+      bankTransferReference,
+      bankTransferSubmittedButton,
+
         paymentPendingSection,
         pendingBookingNo,
         pendingPlate,
@@ -1325,6 +1502,23 @@ function registerEventListeners() {
         "click",
         handlePaymentSubmitted
     );
+
+   bankTransferPaymentButton.addEventListener(
+    "click",
+    openBankTransferPayment
+);
+
+
+bankTransferBackButton.addEventListener(
+    "click",
+    openPaymentSection
+);
+
+
+bankTransferSubmittedButton.addEventListener(
+    "click",
+    handleBankTransferSubmitted
+);
 }
 
 
