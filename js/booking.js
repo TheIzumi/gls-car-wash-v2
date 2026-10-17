@@ -1099,88 +1099,9 @@ async function markPaymentPending() {
     return data;
 }
 
-
 /* =========================================================
-   27. SUBMIT DUITNOW PAYMENT
+   27. SUBMIT PAYMENT FOR VERIFICATION
    ========================================================= */
-
-async function handleBankTransferSubmitted() {
-
-    await submitPaymentForVerification(
-        "transfer",
-        bankTransferSubmittedButton
-    );
-}
-
-
-    paymentSubmissionInProgress =
-        true;
-
-
-    paymentSubmittedButton.disabled =
-        true;
-
-    paymentSubmittedButton.textContent =
-        "Submitting...";
-
-
-    try {
-        await markPaymentPending();
-
-
-        latestBooking.payment_status =
-            "pending";
-
-
-        pendingBookingNo.textContent =
-            latestBooking.booking_no ||
-            "-";
-
-        pendingPlate.textContent =
-            latestBooking.plate_number ||
-            "-";
-
-        pendingAmount.textContent =
-            formatCurrency(
-                latestBooking.amount
-            );
-
-
-        showOnlySection(
-            paymentPendingSection
-        );
-
-
-        console.log(
-            "GLS payment marked pending:",
-            latestBooking.booking_no
-        );
-    }
-
-    catch (error) {
-        console.error(
-            "GLS payment pending submission failed:",
-            error
-        );
-
-
-        alert(
-            "Unable to submit payment for verification. " +
-            "Please show your booking to GLS staff."
-        );
-    }
-
-    finally {
-        paymentSubmissionInProgress =
-            false;
-
-        paymentSubmittedButton.disabled =
-            false;
-
-        paymentSubmittedButton.textContent =
-            "I've Made Payment";
-    }
-}
 
 async function submitPaymentForVerification(
     paymentMethod,
@@ -1195,15 +1116,14 @@ async function submitPaymentForVerification(
     }
 
 
-    paymentSubmissionInProgress =
-        true;
+    paymentSubmissionInProgress = true;
 
-
-    button.disabled =
-        true;
 
     const originalText =
         button.textContent;
+
+
+    button.disabled = true;
 
     button.textContent =
         "Submitting...";
@@ -1217,11 +1137,6 @@ async function submitPaymentForVerification(
         latestBooking.payment_status =
             "pending";
 
-
-        /*
-         * Remember how customer says they paid.
-         * Staff still performs final verification.
-         */
 
         latestBooking.submitted_payment_method =
             paymentMethod;
@@ -1286,11 +1201,39 @@ async function submitPaymentForVerification(
             button.disabled =
                 false;
 
+
             button.textContent =
                 originalText;
         }
     }
 }
+
+
+/* =========================================================
+   28. SUBMIT DUITNOW PAYMENT
+   ========================================================= */
+
+async function handlePaymentSubmitted() {
+
+    await submitPaymentForVerification(
+        "duitnow",
+        paymentSubmittedButton
+    );
+}
+
+
+/* =========================================================
+   29. SUBMIT BANK TRANSFER
+   ========================================================= */
+
+async function handleBankTransferSubmitted() {
+
+    await submitPaymentForVerification(
+        "transfer",
+        bankTransferSubmittedButton
+    );
+}
+
 
 
 /* =========================================================
