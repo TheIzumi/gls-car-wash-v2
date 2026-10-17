@@ -46,6 +46,10 @@ let paymentSubmissionInProgress = false;
 let latestBooking = null;
 let latestSubmittedBooking = null;
 
+let paymentStatusTimer = null;
+let paymentStatusCheckInProgress = false;
+
+const PAYMENT_STATUS_INTERVAL = 5000;
 
 /* =========================================================
    4. BOOKING FORM ELEMENTS
