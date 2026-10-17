@@ -188,6 +188,21 @@ const upcomingFilterButtons =
         ".upcoming-filter"
     );
 
+const upcomingTodayCount =
+    document.getElementById(
+        "upcomingTodayCount"
+    );
+
+const upcomingTomorrowCount =
+    document.getElementById(
+        "upcomingTomorrowCount"
+    );
+
+const upcomingSevenDaysCount =
+    document.getElementById(
+        "upcomingSevenDaysCount"
+    );
+
 
 /* =========================================================
    7. PAYMENT ELEMENTS
