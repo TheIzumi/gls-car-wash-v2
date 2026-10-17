@@ -307,6 +307,133 @@
             <div class="payment-pending-card"><span>Payment Status</span><strong>PENDING VERIFICATION</strong><small>Do not make another payment for this booking unless advised by staff.</small></div>
             <p class="payment-help-text">Your official receipt will become available once your payment is confirmed.</p>
         </section>
+
+        <!-- =================================================
+     PAYMENT SUCCESSFUL
+================================================== -->
+
+<section
+    id="paymentSuccessSection"
+    class="payment-detail-section"
+    hidden
+>
+
+    <div class="confirmation-success-icon">
+        ✓
+    </div>
+
+
+    <p class="confirmation-eyebrow">
+        PAYMENT SUCCESSFUL
+    </p>
+
+
+    <h2>
+        Payment Confirmed
+    </h2>
+
+
+    <p class="payment-detail-description">
+        Your payment has been confirmed successfully.
+        Thank you for choosing GLS Car Wash.
+    </p>
+
+
+    <div class="confirmation-details">
+
+        <div class="confirmation-row">
+            <span>
+                Booking No.
+            </span>
+
+            <strong id="successBookingNo">
+                -
+            </strong>
+        </div>
+
+
+        <div class="confirmation-row">
+            <span>
+                Queue Number
+            </span>
+
+            <strong id="successQueueNo">
+                -
+            </strong>
+        </div>
+
+
+        <div class="confirmation-row">
+            <span>
+                Plate Number
+            </span>
+
+            <strong id="successPlate">
+                -
+            </strong>
+        </div>
+
+
+        <div class="confirmation-row">
+            <span>
+                Amount Paid
+            </span>
+
+            <strong id="successAmount">
+                RM 0.00
+            </strong>
+        </div>
+
+
+        <div class="confirmation-row">
+            <span>
+                Receipt No.
+            </span>
+
+            <strong id="successReceiptNo">
+                -
+            </strong>
+        </div>
+
+    </div>
+
+
+    <div class="payment-status-card">
+
+        <span>
+            Payment Status
+        </span>
+
+        <strong>
+            PAID
+        </strong>
+
+        <small>
+            Your official receipt is ready.
+        </small>
+
+    </div>
+
+
+    <button
+        id="viewCustomerReceiptButton"
+        class="payment-button"
+        type="button"
+    >
+        View Official Receipt
+    </button>
+
+
+    <button
+        id="successNewBookingButton"
+        class="new-booking-button"
+        type="button"
+    >
+        Make Another Booking
+    </button>
+
+</section>
+        
     </main>
 
     <footer class="booking-footer">
