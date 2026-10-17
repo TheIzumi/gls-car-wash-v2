@@ -1171,3 +1171,53 @@ select:invalid {
         padding: 0 12px;
     }
 }
+
+/* =========================================================
+   DUITNOW QR
+   ========================================================= */
+
+.duitnow-qr-card {
+    width: 100%;
+    max-width: 320px;
+
+    margin: 20px auto;
+
+    padding: 16px;
+
+    background: #ffffff;
+
+    border: 1px solid #e1e7ee;
+    border-radius: 14px;
+
+    text-align: center;
+
+    overflow: hidden;
+}
+
+.duitnow-qr-image {
+    display: block;
+
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+
+    margin: 0 auto;
+
+    object-fit: contain;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .duitnow-qr-card {
+        max-width: 290px;
+
+        padding: 12px;
+    }
+
+    .duitnow-qr-image {
+        max-width: 250px;
+    }
+}
