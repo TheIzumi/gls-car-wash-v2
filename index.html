@@ -41,6 +41,7 @@
             <img src="assets/logo.png" alt="Global Line Services Logo" class="brand-logo">
 
             <div>
+
                 <h1>
                     GLS Car Wash
                 </h1>
@@ -48,6 +49,7 @@
                 <p>
                     Operations Dashboard
                 </p>
+
             </div>
 
         </div>
@@ -105,8 +107,8 @@
 
                 <p class="login-copy">
                     Sign in to manage payments,
-                    scheduled bookings, queue operations
-                    and daily car wash activity.
+                    scheduled bookings, queue operations,
+                    booking records and daily car wash activity.
                 </p>
 
 
@@ -188,7 +190,7 @@
 
 
             <!-- =============================================
-                 DASHBOARD WELCOME
+                 WELCOME
                  ============================================= -->
 
             <section class="welcome-row">
@@ -381,9 +383,7 @@
                 </div>
 
 
-                <!-- =========================================
-                     UPCOMING BOOKING FILTERS
-                     ========================================= -->
+                <!-- UPCOMING FILTERS -->
 
                 <div
                     class="queue-filter-bar"
@@ -482,7 +482,7 @@
                         </h2>
 
                         <p>
-                            Review customer payment submissions
+                            Review digital payment submissions
                             and cash payments before confirming.
                         </p>
 
@@ -658,6 +658,248 @@
                     <div class="empty-state">
                         Loading recent bookings...
                     </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 BOOKING HISTORY
+                 ================================================= -->
+
+            <section
+                class="dashboard-panel"
+                id="bookingHistoryPanel"
+            >
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            RECORDS
+                        </p>
+
+                        <h2>
+                            Booking History
+                        </h2>
+
+                        <p>
+                            Search previous bookings by booking
+                            number, queue number, plate number,
+                            customer name or phone number.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================================
+                     HISTORY SEARCH
+                     ========================================= -->
+
+                <form
+                    id="bookingHistorySearchForm"
+                    class="history-search-form"
+                >
+
+                    <input
+                        id="bookingHistorySearch"
+                        type="search"
+                        placeholder="Booking no., queue no., plate, name or phone"
+                        autocomplete="off"
+                        aria-label="Search booking history"
+                    >
+
+
+                    <button
+                        id="bookingHistorySearchButton"
+                        class="primary-button"
+                        type="submit"
+                    >
+                        Search
+                    </button>
+
+
+                    <button
+                        id="bookingHistoryClearButton"
+                        class="secondary-button"
+                        type="button"
+                    >
+                        Clear
+                    </button>
+
+                </form>
+
+
+                <!-- =========================================
+                     HISTORY FILTERS
+                     ========================================= -->
+
+                <div
+                    class="history-filter-bar"
+                    role="group"
+                    aria-label="Booking history filters"
+                >
+
+                    <button
+                        class="history-filter active"
+                        type="button"
+                        data-history-filter="all"
+                    >
+                        All
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="paid"
+                    >
+                        Paid
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="pending"
+                    >
+                        Pending
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="unpaid"
+                    >
+                        Unpaid
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="waiting"
+                    >
+                        Waiting
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="washing"
+                    >
+                        Washing
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="completed"
+                    >
+                        Completed
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="collected"
+                    >
+                        Collected
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="cancelled"
+                    >
+                        Cancelled
+                    </button>
+
+
+                    <button
+                        class="history-filter"
+                        type="button"
+                        data-history-filter="future"
+                    >
+                        Scheduled
+                    </button>
+
+                </div>
+
+
+                <!-- =========================================
+                     HISTORY MESSAGE
+                     ========================================= -->
+
+                <p
+                    id="bookingHistoryMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+
+                <!-- =========================================
+                     HISTORY SUMMARY
+                     ========================================= -->
+
+                <div
+                    id="bookingHistorySummary"
+                    class="history-summary"
+                >
+                    Search or select a filter to view
+                    booking records.
+                </div>
+
+
+                <!-- =========================================
+                     HISTORY RESULTS
+                     ========================================= -->
+
+                <div
+                    id="bookingHistoryList"
+                    class="operations-list"
+                ></div>
+
+
+                <!-- =========================================
+                     HISTORY PAGINATION
+                     ========================================= -->
+
+                <div class="history-pagination">
+
+                    <button
+                        id="bookingHistoryPreviousButton"
+                        class="secondary-button"
+                        type="button"
+                        disabled
+                    >
+                        Previous
+                    </button>
+
+
+                    <span id="bookingHistoryPageInfo">
+                        Page 1
+                    </span>
+
+
+                    <button
+                        id="bookingHistoryNextButton"
+                        class="secondary-button"
+                        type="button"
+                        disabled
+                    >
+                        Next
+                    </button>
 
                 </div>
 
