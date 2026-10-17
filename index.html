@@ -45,12 +45,134 @@
       </section>
 
       <section class="summary-grid" aria-label="Today's summary">
-        <article class="summary-card"><span class="summary-icon">🚗</span><p>Vehicles Today</p><strong id="vehiclesToday">0</strong><small>Bookings created today</small></article>
-        <article class="summary-card"><span class="summary-icon">💰</span><p>Revenue Today</p><strong id="revenueToday">RM 0.00</strong><small>Confirmed payments</small></article>
-        <article class="summary-card"><span class="summary-icon">⏳</span><p>Waiting</p><strong id="waitingCount">0</strong><small>Vehicles waiting</small></article>
-        <article class="summary-card"><span class="summary-icon">🧽</span><p>Washing</p><strong id="washingCount">0</strong><small>Currently being washed</small></article>
-        <article class="summary-card accent-card"><span class="summary-icon">💳</span><p>Payment Pending</p><strong id="pendingPaymentCount">0</strong><small>Requires verification</small></article>
-      </section>
+    <article class="summary-card">
+        <span class="summary-icon">🚗</span>
+        <p>Vehicles Today</p>
+        <strong id="vehiclesToday">0</strong>
+        <small>Bookings created today</small>
+    </article>
+
+    <article class="summary-card">
+        <span class="summary-icon">💰</span>
+        <p>Revenue Today</p>
+        <strong id="revenueToday">RM 0.00</strong>
+        <small>Confirmed payments</small>
+    </article>
+
+    <article class="summary-card">
+        <span class="summary-icon">⏳</span>
+        <p>Waiting</p>
+        <strong id="waitingCount">0</strong>
+        <small>Vehicles waiting</small>
+    </article>
+
+    <article class="summary-card">
+        <span class="summary-icon">🧽</span>
+        <p>Washing</p>
+        <strong id="washingCount">0</strong>
+        <small>Currently being washed</small>
+    </article>
+
+    <article class="summary-card accent-card">
+        <span class="summary-icon">💳</span>
+        <p>Payment Pending</p>
+        <strong id="pendingPaymentCount">0</strong>
+        <small>Requires verification</small>
+    </article>
+</section>
+
+
+<!-- =========================================================
+     UPCOMING BOOKINGS
+     ========================================================= -->
+
+<section
+    class="dashboard-panel"
+    id="upcomingBookingsPanel"
+>
+
+    <div class="section-heading">
+
+        <div>
+            <p class="eyebrow">
+                SCHEDULED APPOINTMENTS
+            </p>
+
+            <h2>
+                Upcoming Bookings
+            </h2>
+
+            <p>
+                View scheduled bookings and check in customers
+                when they arrive.
+            </p>
+        </div>
+
+        <button
+            id="refreshUpcomingButton"
+            class="secondary-button"
+            type="button"
+        >
+            Refresh
+        </button>
+
+    </div>
+
+
+    <div
+        class="queue-filter-bar"
+        role="group"
+        aria-label="Upcoming booking filters"
+    >
+
+        <button
+            class="upcoming-filter active"
+            type="button"
+            data-upcoming-filter="today"
+        >
+            Today
+        </button>
+
+        <button
+            class="upcoming-filter"
+            type="button"
+            data-upcoming-filter="tomorrow"
+        >
+            Tomorrow
+        </button>
+
+        <button
+            class="upcoming-filter"
+            type="button"
+            data-upcoming-filter="7days"
+        >
+            Next 7 Days
+        </button>
+
+    </div>
+
+
+    <p
+        id="upcomingBookingsMessage"
+        class="status-message"
+        role="status"
+        aria-live="polite"
+    ></p>
+
+
+    <div
+        id="upcomingBookingsList"
+        class="operations-list"
+    >
+        <div class="empty-state">
+            Loading upcoming bookings...
+        </div>
+    </div>
+
+</section>
+
+
+<!-- PAYMENT VERIFICATION SECTION STARTS AFTER THIS -->
 
       <section class="dashboard-panel">
         <div class="section-heading"><div><p class="eyebrow">ACTION REQUIRED</p><h2>Payment Verification</h2><p>Review customer payment submissions before confirming payment.</p></div><button id="refreshPaymentsButton" class="secondary-button" type="button">Refresh</button></div>
