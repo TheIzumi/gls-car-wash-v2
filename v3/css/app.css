@@ -1,6 +1,7 @@
 /* =========================================================
    GLS CAR WASH MANAGEMENT SYSTEM V3
-   Mobile / Tablet / Desktop Application
+   TOUCH UI
+   Phone / Tablet / iPad / Desktop
    File: v3/css/app.css
    ========================================================= */
 
@@ -12,35 +13,30 @@
 :root {
     --gls-primary: #123b66;
     --gls-primary-dark: #092a4c;
-    --gls-primary-mid: #18548e;
+    --gls-primary-mid: #1d6099;
     --gls-primary-light: #edf5fd;
-
-    --gls-accent: #2f78b7;
-    --gls-accent-light: #e9f4ff;
 
     --gls-background: #f2f5f8;
     --gls-surface: #ffffff;
     --gls-surface-soft: #f8fafc;
-    --gls-surface-blue: #f4f8fc;
 
     --gls-text: #172c43;
     --gls-text-soft: #52677d;
     --gls-muted: #708093;
-    --gls-muted-light: #93a0ad;
+    --gls-muted-light: #94a0ad;
 
-    --gls-border: #dce5ed;
-    --gls-border-light: #e8edf2;
+    --gls-border: #d8e3ec;
+    --gls-border-light: #e7edf2;
 
-    --gls-success: #147653;
-    --gls-success-dark: #0e6042;
+    --gls-success: #167956;
+    --gls-success-dark: #0e6144;
     --gls-success-bg: #e9f8f0;
 
-    --gls-warning: #926300;
-    --gls-warning-dark: #755000;
-    --gls-warning-bg: #fff7dd;
+    --gls-warning: #956600;
+    --gls-warning-dark: #745000;
+    --gls-warning-bg: #fff6d9;
 
     --gls-danger: #b6382c;
-    --gls-danger-dark: #932c23;
     --gls-danger-bg: #fff0ee;
 
     --gls-info: #326f9f;
@@ -58,31 +54,33 @@
     --gls-closed: #596a7c;
     --gls-closed-bg: #eef1f4;
 
-    --gls-radius-small: 8px;
-    --gls-radius: 12px;
-    --gls-radius-large: 17px;
-    --gls-radius-xl: 22px;
+    --radius-small: 10px;
+    --radius-medium: 14px;
+    --radius-large: 19px;
+    --radius-xl: 24px;
 
-    --gls-shadow-small:
-        0 3px 12px
-        rgba(15, 42, 70, 0.05);
+    --shadow-small:
+        0 4px 14px
+        rgba(15, 42, 70, 0.06);
 
-    --gls-shadow:
-        0 10px 30px
+    --shadow:
+        0 12px 32px
         rgba(15, 42, 70, 0.08);
 
-    --gls-shadow-large:
-        0 18px 45px
-        rgba(15, 42, 70, 0.10);
+    --shadow-large:
+        0 20px 50px
+        rgba(15, 42, 70, 0.11);
 
-    --gls-header-height: 70px;
+    --header-height: 86px;
 
-    --gls-content-width: 1180px;
+    --content-width: 1440px;
+
+    --touch-height: 50px;
 }
 
 
 /* =========================================================
-   2. RESET / BASE
+   2. RESET
    ========================================================= */
 
 *,
@@ -95,9 +93,9 @@
 html {
     min-height: 100%;
 
-    scroll-behavior: smooth;
-
     background: var(--gls-background);
+
+    scroll-behavior: smooth;
 
     -webkit-text-size-adjust: 100%;
 }
@@ -122,7 +120,7 @@ body {
         Arial,
         sans-serif;
 
-    font-size: 14px;
+    font-size: 16px;
 
     line-height: 1.5;
 
@@ -136,14 +134,9 @@ input,
 select,
 textarea {
     font: inherit;
-}
 
-
-button,
-input,
-select,
-textarea {
-    -webkit-tap-highlight-color: transparent;
+    -webkit-tap-highlight-color:
+        transparent;
 }
 
 
@@ -154,13 +147,6 @@ button {
 
 button:disabled {
     cursor: not-allowed;
-}
-
-
-input,
-select,
-textarea {
-    color: var(--gls-text);
 }
 
 
@@ -187,15 +173,16 @@ button:focus-visible,
 input:focus-visible,
 select:focus-visible,
 textarea:focus-visible {
-    outline: 3px solid
-        rgba(47, 120, 183, 0.20);
+    outline:
+        4px solid
+        rgba(47, 120, 183, 0.18);
 
     outline-offset: 2px;
 }
 
 
 /* =========================================================
-   4. APP HEADER
+   4. HEADER
    ========================================================= */
 
 .app-header {
@@ -209,29 +196,30 @@ textarea:focus-visible {
     align-items: center;
     justify-content: space-between;
 
-    gap: 14px;
+    gap: 20px;
 
-    min-height: var(--gls-header-height);
+    min-height: var(--header-height);
 
     padding:
-        9px
+        13px
         max(
-            14px,
-            env(safe-area-inset-left)
+            24px,
+            calc((100vw - var(--content-width)) / 2)
         );
 
     background:
-        rgba(255, 255, 255, 0.96);
+        rgba(255, 255, 255, 0.97);
 
     border-bottom:
         1px solid
         var(--gls-border);
 
     box-shadow:
-        0 2px 12px
-        rgba(15, 42, 70, 0.05);
+        0 3px 14px
+        rgba(15, 42, 70, 0.04);
 
-    backdrop-filter: blur(12px);
+    backdrop-filter:
+        blur(12px);
 }
 
 
@@ -240,19 +228,19 @@ textarea:focus-visible {
 
     align-items: center;
 
-    min-width: 0;
+    gap: 14px;
 
-    gap: 10px;
+    min-width: 0;
 }
 
 
 .header-brand img {
     display: block;
 
-    width: 46px;
-    height: 46px;
+    width: 62px;
+    height: 62px;
 
-    flex: 0 0 46px;
+    flex: 0 0 62px;
 
     object-fit: contain;
 }
@@ -263,23 +251,21 @@ textarea:focus-visible {
 
     color: var(--gls-primary);
 
-    font-size: 16px;
+    font-size: 23px;
     font-weight: 900;
 
-    line-height: 1.15;
+    line-height: 1.1;
 }
 
 
 .header-brand p {
     margin:
-        2px 0 0;
+        4px 0 0;
 
     color: var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 650;
-
-    line-height: 1.2;
 }
 
 
@@ -289,14 +275,12 @@ textarea:focus-visible {
     align-items: center;
     justify-content: flex-end;
 
-    gap: 9px;
-
-    min-width: 0;
+    gap: 15px;
 }
 
 
 .header-user-info {
-    display: none;
+    display: block;
 
     min-width: 0;
 
@@ -307,13 +291,13 @@ textarea:focus-visible {
 .header-user-info strong {
     display: block;
 
-    max-width: 180px;
+    max-width: 260px;
 
     overflow: hidden;
 
     color: var(--gls-primary);
 
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 850;
 
     text-overflow: ellipsis;
@@ -324,22 +308,25 @@ textarea:focus-visible {
 .header-user-info span {
     display: block;
 
-    margin-top: 1px;
+    margin-top: 2px;
 
     color: var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
 
     text-transform: uppercase;
 }
 
 
 .header-action-button {
-    min-height: 38px;
+    min-height: 46px;
 
     padding:
-        7px
-        11px;
+        10px
+        16px;
 
     background: #ffffff;
 
@@ -347,12 +334,12 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 9px;
+    border-radius: 11px;
 
     color: var(--gls-primary);
 
-    font-size: 9px;
-    font-weight: 800;
+    font-size: 12px;
+    font-weight: 850;
 }
 
 
@@ -360,7 +347,7 @@ textarea:focus-visible {
     background:
         var(--gls-primary-light);
 
-    border-color: #b9d0e5;
+    border-color: #b8cfe4;
 }
 
 
@@ -371,38 +358,38 @@ textarea:focus-visible {
 .app-shell {
     width:
         min(
-            var(--gls-content-width),
-            calc(100% - 20px)
+            var(--content-width),
+            calc(100% - 48px)
         );
 
     margin:
         0 auto;
 
     padding:
-        15px 0 30px;
+        28px 0 50px;
 
     padding-bottom:
         max(
-            30px,
+            50px,
             env(safe-area-inset-bottom)
         );
 }
 
 
 /* =========================================================
-   6. COMMON TYPOGRAPHY
+   6. TYPOGRAPHY
    ========================================================= */
 
 .eyebrow {
     margin:
-        0 0 5px;
+        0 0 7px;
 
     color: var(--gls-primary);
 
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 900;
 
-    letter-spacing: 1.15px;
+    letter-spacing: 1.35px;
 
     text-transform: uppercase;
 }
@@ -410,13 +397,13 @@ textarea:focus-visible {
 
 .screen-description {
     margin:
-        6px 0 20px;
+        8px 0 24px;
 
     color: var(--gls-muted);
 
-    font-size: 11px;
+    font-size: 14px;
 
-    line-height: 1.6;
+    line-height: 1.65;
 }
 
 
@@ -438,9 +425,9 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
-    font-weight: 800;
+    font-weight: 850;
 
     text-decoration: none;
 
@@ -453,11 +440,11 @@ textarea:focus-visible {
 
 
 .primary-button {
-    min-height: 44px;
+    min-height: var(--touch-height);
 
     padding:
-        9px
-        15px;
+        11px
+        19px;
 
     background:
         linear-gradient(
@@ -471,6 +458,8 @@ textarea:focus-visible {
         var(--gls-primary);
 
     color: #ffffff;
+
+    font-size: 14px;
 }
 
 
@@ -485,11 +474,11 @@ textarea:focus-visible {
 
 
 .secondary-button {
-    min-height: 42px;
+    min-height: var(--touch-height);
 
     padding:
-        9px
-        14px;
+        11px
+        18px;
 
     background: #ffffff;
 
@@ -497,7 +486,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
+
+    font-size: 13px;
 }
 
 
@@ -505,14 +497,16 @@ textarea:focus-visible {
     background:
         var(--gls-primary-light);
 
-    border-color: #b8d0e5;
+    border-color: #b8cfe4;
 }
 
 
 .large-button {
     width: 100%;
 
-    min-height: 48px;
+    min-height: 56px;
+
+    font-size: 16px;
 }
 
 
@@ -526,7 +520,8 @@ textarea:focus-visible {
 .secondary-button:active:not(:disabled),
 .back-button:active:not(:disabled),
 .icon-button:active:not(:disabled) {
-    transform: scale(0.98);
+    transform:
+        scale(0.98);
 }
 
 
@@ -543,22 +538,23 @@ textarea:focus-visible {
     min-height:
         calc(
             100vh -
-            var(--gls-header-height) -
-            70px
+            var(--header-height) -
+            95px
         );
 
     padding:
-        12px 0;
+        20px 0;
 }
 
 
 .login-card {
     width: 100%;
-    max-width: 430px;
+
+    max-width: 520px;
 
     padding:
-        28px
-        20px;
+        42px
+        40px;
 
     background: #ffffff;
 
@@ -566,9 +562,11 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: var(--gls-radius-xl);
+    border-radius:
+        var(--radius-xl);
 
-    box-shadow: var(--gls-shadow-large);
+    box-shadow:
+        var(--shadow-large);
 
     text-align: center;
 }
@@ -577,10 +575,11 @@ textarea:focus-visible {
 .login-card > img {
     display: block;
 
-    width: 120px;
+    width: 150px;
 
     margin:
-        0 auto 18px;
+        0 auto
+        24px;
 }
 
 
@@ -589,13 +588,13 @@ textarea:focus-visible {
 
     color: var(--gls-primary);
 
-    font-size: 24px;
+    font-size: 31px;
     font-weight: 900;
 }
 
 
 .login-form {
-    margin-top: 22px;
+    margin-top: 28px;
 
     text-align: left;
 }
@@ -603,20 +602,21 @@ textarea:focus-visible {
 
 .security-note {
     margin:
-        18px 0 0;
+        22px 0 0;
 
-    color: var(--gls-muted-light);
+    color:
+        var(--gls-muted-light);
 
-    font-size: 8px;
+    font-size: 10px;
 }
 
 
 /* =========================================================
-   9. FORM COMPONENTS
+   9. FORM ELEMENTS
    ========================================================= */
 
 .form-field {
-    margin-bottom: 15px;
+    margin-bottom: 19px;
 }
 
 
@@ -628,11 +628,12 @@ textarea:focus-visible {
 .form-field label {
     display: block;
 
-    margin-bottom: 6px;
+    margin-bottom: 8px;
 
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 750;
 }
 
@@ -644,20 +645,21 @@ textarea:focus-visible {
     width: 100%;
 
     padding:
-        10px
-        12px;
+        12px
+        14px;
 
     background: #ffffff;
 
     border:
         1px solid
-        #d3dee8;
+        #d2dde7;
 
-    border-radius: 10px;
+    border-radius: 11px;
 
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
-    font-size: 13px;
+    font-size: 16px;
 
     transition:
         border-color 0.17s ease,
@@ -668,19 +670,20 @@ textarea:focus-visible {
 .form-field input,
 .form-field select,
 .lookup-form input {
-    min-height: 46px;
+    min-height: 52px;
 }
 
 
 .form-field textarea {
-    min-height: 74px;
+    min-height: 95px;
 }
 
 
 .form-field input::placeholder,
 .form-field textarea::placeholder,
 .lookup-form input::placeholder {
-    color: #9ba8b5;
+    color:
+        #9aa7b4;
 }
 
 
@@ -690,22 +693,27 @@ textarea:focus-visible {
 .lookup-form input:focus {
     outline: none;
 
-    border-color: #6796c1;
+    border-color:
+        #6796c1;
 
     box-shadow:
-        0 0 0 3px
-        rgba(18, 59, 102, 0.08);
+        0 0 0 4px
+        rgba(18, 59, 102, 0.07);
 }
 
 
 .form-grid {
     display: grid;
 
-    grid-template-columns: 1fr;
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
 
     gap:
         0
-        14px;
+        18px;
 }
 
 
@@ -715,13 +723,14 @@ textarea:focus-visible {
 
 .status-message {
     margin:
-        10px 0;
+        12px 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 10px;
+    font-size: 13px;
 
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 
@@ -734,10 +743,10 @@ textarea:focus-visible {
 .status-message.success,
 .status-message.error {
     padding:
-        10px
-        12px;
+        13px
+        15px;
 
-    border-radius: 9px;
+    border-radius: 10px;
 }
 
 
@@ -749,7 +758,8 @@ textarea:focus-visible {
         1px solid
         #c8deef;
 
-    color: var(--gls-info);
+    color:
+        var(--gls-info);
 }
 
 
@@ -761,7 +771,8 @@ textarea:focus-visible {
         1px solid
         #bce1ce;
 
-    color: var(--gls-success);
+    color:
+        var(--gls-success);
 }
 
 
@@ -773,7 +784,8 @@ textarea:focus-visible {
         1px solid
         #ecc5c0;
 
-    color: var(--gls-danger);
+    color:
+        var(--gls-danger);
 }
 
 
@@ -786,7 +798,7 @@ textarea:focus-visible {
 
     top:
         calc(
-            var(--gls-header-height) + 9px
+            var(--header-height) + 12px
         );
 
     z-index: 80;
@@ -795,22 +807,29 @@ textarea:focus-visible {
 
     align-items: center;
 
-    gap: 5px;
+    gap: 7px;
 
-    margin-bottom: 18px;
+    width: 100%;
 
-    padding: 5px;
+    max-width: 760px;
+
+    margin:
+        0 auto
+        32px;
+
+    padding: 7px;
 
     background:
-        rgba(255, 255, 255, 0.95);
+        rgba(255, 255, 255, 0.96);
 
     border:
         1px solid
         var(--gls-border);
 
-    border-radius: 12px;
+    border-radius: 15px;
 
-    box-shadow: var(--gls-shadow-small);
+    box-shadow:
+        var(--shadow-small);
 
     backdrop-filter: blur(10px);
 }
@@ -819,22 +838,24 @@ textarea:focus-visible {
 .nav-button {
     flex: 1;
 
-    min-height: 40px;
+    min-height: 50px;
 
     padding:
-        8px
-        10px;
+        11px
+        14px;
 
-    background: transparent;
+    background:
+        transparent;
 
     border: 0;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 10px;
-    font-weight: 800;
+    font-size: 14px;
+    font-weight: 850;
 }
 
 
@@ -852,11 +873,15 @@ textarea:focus-visible {
         var(--gls-primary);
 
     color: #ffffff;
+
+    box-shadow:
+        0 4px 12px
+        rgba(18, 59, 102, 0.14);
 }
 
 
 /* =========================================================
-   12. APPLICATION SCREEN
+   12. SCREEN
    ========================================================= */
 
 .application-screen {
@@ -865,7 +890,7 @@ textarea:focus-visible {
 
 
 .screen-heading {
-    margin-bottom: 18px;
+    margin-bottom: 24px;
 }
 
 
@@ -873,20 +898,22 @@ textarea:focus-visible {
 .screen-toolbar h2 {
     margin: 0;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 24px;
+    font-size: 31px;
     font-weight: 900;
 }
 
 
 .screen-heading > p:not(.eyebrow) {
     margin:
-        5px 0 0;
+        7px 0 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 10px;
+    font-size: 13px;
 }
 
 
@@ -895,19 +922,19 @@ textarea:focus-visible {
 
     align-items: center;
 
-    gap: 12px;
+    gap: 15px;
 
-    margin-bottom: 18px;
+    margin-bottom: 24px;
 }
 
 
 .back-button {
-    min-width: 74px;
-    min-height: 40px;
+    min-width: 95px;
+    min-height: 48px;
 
     padding:
-        7px
-        10px;
+        10px
+        14px;
 
     background: #ffffff;
 
@@ -915,9 +942,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 10px;
+    font-size: 13px;
 }
 
 
@@ -928,7 +956,7 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   13. WELCOME
+   13. OPERATIONS WELCOME
    ========================================================= */
 
 .welcome-section {
@@ -937,37 +965,49 @@ textarea:focus-visible {
     align-items: center;
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 18px;
 
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 
 .welcome-section h2 {
     margin: 0;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 24px;
+    font-size:
+        clamp(
+            28px,
+            3vw,
+            40px
+        );
+
     font-weight: 900;
+
+    line-height: 1.15;
 }
 
 
 #operationsDate {
     margin:
-        3px 0 0;
+        6px 0 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 13px;
 }
 
 
 .icon-button {
-    width: 42px;
-    height: 42px;
+    width: 52px;
+    height: 52px;
 
-    flex: 0 0 42px;
+    flex:
+        0 0
+        52px;
 
     padding: 0;
 
@@ -977,9 +1017,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 20px;
+    font-size: 24px;
 }
 
 
@@ -990,7 +1031,7 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   14. NEW JOB PRIMARY ACTION
+   14. NEW JOB BUTTON
    ========================================================= */
 
 .new-job-button {
@@ -999,35 +1040,37 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
 
-    gap: 9px;
+    gap: 14px;
 
     width: 100%;
-    min-height: 58px;
+    max-width: 520px;
 
-    margin-bottom: 14px;
+    min-height: 78px;
+
+    margin-bottom: 22px;
 
     padding:
-        11px
-        16px;
+        15px
+        22px;
 
     background:
         linear-gradient(
             135deg,
             var(--gls-primary),
-            #1d629e
+            #2168a4
         );
 
     border: 0;
 
-    border-radius: 15px;
+    border-radius: 18px;
 
     box-shadow:
-        0 8px 22px
-        rgba(18, 59, 102, 0.17);
+        0 10px 26px
+        rgba(18, 59, 102, 0.18);
 
     color: #ffffff;
 
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 900;
 }
 
@@ -1043,7 +1086,8 @@ textarea:focus-visible {
 
 
 .new-job-button:active {
-    transform: scale(0.993);
+    transform:
+        scale(0.992);
 }
 
 
@@ -1053,15 +1097,15 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
 
-    width: 29px;
-    height: 29px;
+    width: 39px;
+    height: 39px;
 
     background:
         rgba(255, 255, 255, 0.18);
 
     border-radius: 999px;
 
-    font-size: 22px;
+    font-size: 29px;
 
     line-height: 1;
 }
@@ -1076,13 +1120,15 @@ textarea:focus-visible {
 
     grid-template-columns:
         repeat(
-            2,
+            4,
             minmax(0, 1fr)
         );
 
-    gap: 8px;
+    gap: 14px;
 
-    margin-bottom: 14px;
+    max-width: 1040px;
+
+    margin-bottom: 22px;
 }
 
 
@@ -1091,10 +1137,10 @@ textarea:focus-visible {
 
     overflow: hidden;
 
-    min-height: 86px;
+    min-height: 135px;
 
     padding:
-        13px;
+        22px;
 
     background: #ffffff;
 
@@ -1102,10 +1148,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 13px;
+    border-radius: 17px;
 
     box-shadow:
-        var(--gls-shadow-small);
+        var(--shadow-small);
 }
 
 
@@ -1115,7 +1161,7 @@ textarea:focus-visible {
     top: 0;
     left: 0;
 
-    width: 4px;
+    width: 6px;
     height: 100%;
 
     content: "";
@@ -1125,9 +1171,10 @@ textarea:focus-visible {
 .summary-card span {
     display: block;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 14px;
     font-weight: 750;
 }
 
@@ -1135,11 +1182,12 @@ textarea:focus-visible {
 .summary-card strong {
     display: block;
 
-    margin-top: 5px;
+    margin-top: 9px;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 26px;
+    font-size: 44px;
     font-weight: 900;
 
     line-height: 1;
@@ -1180,12 +1228,12 @@ textarea:focus-visible {
     grid-template-columns:
         repeat(
             2,
-            minmax(0, 1fr)
+            minmax(220px, 310px)
         );
 
-    gap: 8px;
+    gap: 12px;
 
-    margin-bottom: 18px;
+    margin-bottom: 28px;
 }
 
 
@@ -1199,14 +1247,14 @@ textarea:focus-visible {
     align-items: center;
 
     gap:
-        3px
-        9px;
+        4px
+        13px;
 
-    min-height: 58px;
+    min-height: 76px;
 
     padding:
-        10px
-        12px;
+        14px
+        18px;
 
     background: #ffffff;
 
@@ -1214,9 +1262,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 12px;
+    border-radius: 15px;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
     text-align: left;
 }
@@ -1226,12 +1275,13 @@ textarea:focus-visible {
     background:
         var(--gls-primary-light);
 
-    border-color: #bcd2e6;
+    border-color:
+        #bcd2e6;
 }
 
 
 .quick-action-button:disabled {
-    opacity: 0.60;
+    opacity: 0.58;
 }
 
 
@@ -1239,20 +1289,21 @@ textarea:focus-visible {
     grid-row:
         1 / span 2;
 
-    font-size: 20px;
+    font-size: 30px;
 }
 
 
 .quick-action-button > span:not(.quick-action-icon) {
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 850;
 }
 
 
 .quick-action-button small {
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 7px;
+    font-size: 10px;
 }
 
 
@@ -1262,8 +1313,7 @@ textarea:focus-visible {
 
 .jobs-section {
     padding:
-        17px
-        14px;
+        27px;
 
     background: #ffffff;
 
@@ -1271,9 +1321,11 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: var(--gls-radius-large);
+    border-radius:
+        var(--radius-large);
 
-    box-shadow: var(--gls-shadow);
+    box-shadow:
+        var(--shadow);
 }
 
 
@@ -1283,29 +1335,31 @@ textarea:focus-visible {
     align-items: flex-start;
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 17px;
 
-    margin-bottom: 13px;
+    margin-bottom: 19px;
 }
 
 
 .section-heading h3 {
     margin: 0;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 17px;
+    font-size: 23px;
     font-weight: 900;
 }
 
 
 .section-heading p:not(.eyebrow) {
     margin:
-        3px 0 0;
+        5px 0 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 12px;
 }
 
 
@@ -1316,31 +1370,20 @@ textarea:focus-visible {
 .job-filter-bar {
     display: flex;
 
-    gap: 6px;
+    flex-wrap: wrap;
 
-    overflow-x: auto;
+    gap: 9px;
 
-    margin-bottom: 13px;
-
-    padding-bottom: 2px;
-
-    scrollbar-width: none;
-}
-
-
-.job-filter-bar::-webkit-scrollbar {
-    display: none;
+    margin-bottom: 20px;
 }
 
 
 .job-filter {
-    flex: 0 0 auto;
-
-    min-height: 34px;
+    min-height: 46px;
 
     padding:
-        7px
-        11px;
+        10px
+        16px;
 
     background: #ffffff;
 
@@ -1348,14 +1391,13 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 8px;
+    border-radius: 10px;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
-    font-weight: 800;
-
-    white-space: nowrap;
+    font-size: 12px;
+    font-weight: 850;
 }
 
 
@@ -1380,7 +1422,7 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   19. JOB / SEARCH LISTS
+   19. LISTS
    ========================================================= */
 
 .jobs-list,
@@ -1392,19 +1434,19 @@ textarea:focus-visible {
 
     flex-direction: column;
 
-    gap: 9px;
+    gap: 13px;
 }
 
 
 /* =========================================================
-   20. GENERIC JOB CARD
+   20. JOB CARDS
    ========================================================= */
 
 .job-card,
 .lookup-result-card,
 .search-result-card {
     padding:
-        13px;
+        19px;
 
     background:
         var(--gls-surface-soft);
@@ -1413,7 +1455,7 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 12px;
+    border-radius: 15px;
 }
 
 
@@ -1423,28 +1465,30 @@ textarea:focus-visible {
     align-items: flex-start;
     justify-content: space-between;
 
-    gap: 10px;
+    gap: 14px;
 }
 
 
 .job-number {
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 850;
 }
 
 
 .vehicle-plate {
     margin:
-        3px 0 0;
+        4px 0 0;
 
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
-    font-size: 18px;
+    font-size: 25px;
     font-weight: 900;
 
-    letter-spacing: 0.3px;
+    letter-spacing: 0.4px;
 }
 
 
@@ -1454,17 +1498,18 @@ textarea:focus-visible {
     flex-wrap: wrap;
 
     gap:
-        4px
-        10px;
+        6px
+        14px;
 
-    margin-top: 8px;
+    margin-top: 11px;
 }
 
 
 .job-meta span {
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 }
 
 
@@ -1473,24 +1518,26 @@ textarea:focus-visible {
 
     flex-wrap: wrap;
 
-    gap: 7px;
+    gap: 10px;
 
-    margin-top: 12px;
+    margin-top: 16px;
 }
 
 
 .job-actions button {
-    flex: 1 1 auto;
+    flex:
+        1 1
+        auto;
 
-    min-height: 39px;
+    min-height: 48px;
 
     padding:
-        7px
-        10px;
+        10px
+        15px;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 850;
 }
 
@@ -1505,15 +1552,15 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
 
-    min-height: 22px;
+    min-height: 29px;
 
     padding:
-        4px
-        8px;
+        6px
+        11px;
 
     border-radius: 999px;
 
-    font-size: 7px;
+    font-size: 10px;
     font-weight: 900;
 
     letter-spacing: 0.4px;
@@ -1580,21 +1627,22 @@ textarea:focus-visible {
 
 .empty-state {
     padding:
-        24px
-        16px;
+        38px
+        22px;
 
     background:
         var(--gls-surface-soft);
 
     border:
         1px dashed
-        #d4dee8;
+        #d2dde7;
 
-    border-radius: 11px;
+    border-radius: 14px;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 13px;
 
     line-height: 1.6;
 
@@ -1603,15 +1651,16 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   23. FORM CARD
+   23. FORM CARDS
    ========================================================= */
 
 .form-card {
-    margin-bottom: 13px;
+    max-width: 1020px;
+
+    margin-bottom: 18px;
 
     padding:
-        16px
-        14px;
+        25px;
 
     background: #ffffff;
 
@@ -1619,10 +1668,11 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: var(--gls-radius-large);
+    border-radius:
+        var(--radius-large);
 
     box-shadow:
-        var(--gls-shadow-small);
+        var(--shadow-small);
 }
 
 
@@ -1631,31 +1681,33 @@ textarea:focus-visible {
 
     align-items: flex-start;
 
-    gap: 10px;
+    gap: 14px;
 
-    margin-bottom: 16px;
+    margin-bottom: 22px;
 }
 
 
 .form-card-heading h3 {
     margin: 0;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 15px;
+    font-size: 21px;
     font-weight: 900;
 }
 
 
 .form-card-heading p {
     margin:
-        3px 0 0;
+        5px 0 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
 
@@ -1665,10 +1717,12 @@ textarea:focus-visible {
     align-items: center;
     justify-content: center;
 
-    width: 27px;
-    height: 27px;
+    width: 38px;
+    height: 38px;
 
-    flex: 0 0 27px;
+    flex:
+        0 0
+        38px;
 
     background:
         var(--gls-primary);
@@ -1677,13 +1731,13 @@ textarea:focus-visible {
 
     color: #ffffff;
 
-    font-size: 10px;
+    font-size: 14px;
     font-weight: 900;
 }
 
 
 /* =========================================================
-   24. LOOKUP FORM
+   24. LOOKUP
    ========================================================= */
 
 .lookup-form {
@@ -1693,7 +1747,7 @@ textarea:focus-visible {
         minmax(0, 1fr)
         auto;
 
-    gap: 7px;
+    gap: 10px;
 }
 
 
@@ -1701,22 +1755,24 @@ textarea:focus-visible {
 .secondary-button,
 .lookup-form
 .primary-button {
-    min-width: 78px;
+    min-width: 105px;
 }
 
 
 /* =========================================================
-   25. WARNING / INFO CARD
+   25. WARNING / INFO
    ========================================================= */
 
 .warning-card,
 .info-card {
-    margin-bottom: 13px;
+    max-width: 1020px;
+
+    margin-bottom: 18px;
 
     padding:
-        13px;
+        18px;
 
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 
@@ -1750,18 +1806,18 @@ textarea:focus-visible {
 .info-card strong {
     display: block;
 
-    font-size: 11px;
+    font-size: 15px;
 }
 
 
 .warning-card p,
 .info-card p {
     margin:
-        4px 0 0;
+        6px 0 0;
 
-    font-size: 9px;
+    font-size: 12px;
 
-    line-height: 1.5;
+    line-height: 1.55;
 }
 
 
@@ -1772,9 +1828,13 @@ textarea:focus-visible {
 .selection-grid {
     display: grid;
 
-    grid-template-columns: 1fr;
+    grid-template-columns:
+        repeat(
+            3,
+            minmax(0, 1fr)
+        );
 
-    gap: 8px;
+    gap: 12px;
 }
 
 
@@ -1784,9 +1844,10 @@ textarea:focus-visible {
     display: block;
 
     width: 100%;
+    min-height: 150px;
 
     padding:
-        13px;
+        19px;
 
     background: #ffffff;
 
@@ -1794,9 +1855,10 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 11px;
+    border-radius: 14px;
 
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
     cursor: pointer;
 
@@ -1808,7 +1870,8 @@ textarea:focus-visible {
     background:
         var(--gls-primary-light);
 
-    border-color: #b8cfe4;
+    border-color:
+        #b8cfe4;
 }
 
 
@@ -1825,41 +1888,44 @@ textarea:focus-visible {
 .selection-card strong {
     display: block;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 11px;
+    font-size: 15px;
 }
 
 
 .selection-card p {
     margin:
-        3px 0 0;
+        6px 0 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 }
 
 
 .selection-card .service-price {
     display: block;
 
-    margin-top: 8px;
+    margin-top: 13px;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 15px;
+    font-size: 21px;
     font-weight: 900;
 }
 
 
 /* =========================================================
-   27. ADD-ON CARD
+   27. ADD-ONS
    ========================================================= */
 
 .addon-card {
     padding:
-        13px;
+        18px;
 
     background:
         var(--gls-surface-soft);
@@ -1868,7 +1934,7 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 11px;
+    border-radius: 14px;
 }
 
 
@@ -1878,7 +1944,7 @@ textarea:focus-visible {
     align-items: center;
     justify-content: space-between;
 
-    gap: 10px;
+    gap: 14px;
 }
 
 
@@ -1887,7 +1953,7 @@ textarea:focus-visible {
 
     align-items: center;
 
-    gap: 9px;
+    gap: 12px;
 
     min-width: 0;
 
@@ -1896,10 +1962,12 @@ textarea:focus-visible {
 
 
 .addon-checkbox-label input {
-    width: 19px;
-    height: 19px;
+    width: 25px;
+    height: 25px;
 
-    flex: 0 0 19px;
+    flex:
+        0 0
+        25px;
 
     accent-color:
         var(--gls-primary);
@@ -1907,16 +1975,18 @@ textarea:focus-visible {
 
 
 .addon-checkbox-label strong {
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 11px;
+    font-size: 15px;
 }
 
 
 .addon-price {
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 11px;
+    font-size: 15px;
     font-weight: 900;
 
     white-space: nowrap;
@@ -1925,32 +1995,36 @@ textarea:focus-visible {
 
 .addon-description {
     margin:
-        5px 0 0
-        28px;
+        7px
+        0 0
+        37px;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 }
 
 
 .addon-custom-fields {
     display: grid;
 
-    grid-template-columns: 1fr;
+    grid-template-columns:
+        minmax(150px, 0.35fr)
+        minmax(0, 1fr);
 
-    gap: 7px;
+    gap: 10px;
 
-    margin-top: 10px;
+    margin-top: 14px;
 }
 
 
 .addon-custom-fields input {
-    min-height: 40px;
+    min-height: 48px;
 
     padding:
-        8px
-        10px;
+        10px
+        12px;
 
     background: #ffffff;
 
@@ -1958,7 +2032,7 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 
@@ -1967,12 +2041,13 @@ textarea:focus-visible {
    ========================================================= */
 
 .price-summary-card {
+    max-width: 1020px;
+
     margin:
-        15px 0;
+        20px 0;
 
     padding:
-        17px
-        15px;
+        25px;
 
     background:
         linear-gradient(
@@ -1985,9 +2060,11 @@ textarea:focus-visible {
         1px solid
         #cbdceb;
 
-    border-radius: var(--gls-radius-large);
+    border-radius:
+        var(--radius-large);
 
-    box-shadow: var(--gls-shadow);
+    box-shadow:
+        var(--shadow);
 }
 
 
@@ -1997,9 +2074,9 @@ textarea:focus-visible {
     align-items: center;
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 15px;
 
-    padding-bottom: 12px;
+    padding-bottom: 17px;
 
     border-bottom:
         1px solid
@@ -2010,17 +2087,19 @@ textarea:focus-visible {
 .price-summary-heading h3 {
     margin: 0;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 15px;
+    font-size: 21px;
     font-weight: 900;
 }
 
 
 .price-summary-heading > strong {
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 23px;
+    font-size: 32px;
     font-weight: 900;
 
     white-space: nowrap;
@@ -2028,7 +2107,7 @@ textarea:focus-visible {
 
 
 .price-breakdown {
-    padding-top: 11px;
+    padding-top: 15px;
 }
 
 
@@ -2038,19 +2117,21 @@ textarea:focus-visible {
     align-items: flex-start;
     justify-content: space-between;
 
-    gap: 12px;
+    gap: 15px;
 
     padding:
-        5px 0;
+        7px 0;
 
-    color: var(--gls-text-soft);
+    color:
+        var(--gls-text-soft);
 
-    font-size: 9px;
+    font-size: 13px;
 }
 
 
 .price-line strong {
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
     font-weight: 800;
 
@@ -2059,39 +2140,41 @@ textarea:focus-visible {
 
 
 .price-line.total {
-    margin-top: 6px;
+    margin-top: 9px;
 
-    padding-top: 10px;
+    padding-top: 14px;
 
     border-top:
         1px solid
         var(--gls-border);
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 11px;
+    font-size: 16px;
     font-weight: 850;
 }
 
 
 .price-placeholder {
     padding:
-        12px 0;
+        16px 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 9px;
+    font-size: 13px;
 
     text-align: center;
 }
 
 
 .seasonal-notice {
-    margin-top: 10px;
+    margin-top: 13px;
 
     padding:
-        9px
-        10px;
+        12px
+        14px;
 
     background:
         var(--gls-warning-bg);
@@ -2100,23 +2183,24 @@ textarea:focus-visible {
         1px solid
         #ead69e;
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     color:
         var(--gls-warning-dark);
 
-    font-size: 8px;
+    font-size: 12px;
 }
 
 
 .create-job-button {
     width: 100%;
+    max-width: 1020px;
 
-    min-height: 52px;
+    min-height: 62px;
 
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 
-    font-size: 13px;
+    font-size: 17px;
 }
 
 
@@ -2129,11 +2213,11 @@ textarea:focus-visible {
 
     grid-template-columns:
         repeat(
-            2,
+            4,
             minmax(0, 1fr)
         );
 
-    gap: 9px;
+    gap: 15px;
 }
 
 
@@ -2144,10 +2228,9 @@ textarea:focus-visible {
 
     align-items: flex-start;
 
-    min-height: 130px;
+    min-height: 185px;
 
-    padding:
-        14px;
+    padding: 22px;
 
     background: #ffffff;
 
@@ -2155,12 +2238,13 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 13px;
+    border-radius: 17px;
 
     box-shadow:
-        var(--gls-shadow-small);
+        var(--shadow-small);
 
-    color: var(--gls-text);
+    color:
+        var(--gls-text);
 
     text-align: left;
 }
@@ -2170,63 +2254,67 @@ textarea:focus-visible {
     background:
         var(--gls-primary-light);
 
-    border-color: #b8cfe4;
+    border-color:
+        #b8cfe4;
 }
 
 
 .admin-menu-card:disabled {
-    opacity: 0.55;
+    opacity: 0.53;
 }
 
 
 .admin-menu-icon {
     display: block;
 
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 
-    font-size: 23px;
+    font-size: 35px;
 }
 
 
 .admin-menu-card strong {
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 11px;
+    font-size: 16px;
 }
 
 
 .admin-menu-card small {
     display: block;
 
-    margin-top: 5px;
+    margin-top: 7px;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 
-    line-height: 1.45;
+    line-height: 1.5;
 }
 
 
 .coming-soon-note {
     margin:
-        15px 0;
+        22px 0;
 
-    color: var(--gls-muted);
+    color:
+        var(--gls-muted);
 
-    font-size: 8px;
+    font-size: 12px;
 
     text-align: center;
 }
 
 
 /* =========================================================
-   30. PRICING MANAGEMENT
+   30. PRICING ADMIN
    ========================================================= */
 
 .pricing-card {
     padding:
-        13px;
+        19px;
 
     background:
         var(--gls-surface-soft);
@@ -2235,17 +2323,18 @@ textarea:focus-visible {
         1px solid
         var(--gls-border);
 
-    border-radius: 11px;
+    border-radius: 14px;
 }
 
 
 .pricing-card h4 {
     margin:
-        0 0 9px;
+        0 0 13px;
 
-    color: var(--gls-primary);
+    color:
+        var(--gls-primary);
 
-    font-size: 12px;
+    font-size: 17px;
     font-weight: 900;
 }
 
@@ -2255,15 +2344,15 @@ textarea:focus-visible {
 
     grid-template-columns:
         minmax(0, 1fr)
-        minmax(90px, 120px)
+        minmax(120px, 170px)
         auto;
 
     align-items: center;
 
-    gap: 8px;
+    gap: 12px;
 
     padding:
-        7px 0;
+        11px 0;
 
     border-top:
         1px solid
@@ -2277,35 +2366,38 @@ textarea:focus-visible {
 
 
 .pricing-row label {
-    color: var(--gls-text-soft);
+    color:
+        var(--gls-text-soft);
 
-    font-size: 9px;
+    font-size: 13px;
+    font-weight: 650;
 }
 
 
 .pricing-row input {
-    min-height: 38px;
-
     width: 100%;
+    min-height: 47px;
 
     padding:
-        7px
-        9px;
+        9px
+        11px;
 
     border:
         1px solid
         var(--gls-border);
 
-    border-radius: 8px;
+    border-radius: 10px;
+
+    font-size: 14px;
 }
 
 
 .pricing-save-button {
-    min-height: 38px;
+    min-height: 47px;
 
     padding:
-        7px
-        10px;
+        9px
+        15px;
 
     background:
         var(--gls-primary);
@@ -2314,11 +2406,11 @@ textarea:focus-visible {
         1px solid
         var(--gls-primary);
 
-    border-radius: 8px;
+    border-radius: 10px;
 
     color: #ffffff;
 
-    font-size: 8px;
+    font-size: 12px;
     font-weight: 850;
 }
 
@@ -2329,18 +2421,19 @@ textarea:focus-visible {
 
 .app-footer {
     padding:
-        8px
-        14px
+        12px
+        20px
         max(
-            22px,
+            30px,
             env(safe-area-inset-bottom)
         );
 
-    color: var(--gls-muted-light);
+    color:
+        var(--gls-muted-light);
 
-    font-size: 8px;
+    font-size: 10px;
 
-    line-height: 1.5;
+    line-height: 1.6;
 
     text-align: center;
 }
@@ -2348,114 +2441,46 @@ textarea:focus-visible {
 
 .app-footer p {
     margin:
-        1px 0;
+        2px 0;
 }
 
 
 /* =========================================================
-   32. TABLET
+   32. TABLET / IPAD PORTRAIT
    ========================================================= */
 
-@media (min-width: 600px) {
+@media (max-width: 1000px) {
 
     :root {
-        --gls-header-height: 76px;
-    }
-
-
-    .app-header {
-        padding:
-            10px
-            max(
-                20px,
-                calc((100vw - var(--gls-content-width)) / 2)
-            );
-    }
-
-
-    .header-brand img {
-        width: 52px;
-        height: 52px;
-
-        flex-basis: 52px;
-    }
-
-
-    .header-brand h1 {
-        font-size: 18px;
-    }
-
-
-    .header-user-info {
-        display: block;
+        --content-width: 100%;
     }
 
 
     .app-shell {
         width:
-            min(
-                var(--gls-content-width),
-                calc(100% - 32px)
-            );
+            calc(100% - 30px);
 
-        padding-top: 22px;
-    }
-
-
-    .main-navigation {
-        top:
-            calc(
-                var(--gls-header-height) + 10px
-            );
-
-        max-width: 520px;
-
-        margin:
-            0 auto 22px;
+        padding-top: 23px;
     }
 
 
     .operations-summary {
         grid-template-columns:
             repeat(
-                4,
+                2,
                 minmax(0, 1fr)
             );
 
-        gap: 10px;
+        max-width: none;
     }
 
 
     .summary-card {
-        min-height: 100px;
-
-        padding: 16px;
-    }
-
-
-    .summary-card strong {
-        font-size: 31px;
+        min-height: 125px;
     }
 
 
     .quick-actions {
-        grid-template-columns:
-            repeat(
-                2,
-                minmax(0, 220px)
-            );
-    }
-
-
-    .jobs-section,
-    .form-card,
-    .price-summary-card {
-        padding:
-            20px;
-    }
-
-
-    .form-grid {
         grid-template-columns:
             repeat(
                 2,
@@ -2467,130 +2492,163 @@ textarea:focus-visible {
     .selection-grid {
         grid-template-columns:
             repeat(
-                3,
+                2,
                 minmax(0, 1fr)
             );
-    }
-
-
-    .addon-custom-fields {
-        grid-template-columns:
-            minmax(120px, 0.35fr)
-            minmax(0, 1fr);
     }
 
 
     .admin-menu-grid {
         grid-template-columns:
             repeat(
-                3,
+                2,
                 minmax(0, 1fr)
             );
-
-        gap: 12px;
-    }
-
-
-    .admin-menu-card {
-        min-height: 145px;
-
-        padding: 17px;
-    }
-
-
-    .login-card {
-        padding:
-            34px
-            32px;
     }
 
 }
 
 
 /* =========================================================
-   33. LARGE TABLET / DESKTOP
+   33. PHONE / SMALL TABLET
    ========================================================= */
 
-@media (min-width: 900px) {
+@media (max-width: 700px) {
 
-    .operations-summary {
-        max-width: 780px;
+    :root {
+        --header-height: 76px;
     }
 
 
-    .jobs-section {
+    body {
+        font-size: 15px;
+    }
+
+
+    .app-header {
         padding:
-            22px;
+            10px
+            14px;
     }
 
 
-    .job-card {
-        display: grid;
-
-        grid-template-columns:
-            minmax(0, 1fr)
-            auto;
-
-        gap: 20px;
+    .header-brand {
+        gap: 10px;
     }
 
 
-    .job-actions {
-        align-items: center;
+    .header-brand img {
+        width: 51px;
+        height: 51px;
 
-        margin-top: 0;
+        flex-basis: 51px;
     }
 
 
-    .admin-menu-grid {
-        grid-template-columns:
-            repeat(
-                4,
-                minmax(0, 1fr)
-            );
+    .header-brand h1 {
+        font-size: 18px;
     }
 
 
-    .new-job-button {
-        max-width: 340px;
-
-        min-height: 62px;
+    .header-brand p {
+        font-size: 9px;
     }
 
 
-    #newJobForm,
-    #newJobScreen > .form-card,
-    #newJobScreen > .warning-card {
-        max-width: 900px;
+    .header-user-info {
+        display: none;
     }
 
 
-    .screen-toolbar {
-        max-width: 900px;
-    }
+    .header-action-button {
+        min-height: 43px;
 
-
-    .price-summary-card {
         padding:
-            22px;
+            8px
+            12px;
     }
 
-}
-
-
-/* =========================================================
-   34. DESKTOP ADMIN
-   ========================================================= */
-
-@media (min-width: 1100px) {
 
     .app-shell {
-        padding-top: 26px;
+        width:
+            calc(100% - 18px);
+
+        padding:
+            15px 0
+            35px;
     }
 
 
     .main-navigation {
-        max-width: 600px;
+        top:
+            calc(
+                var(--header-height) + 7px
+            );
+
+        margin-bottom: 20px;
+
+        padding: 5px;
+    }
+
+
+    .nav-button {
+        min-height: 45px;
+
+        padding:
+            9px
+            8px;
+
+        font-size: 11px;
+    }
+
+
+    .welcome-section h2 {
+        font-size: 27px;
+    }
+
+
+    #operationsDate {
+        font-size: 10px;
+    }
+
+
+    .icon-button {
+        width: 48px;
+        height: 48px;
+
+        flex-basis: 48px;
+    }
+
+
+    .new-job-button {
+        max-width: none;
+
+        min-height: 68px;
+
+        font-size: 17px;
+    }
+
+
+    .operations-summary {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 9px;
+    }
+
+
+    .summary-card {
+        min-height: 102px;
+
+        padding: 16px;
+    }
+
+
+    .summary-card span {
+        font-size: 11px;
     }
 
 
@@ -2599,26 +2657,186 @@ textarea:focus-visible {
     }
 
 
-    .admin-menu-card {
-        min-height: 155px;
+    .quick-actions {
+        gap: 9px;
     }
 
 
-    .pricing-list {
-        gap: 11px;
+    .quick-action-button {
+        min-height: 68px;
+
+        padding:
+            11px
+            12px;
+    }
+
+
+    .quick-action-icon {
+        font-size: 25px;
+    }
+
+
+    .quick-action-button
+    > span:not(.quick-action-icon) {
+        font-size: 12px;
+    }
+
+
+    .jobs-section {
+        padding:
+            19px
+            15px;
+    }
+
+
+    .section-heading h3 {
+        font-size: 19px;
+    }
+
+
+    .job-filter-bar {
+        flex-wrap: nowrap;
+
+        overflow-x: auto;
+
+        padding-bottom: 3px;
+
+        scrollbar-width: none;
+    }
+
+
+    .job-filter-bar::-webkit-scrollbar {
+        display: none;
+    }
+
+
+    .job-filter {
+        flex:
+            0 0
+            auto;
+
+        min-height: 43px;
+
+        font-size: 11px;
+    }
+
+
+    .form-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .form-card {
+        padding:
+            19px
+            15px;
+    }
+
+
+    .form-card-heading h3 {
+        font-size: 18px;
+    }
+
+
+    .step-number {
+        width: 34px;
+        height: 34px;
+
+        flex-basis: 34px;
+    }
+
+
+    .lookup-form {
+        grid-template-columns:
+            minmax(0, 1fr)
+            auto;
+    }
+
+
+    .selection-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .selection-card {
+        min-height: 125px;
+    }
+
+
+    .addon-custom-fields {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .price-summary-card {
+        padding:
+            19px
+            16px;
+    }
+
+
+    .price-summary-heading
+    > strong {
+        font-size: 25px;
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+
+        gap: 9px;
+    }
+
+
+    .admin-menu-card {
+        min-height: 145px;
+
+        padding: 15px;
+    }
+
+
+    .admin-menu-icon {
+        font-size: 27px;
+    }
+
+
+    .admin-menu-card strong {
+        font-size: 13px;
+    }
+
+
+    .admin-menu-card small {
+        font-size: 10px;
+    }
+
+
+    .pricing-row {
+        grid-template-columns:
+            minmax(0, 1fr)
+            100px
+            auto;
+
+        gap: 7px;
     }
 
 }
 
 
 /* =========================================================
-   35. SMALL PHONE
+   34. SMALL PHONE
    ========================================================= */
 
-@media (max-width: 380px) {
+@media (max-width: 430px) {
 
     .header-brand h1 {
-        font-size: 14px;
+        font-size: 16px;
     }
 
 
@@ -2627,31 +2845,63 @@ textarea:focus-visible {
     }
 
 
-    .app-shell {
-        width:
-            calc(100% - 16px);
+    .header-brand img {
+        width: 45px;
+        height: 45px;
+
+        flex-basis: 45px;
+    }
+
+
+    .login-card {
+        padding:
+            30px
+            20px;
+    }
+
+
+    .login-card h2 {
+        font-size: 27px;
+    }
+
+
+    .login-card > img {
+        width: 130px;
+    }
+
+
+    .welcome-section h2 {
+        font-size: 24px;
+    }
+
+
+    .operations-summary {
+        gap: 7px;
     }
 
 
     .summary-card {
-        padding:
-            11px;
+        min-height: 95px;
+
+        padding: 14px;
     }
 
 
     .summary-card strong {
-        font-size: 23px;
+        font-size: 31px;
     }
 
 
-    .quick-action-button {
-        padding:
-            9px;
+    .quick-actions {
+        grid-template-columns:
+            1fr
+            1fr;
     }
 
 
     .lookup-form {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr;
     }
 
 
@@ -2663,18 +2913,33 @@ textarea:focus-visible {
     }
 
 
-    .admin-menu-grid {
-        grid-template-columns: 1fr;
+    .screen-toolbar {
+        align-items: flex-start;
     }
 
 
-    .admin-menu-card {
-        min-height: 100px;
+    .screen-toolbar h2 {
+        font-size: 26px;
+    }
+
+
+    .price-summary-heading {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns:
+            1fr
+            1fr;
     }
 
 
     .pricing-row {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+            1fr;
     }
 
 
@@ -2686,13 +2951,75 @@ textarea:focus-visible {
 
 
 /* =========================================================
-   36. REDUCED MOTION
+   35. VERY SMALL PHONE
+   ========================================================= */
+
+@media (max-width: 350px) {
+
+    .operations-summary {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .quick-actions {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns:
+            1fr;
+    }
+
+
+    .main-navigation {
+        overflow-x: auto;
+    }
+
+
+    .nav-button {
+        min-width: 90px;
+    }
+
+}
+
+
+/* =========================================================
+   36. TOUCH DEVICE ENHANCEMENT
+   ========================================================= */
+
+@media (pointer: coarse) {
+
+    button,
+    select,
+    input[type="checkbox"] {
+        touch-action:
+            manipulation;
+    }
+
+
+    .nav-button,
+    .job-filter,
+    .header-action-button,
+    .pricing-save-button {
+        min-height:
+            48px;
+    }
+
+}
+
+
+/* =========================================================
+   37. REDUCED MOTION
    ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
     html {
-        scroll-behavior: auto;
+        scroll-behavior:
+            auto;
     }
 
 
