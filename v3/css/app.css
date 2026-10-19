@@ -1,1 +1,2712 @@
+/* =========================================================
+   GLS CAR WASH MANAGEMENT SYSTEM V3
+   Mobile / Tablet / Desktop Application
+   File: v3/css/app.css
+   ========================================================= */
 
+
+/* =========================================================
+   1. DESIGN TOKENS
+   ========================================================= */
+
+:root {
+    --gls-primary: #123b66;
+    --gls-primary-dark: #092a4c;
+    --gls-primary-mid: #18548e;
+    --gls-primary-light: #edf5fd;
+
+    --gls-accent: #2f78b7;
+    --gls-accent-light: #e9f4ff;
+
+    --gls-background: #f2f5f8;
+    --gls-surface: #ffffff;
+    --gls-surface-soft: #f8fafc;
+    --gls-surface-blue: #f4f8fc;
+
+    --gls-text: #172c43;
+    --gls-text-soft: #52677d;
+    --gls-muted: #708093;
+    --gls-muted-light: #93a0ad;
+
+    --gls-border: #dce5ed;
+    --gls-border-light: #e8edf2;
+
+    --gls-success: #147653;
+    --gls-success-dark: #0e6042;
+    --gls-success-bg: #e9f8f0;
+
+    --gls-warning: #926300;
+    --gls-warning-dark: #755000;
+    --gls-warning-bg: #fff7dd;
+
+    --gls-danger: #b6382c;
+    --gls-danger-dark: #932c23;
+    --gls-danger-bg: #fff0ee;
+
+    --gls-info: #326f9f;
+    --gls-info-bg: #edf6ff;
+
+    --gls-waiting: #3974a8;
+    --gls-waiting-bg: #ebf4fd;
+
+    --gls-washing: #a16d00;
+    --gls-washing-bg: #fff4d7;
+
+    --gls-ready: #16815a;
+    --gls-ready-bg: #e8f8ef;
+
+    --gls-closed: #596a7c;
+    --gls-closed-bg: #eef1f4;
+
+    --gls-radius-small: 8px;
+    --gls-radius: 12px;
+    --gls-radius-large: 17px;
+    --gls-radius-xl: 22px;
+
+    --gls-shadow-small:
+        0 3px 12px
+        rgba(15, 42, 70, 0.05);
+
+    --gls-shadow:
+        0 10px 30px
+        rgba(15, 42, 70, 0.08);
+
+    --gls-shadow-large:
+        0 18px 45px
+        rgba(15, 42, 70, 0.10);
+
+    --gls-header-height: 70px;
+
+    --gls-content-width: 1180px;
+}
+
+
+/* =========================================================
+   2. RESET / BASE
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+
+html {
+    min-height: 100%;
+
+    scroll-behavior: smooth;
+
+    background: var(--gls-background);
+
+    -webkit-text-size-adjust: 100%;
+}
+
+
+body {
+    margin: 0;
+
+    min-width: 320px;
+    min-height: 100vh;
+
+    background: var(--gls-background);
+
+    color: var(--gls-text);
+
+    font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Helvetica,
+        Arial,
+        sans-serif;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+
+button,
+input,
+select,
+textarea {
+    font: inherit;
+}
+
+
+button,
+input,
+select,
+textarea {
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+button {
+    cursor: pointer;
+}
+
+
+button:disabled {
+    cursor: not-allowed;
+}
+
+
+input,
+select,
+textarea {
+    color: var(--gls-text);
+}
+
+
+textarea {
+    resize: vertical;
+}
+
+
+img {
+    max-width: 100%;
+}
+
+
+[hidden] {
+    display: none !important;
+}
+
+
+/* =========================================================
+   3. ACCESSIBILITY
+   ========================================================= */
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid
+        rgba(47, 120, 183, 0.20);
+
+    outline-offset: 2px;
+}
+
+
+/* =========================================================
+   4. APP HEADER
+   ========================================================= */
+
+.app-header {
+    position: sticky;
+
+    top: 0;
+    z-index: 100;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    min-height: var(--gls-header-height);
+
+    padding:
+        9px
+        max(
+            14px,
+            env(safe-area-inset-left)
+        );
+
+    background:
+        rgba(255, 255, 255, 0.96);
+
+    border-bottom:
+        1px solid
+        var(--gls-border);
+
+    box-shadow:
+        0 2px 12px
+        rgba(15, 42, 70, 0.05);
+
+    backdrop-filter: blur(12px);
+}
+
+
+.header-brand {
+    display: flex;
+
+    align-items: center;
+
+    min-width: 0;
+
+    gap: 10px;
+}
+
+
+.header-brand img {
+    display: block;
+
+    width: 46px;
+    height: 46px;
+
+    flex: 0 0 46px;
+
+    object-fit: contain;
+}
+
+
+.header-brand h1 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 16px;
+    font-weight: 900;
+
+    line-height: 1.15;
+}
+
+
+.header-brand p {
+    margin:
+        2px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+    font-weight: 650;
+
+    line-height: 1.2;
+}
+
+
+.header-user {
+    display: flex;
+
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    min-width: 0;
+}
+
+
+.header-user-info {
+    display: none;
+
+    min-width: 0;
+
+    text-align: right;
+}
+
+
+.header-user-info strong {
+    display: block;
+
+    max-width: 180px;
+
+    overflow: hidden;
+
+    color: var(--gls-primary);
+
+    font-size: 10px;
+    font-weight: 850;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.header-user-info span {
+    display: block;
+
+    margin-top: 1px;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+
+    text-transform: uppercase;
+}
+
+
+.header-action-button {
+    min-height: 38px;
+
+    padding:
+        7px
+        11px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 9px;
+
+    color: var(--gls-primary);
+
+    font-size: 9px;
+    font-weight: 800;
+}
+
+
+.header-action-button:hover {
+    background:
+        var(--gls-primary-light);
+
+    border-color: #b9d0e5;
+}
+
+
+/* =========================================================
+   5. APP SHELL
+   ========================================================= */
+
+.app-shell {
+    width:
+        min(
+            var(--gls-content-width),
+            calc(100% - 20px)
+        );
+
+    margin:
+        0 auto;
+
+    padding:
+        15px 0 30px;
+
+    padding-bottom:
+        max(
+            30px,
+            env(safe-area-inset-bottom)
+        );
+}
+
+
+/* =========================================================
+   6. COMMON TYPOGRAPHY
+   ========================================================= */
+
+.eyebrow {
+    margin:
+        0 0 5px;
+
+    color: var(--gls-primary);
+
+    font-size: 8px;
+    font-weight: 900;
+
+    letter-spacing: 1.15px;
+
+    text-transform: uppercase;
+}
+
+
+.screen-description {
+    margin:
+        6px 0 20px;
+
+    color: var(--gls-muted);
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+.required {
+    color: var(--gls-danger);
+}
+
+
+/* =========================================================
+   7. COMMON BUTTONS
+   ========================================================= */
+
+.primary-button,
+.secondary-button,
+.back-button,
+.icon-button {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    font-weight: 800;
+
+    text-decoration: none;
+
+    transition:
+        background 0.17s ease,
+        border-color 0.17s ease,
+        color 0.17s ease,
+        transform 0.1s ease;
+}
+
+
+.primary-button {
+    min-height: 44px;
+
+    padding:
+        9px
+        15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gls-primary),
+            var(--gls-primary-mid)
+        );
+
+    border:
+        1px solid
+        var(--gls-primary);
+
+    color: #ffffff;
+}
+
+
+.primary-button:hover:not(:disabled) {
+    background:
+        linear-gradient(
+            135deg,
+            var(--gls-primary-dark),
+            var(--gls-primary)
+        );
+}
+
+
+.secondary-button {
+    min-height: 42px;
+
+    padding:
+        9px
+        14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    color: var(--gls-primary);
+}
+
+
+.secondary-button:hover:not(:disabled) {
+    background:
+        var(--gls-primary-light);
+
+    border-color: #b8d0e5;
+}
+
+
+.large-button {
+    width: 100%;
+
+    min-height: 48px;
+}
+
+
+.primary-button:disabled,
+.secondary-button:disabled {
+    opacity: 0.48;
+}
+
+
+.primary-button:active:not(:disabled),
+.secondary-button:active:not(:disabled),
+.back-button:active:not(:disabled),
+.icon-button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+
+/* =========================================================
+   8. LOGIN
+   ========================================================= */
+
+.login-screen {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height:
+        calc(
+            100vh -
+            var(--gls-header-height) -
+            70px
+        );
+
+    padding:
+        12px 0;
+}
+
+
+.login-card {
+    width: 100%;
+    max-width: 430px;
+
+    padding:
+        28px
+        20px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: var(--gls-radius-xl);
+
+    box-shadow: var(--gls-shadow-large);
+
+    text-align: center;
+}
+
+
+.login-card > img {
+    display: block;
+
+    width: 120px;
+
+    margin:
+        0 auto 18px;
+}
+
+
+.login-card h2 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+
+.login-form {
+    margin-top: 22px;
+
+    text-align: left;
+}
+
+
+.security-note {
+    margin:
+        18px 0 0;
+
+    color: var(--gls-muted-light);
+
+    font-size: 8px;
+}
+
+
+/* =========================================================
+   9. FORM COMPONENTS
+   ========================================================= */
+
+.form-field {
+    margin-bottom: 15px;
+}
+
+
+.form-field:last-child {
+    margin-bottom: 0;
+}
+
+
+.form-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: var(--gls-text);
+
+    font-size: 10px;
+    font-weight: 750;
+}
+
+
+.form-field input,
+.form-field select,
+.form-field textarea,
+.lookup-form input {
+    width: 100%;
+
+    padding:
+        10px
+        12px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        #d3dee8;
+
+    border-radius: 10px;
+
+    color: var(--gls-text);
+
+    font-size: 13px;
+
+    transition:
+        border-color 0.17s ease,
+        box-shadow 0.17s ease;
+}
+
+
+.form-field input,
+.form-field select,
+.lookup-form input {
+    min-height: 46px;
+}
+
+
+.form-field textarea {
+    min-height: 74px;
+}
+
+
+.form-field input::placeholder,
+.form-field textarea::placeholder,
+.lookup-form input::placeholder {
+    color: #9ba8b5;
+}
+
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus,
+.lookup-form input:focus {
+    outline: none;
+
+    border-color: #6796c1;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(18, 59, 102, 0.08);
+}
+
+
+.form-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap:
+        0
+        14px;
+}
+
+
+/* =========================================================
+   10. STATUS MESSAGE
+   ========================================================= */
+
+.status-message {
+    margin:
+        10px 0;
+
+    color: var(--gls-muted);
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+.status-message:empty {
+    display: none;
+}
+
+
+.status-message.info,
+.status-message.success,
+.status-message.error {
+    padding:
+        10px
+        12px;
+
+    border-radius: 9px;
+}
+
+
+.status-message.info {
+    background:
+        var(--gls-info-bg);
+
+    border:
+        1px solid
+        #c8deef;
+
+    color: var(--gls-info);
+}
+
+
+.status-message.success {
+    background:
+        var(--gls-success-bg);
+
+    border:
+        1px solid
+        #bce1ce;
+
+    color: var(--gls-success);
+}
+
+
+.status-message.error {
+    background:
+        var(--gls-danger-bg);
+
+    border:
+        1px solid
+        #ecc5c0;
+
+    color: var(--gls-danger);
+}
+
+
+/* =========================================================
+   11. MAIN NAVIGATION
+   ========================================================= */
+
+.main-navigation {
+    position: sticky;
+
+    top:
+        calc(
+            var(--gls-header-height) + 9px
+        );
+
+    z-index: 80;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    margin-bottom: 18px;
+
+    padding: 5px;
+
+    background:
+        rgba(255, 255, 255, 0.95);
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 12px;
+
+    box-shadow: var(--gls-shadow-small);
+
+    backdrop-filter: blur(10px);
+}
+
+
+.nav-button {
+    flex: 1;
+
+    min-height: 40px;
+
+    padding:
+        8px
+        10px;
+
+    background: transparent;
+
+    border: 0;
+
+    border-radius: 8px;
+
+    color: var(--gls-muted);
+
+    font-size: 10px;
+    font-weight: 800;
+}
+
+
+.nav-button:hover {
+    background:
+        var(--gls-primary-light);
+
+    color:
+        var(--gls-primary);
+}
+
+
+.nav-button.active {
+    background:
+        var(--gls-primary);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   12. APPLICATION SCREEN
+   ========================================================= */
+
+.application-screen {
+    width: 100%;
+}
+
+
+.screen-heading {
+    margin-bottom: 18px;
+}
+
+
+.screen-heading h2,
+.screen-toolbar h2 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+
+.screen-heading > p:not(.eyebrow) {
+    margin:
+        5px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 10px;
+}
+
+
+.screen-toolbar {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+.back-button {
+    min-width: 74px;
+    min-height: 40px;
+
+    padding:
+        7px
+        10px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    color: var(--gls-primary);
+
+    font-size: 10px;
+}
+
+
+.back-button:hover {
+    background:
+        var(--gls-primary-light);
+}
+
+
+/* =========================================================
+   13. WELCOME
+   ========================================================= */
+
+.welcome-section {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 14px;
+}
+
+
+.welcome-section h2 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 24px;
+    font-weight: 900;
+}
+
+
+#operationsDate {
+    margin:
+        3px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+}
+
+
+.icon-button {
+    width: 42px;
+    height: 42px;
+
+    flex: 0 0 42px;
+
+    padding: 0;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    color: var(--gls-primary);
+
+    font-size: 20px;
+}
+
+
+.icon-button:hover {
+    background:
+        var(--gls-primary-light);
+}
+
+
+/* =========================================================
+   14. NEW JOB PRIMARY ACTION
+   ========================================================= */
+
+.new-job-button {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 9px;
+
+    width: 100%;
+    min-height: 58px;
+
+    margin-bottom: 14px;
+
+    padding:
+        11px
+        16px;
+
+    background:
+        linear-gradient(
+            135deg,
+            var(--gls-primary),
+            #1d629e
+        );
+
+    border: 0;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 8px 22px
+        rgba(18, 59, 102, 0.17);
+
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 900;
+}
+
+
+.new-job-button:hover {
+    background:
+        linear-gradient(
+            135deg,
+            var(--gls-primary-dark),
+            var(--gls-primary)
+        );
+}
+
+
+.new-job-button:active {
+    transform: scale(0.993);
+}
+
+
+.new-job-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 29px;
+    height: 29px;
+
+    background:
+        rgba(255, 255, 255, 0.18);
+
+    border-radius: 999px;
+
+    font-size: 22px;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   15. OPERATIONS SUMMARY
+   ========================================================= */
+
+.operations-summary {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin-bottom: 14px;
+}
+
+
+.summary-card {
+    position: relative;
+
+    overflow: hidden;
+
+    min-height: 86px;
+
+    padding:
+        13px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 13px;
+
+    box-shadow:
+        var(--gls-shadow-small);
+}
+
+
+.summary-card::before {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 4px;
+    height: 100%;
+
+    content: "";
+}
+
+
+.summary-card span {
+    display: block;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+    font-weight: 750;
+}
+
+
+.summary-card strong {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--gls-primary);
+
+    font-size: 26px;
+    font-weight: 900;
+
+    line-height: 1;
+}
+
+
+.waiting-card::before {
+    background:
+        var(--gls-waiting);
+}
+
+
+.washing-card::before {
+    background:
+        var(--gls-washing);
+}
+
+
+.ready-card::before {
+    background:
+        var(--gls-ready);
+}
+
+
+.closed-card::before {
+    background:
+        var(--gls-closed);
+}
+
+
+/* =========================================================
+   16. QUICK ACTIONS
+   ========================================================= */
+
+.quick-actions {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 8px;
+
+    margin-bottom: 18px;
+}
+
+
+.quick-action-button {
+    display: grid;
+
+    grid-template-columns:
+        auto
+        minmax(0, 1fr);
+
+    align-items: center;
+
+    gap:
+        3px
+        9px;
+
+    min-height: 58px;
+
+    padding:
+        10px
+        12px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 12px;
+
+    color: var(--gls-primary);
+
+    text-align: left;
+}
+
+
+.quick-action-button:hover:not(:disabled) {
+    background:
+        var(--gls-primary-light);
+
+    border-color: #bcd2e6;
+}
+
+
+.quick-action-button:disabled {
+    opacity: 0.60;
+}
+
+
+.quick-action-icon {
+    grid-row:
+        1 / span 2;
+
+    font-size: 20px;
+}
+
+
+.quick-action-button > span:not(.quick-action-icon) {
+    font-size: 10px;
+    font-weight: 850;
+}
+
+
+.quick-action-button small {
+    color: var(--gls-muted);
+
+    font-size: 7px;
+}
+
+
+/* =========================================================
+   17. JOBS SECTION
+   ========================================================= */
+
+.jobs-section {
+    padding:
+        17px
+        14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: var(--gls-radius-large);
+
+    box-shadow: var(--gls-shadow);
+}
+
+
+.section-heading {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 13px;
+}
+
+
+.section-heading h3 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 17px;
+    font-weight: 900;
+}
+
+
+.section-heading p:not(.eyebrow) {
+    margin:
+        3px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+}
+
+
+/* =========================================================
+   18. JOB FILTER
+   ========================================================= */
+
+.job-filter-bar {
+    display: flex;
+
+    gap: 6px;
+
+    overflow-x: auto;
+
+    margin-bottom: 13px;
+
+    padding-bottom: 2px;
+
+    scrollbar-width: none;
+}
+
+
+.job-filter-bar::-webkit-scrollbar {
+    display: none;
+}
+
+
+.job-filter {
+    flex: 0 0 auto;
+
+    min-height: 34px;
+
+    padding:
+        7px
+        11px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 8px;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.job-filter:hover {
+    background:
+        var(--gls-primary-light);
+
+    color:
+        var(--gls-primary);
+}
+
+
+.job-filter.active {
+    background:
+        var(--gls-primary);
+
+    border-color:
+        var(--gls-primary);
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   19. JOB / SEARCH LISTS
+   ========================================================= */
+
+.jobs-list,
+.lookup-results,
+.search-results,
+.pricing-list,
+.addon-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+
+/* =========================================================
+   20. GENERIC JOB CARD
+   ========================================================= */
+
+.job-card,
+.lookup-result-card,
+.search-result-card {
+    padding:
+        13px;
+
+    background:
+        var(--gls-surface-soft);
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 12px;
+}
+
+
+.job-card-top {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.job-number {
+    color: var(--gls-primary);
+
+    font-size: 10px;
+    font-weight: 850;
+}
+
+
+.vehicle-plate {
+    margin:
+        3px 0 0;
+
+    color: var(--gls-text);
+
+    font-size: 18px;
+    font-weight: 900;
+
+    letter-spacing: 0.3px;
+}
+
+
+.job-meta {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap:
+        4px
+        10px;
+
+    margin-top: 8px;
+}
+
+
+.job-meta span {
+    color: var(--gls-muted);
+
+    font-size: 8px;
+}
+
+
+.job-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    margin-top: 12px;
+}
+
+
+.job-actions button {
+    flex: 1 1 auto;
+
+    min-height: 39px;
+
+    padding:
+        7px
+        10px;
+
+    border-radius: 8px;
+
+    font-size: 9px;
+    font-weight: 850;
+}
+
+
+/* =========================================================
+   21. STATUS BADGES
+   ========================================================= */
+
+.status-badge {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 22px;
+
+    padding:
+        4px
+        8px;
+
+    border-radius: 999px;
+
+    font-size: 7px;
+    font-weight: 900;
+
+    letter-spacing: 0.4px;
+
+    text-transform: uppercase;
+}
+
+
+.status-badge.waiting {
+    background:
+        var(--gls-waiting-bg);
+
+    color:
+        var(--gls-waiting);
+}
+
+
+.status-badge.washing {
+    background:
+        var(--gls-washing-bg);
+
+    color:
+        var(--gls-washing);
+}
+
+
+.status-badge.ready {
+    background:
+        var(--gls-ready-bg);
+
+    color:
+        var(--gls-ready);
+}
+
+
+.status-badge.closed {
+    background:
+        var(--gls-closed-bg);
+
+    color:
+        var(--gls-closed);
+}
+
+
+.status-badge.unpaid {
+    background: #f1f3f5;
+
+    color: #5e6b79;
+}
+
+
+.status-badge.paid {
+    background:
+        var(--gls-success-bg);
+
+    color:
+        var(--gls-success);
+}
+
+
+/* =========================================================
+   22. EMPTY STATE
+   ========================================================= */
+
+.empty-state {
+    padding:
+        24px
+        16px;
+
+    background:
+        var(--gls-surface-soft);
+
+    border:
+        1px dashed
+        #d4dee8;
+
+    border-radius: 11px;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+
+    line-height: 1.6;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   23. FORM CARD
+   ========================================================= */
+
+.form-card {
+    margin-bottom: 13px;
+
+    padding:
+        16px
+        14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: var(--gls-radius-large);
+
+    box-shadow:
+        var(--gls-shadow-small);
+}
+
+
+.form-card-heading {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    margin-bottom: 16px;
+}
+
+
+.form-card-heading h3 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 15px;
+    font-weight: 900;
+}
+
+
+.form-card-heading p {
+    margin:
+        3px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+
+    line-height: 1.45;
+}
+
+
+.step-number {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 27px;
+    height: 27px;
+
+    flex: 0 0 27px;
+
+    background:
+        var(--gls-primary);
+
+    border-radius: 999px;
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   24. LOOKUP FORM
+   ========================================================= */
+
+.lookup-form {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        auto;
+
+    gap: 7px;
+}
+
+
+.lookup-form
+.secondary-button,
+.lookup-form
+.primary-button {
+    min-width: 78px;
+}
+
+
+/* =========================================================
+   25. WARNING / INFO CARD
+   ========================================================= */
+
+.warning-card,
+.info-card {
+    margin-bottom: 13px;
+
+    padding:
+        13px;
+
+    border-radius: 12px;
+}
+
+
+.warning-card {
+    background:
+        var(--gls-warning-bg);
+
+    border:
+        1px solid
+        #ead69e;
+
+    color:
+        var(--gls-warning-dark);
+}
+
+
+.info-card {
+    background:
+        var(--gls-info-bg);
+
+    border:
+        1px solid
+        #c9deef;
+
+    color:
+        var(--gls-info);
+}
+
+
+.warning-card strong,
+.info-card strong {
+    display: block;
+
+    font-size: 11px;
+}
+
+
+.warning-card p,
+.info-card p {
+    margin:
+        4px 0 0;
+
+    font-size: 9px;
+
+    line-height: 1.5;
+}
+
+
+/* =========================================================
+   26. SERVICE SELECTION
+   ========================================================= */
+
+.selection-grid {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 8px;
+}
+
+
+.selection-card {
+    position: relative;
+
+    display: block;
+
+    width: 100%;
+
+    padding:
+        13px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 11px;
+
+    color: var(--gls-text);
+
+    cursor: pointer;
+
+    text-align: left;
+}
+
+
+.selection-card:hover {
+    background:
+        var(--gls-primary-light);
+
+    border-color: #b8cfe4;
+}
+
+
+.selection-card.selected {
+    background:
+        var(--gls-primary-light);
+
+    border:
+        2px solid
+        var(--gls-primary);
+}
+
+
+.selection-card strong {
+    display: block;
+
+    color: var(--gls-primary);
+
+    font-size: 11px;
+}
+
+
+.selection-card p {
+    margin:
+        3px 0 0;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+}
+
+
+.selection-card .service-price {
+    display: block;
+
+    margin-top: 8px;
+
+    color: var(--gls-primary);
+
+    font-size: 15px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   27. ADD-ON CARD
+   ========================================================= */
+
+.addon-card {
+    padding:
+        13px;
+
+    background:
+        var(--gls-surface-soft);
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 11px;
+}
+
+
+.addon-card-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+}
+
+
+.addon-checkbox-label {
+    display: flex;
+
+    align-items: center;
+
+    gap: 9px;
+
+    min-width: 0;
+
+    cursor: pointer;
+}
+
+
+.addon-checkbox-label input {
+    width: 19px;
+    height: 19px;
+
+    flex: 0 0 19px;
+
+    accent-color:
+        var(--gls-primary);
+}
+
+
+.addon-checkbox-label strong {
+    color: var(--gls-primary);
+
+    font-size: 11px;
+}
+
+
+.addon-price {
+    color: var(--gls-primary);
+
+    font-size: 11px;
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+
+.addon-description {
+    margin:
+        5px 0 0
+        28px;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+}
+
+
+.addon-custom-fields {
+    display: grid;
+
+    grid-template-columns: 1fr;
+
+    gap: 7px;
+
+    margin-top: 10px;
+}
+
+
+.addon-custom-fields input {
+    min-height: 40px;
+
+    padding:
+        8px
+        10px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 8px;
+}
+
+
+/* =========================================================
+   28. PRICE SUMMARY
+   ========================================================= */
+
+.price-summary-card {
+    margin:
+        15px 0;
+
+    padding:
+        17px
+        15px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f3f8fd
+        );
+
+    border:
+        1px solid
+        #cbdceb;
+
+    border-radius: var(--gls-radius-large);
+
+    box-shadow: var(--gls-shadow);
+}
+
+
+.price-summary-heading {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding-bottom: 12px;
+
+    border-bottom:
+        1px solid
+        var(--gls-border);
+}
+
+
+.price-summary-heading h3 {
+    margin: 0;
+
+    color: var(--gls-primary);
+
+    font-size: 15px;
+    font-weight: 900;
+}
+
+
+.price-summary-heading > strong {
+    color: var(--gls-primary);
+
+    font-size: 23px;
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+
+.price-breakdown {
+    padding-top: 11px;
+}
+
+
+.price-line {
+    display: flex;
+
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding:
+        5px 0;
+
+    color: var(--gls-text-soft);
+
+    font-size: 9px;
+}
+
+
+.price-line strong {
+    color: var(--gls-text);
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.price-line.total {
+    margin-top: 6px;
+
+    padding-top: 10px;
+
+    border-top:
+        1px solid
+        var(--gls-border);
+
+    color: var(--gls-primary);
+
+    font-size: 11px;
+    font-weight: 850;
+}
+
+
+.price-placeholder {
+    padding:
+        12px 0;
+
+    color: var(--gls-muted);
+
+    font-size: 9px;
+
+    text-align: center;
+}
+
+
+.seasonal-notice {
+    margin-top: 10px;
+
+    padding:
+        9px
+        10px;
+
+    background:
+        var(--gls-warning-bg);
+
+    border:
+        1px solid
+        #ead69e;
+
+    border-radius: 8px;
+
+    color:
+        var(--gls-warning-dark);
+
+    font-size: 8px;
+}
+
+
+.create-job-button {
+    width: 100%;
+
+    min-height: 52px;
+
+    margin-bottom: 10px;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   29. ADMIN MENU
+   ========================================================= */
+
+.admin-menu-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(
+            2,
+            minmax(0, 1fr)
+        );
+
+    gap: 9px;
+}
+
+
+.admin-menu-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    min-height: 130px;
+
+    padding:
+        14px;
+
+    background: #ffffff;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 13px;
+
+    box-shadow:
+        var(--gls-shadow-small);
+
+    color: var(--gls-text);
+
+    text-align: left;
+}
+
+
+.admin-menu-card:hover:not(:disabled) {
+    background:
+        var(--gls-primary-light);
+
+    border-color: #b8cfe4;
+}
+
+
+.admin-menu-card:disabled {
+    opacity: 0.55;
+}
+
+
+.admin-menu-icon {
+    display: block;
+
+    margin-bottom: 10px;
+
+    font-size: 23px;
+}
+
+
+.admin-menu-card strong {
+    color: var(--gls-primary);
+
+    font-size: 11px;
+}
+
+
+.admin-menu-card small {
+    display: block;
+
+    margin-top: 5px;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+
+    line-height: 1.45;
+}
+
+
+.coming-soon-note {
+    margin:
+        15px 0;
+
+    color: var(--gls-muted);
+
+    font-size: 8px;
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   30. PRICING MANAGEMENT
+   ========================================================= */
+
+.pricing-card {
+    padding:
+        13px;
+
+    background:
+        var(--gls-surface-soft);
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 11px;
+}
+
+
+.pricing-card h4 {
+    margin:
+        0 0 9px;
+
+    color: var(--gls-primary);
+
+    font-size: 12px;
+    font-weight: 900;
+}
+
+
+.pricing-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(0, 1fr)
+        minmax(90px, 120px)
+        auto;
+
+    align-items: center;
+
+    gap: 8px;
+
+    padding:
+        7px 0;
+
+    border-top:
+        1px solid
+        var(--gls-border-light);
+}
+
+
+.pricing-row:first-of-type {
+    border-top: 0;
+}
+
+
+.pricing-row label {
+    color: var(--gls-text-soft);
+
+    font-size: 9px;
+}
+
+
+.pricing-row input {
+    min-height: 38px;
+
+    width: 100%;
+
+    padding:
+        7px
+        9px;
+
+    border:
+        1px solid
+        var(--gls-border);
+
+    border-radius: 8px;
+}
+
+
+.pricing-save-button {
+    min-height: 38px;
+
+    padding:
+        7px
+        10px;
+
+    background:
+        var(--gls-primary);
+
+    border:
+        1px solid
+        var(--gls-primary);
+
+    border-radius: 8px;
+
+    color: #ffffff;
+
+    font-size: 8px;
+    font-weight: 850;
+}
+
+
+/* =========================================================
+   31. FOOTER
+   ========================================================= */
+
+.app-footer {
+    padding:
+        8px
+        14px
+        max(
+            22px,
+            env(safe-area-inset-bottom)
+        );
+
+    color: var(--gls-muted-light);
+
+    font-size: 8px;
+
+    line-height: 1.5;
+
+    text-align: center;
+}
+
+
+.app-footer p {
+    margin:
+        1px 0;
+}
+
+
+/* =========================================================
+   32. TABLET
+   ========================================================= */
+
+@media (min-width: 600px) {
+
+    :root {
+        --gls-header-height: 76px;
+    }
+
+
+    .app-header {
+        padding:
+            10px
+            max(
+                20px,
+                calc((100vw - var(--gls-content-width)) / 2)
+            );
+    }
+
+
+    .header-brand img {
+        width: 52px;
+        height: 52px;
+
+        flex-basis: 52px;
+    }
+
+
+    .header-brand h1 {
+        font-size: 18px;
+    }
+
+
+    .header-user-info {
+        display: block;
+    }
+
+
+    .app-shell {
+        width:
+            min(
+                var(--gls-content-width),
+                calc(100% - 32px)
+            );
+
+        padding-top: 22px;
+    }
+
+
+    .main-navigation {
+        top:
+            calc(
+                var(--gls-header-height) + 10px
+            );
+
+        max-width: 520px;
+
+        margin:
+            0 auto 22px;
+    }
+
+
+    .operations-summary {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+
+        gap: 10px;
+    }
+
+
+    .summary-card {
+        min-height: 100px;
+
+        padding: 16px;
+    }
+
+
+    .summary-card strong {
+        font-size: 31px;
+    }
+
+
+    .quick-actions {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 220px)
+            );
+    }
+
+
+    .jobs-section,
+    .form-card,
+    .price-summary-card {
+        padding:
+            20px;
+    }
+
+
+    .form-grid {
+        grid-template-columns:
+            repeat(
+                2,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .selection-grid {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .addon-custom-fields {
+        grid-template-columns:
+            minmax(120px, 0.35fr)
+            minmax(0, 1fr);
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns:
+            repeat(
+                3,
+                minmax(0, 1fr)
+            );
+
+        gap: 12px;
+    }
+
+
+    .admin-menu-card {
+        min-height: 145px;
+
+        padding: 17px;
+    }
+
+
+    .login-card {
+        padding:
+            34px
+            32px;
+    }
+
+}
+
+
+/* =========================================================
+   33. LARGE TABLET / DESKTOP
+   ========================================================= */
+
+@media (min-width: 900px) {
+
+    .operations-summary {
+        max-width: 780px;
+    }
+
+
+    .jobs-section {
+        padding:
+            22px;
+    }
+
+
+    .job-card {
+        display: grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            auto;
+
+        gap: 20px;
+    }
+
+
+    .job-actions {
+        align-items: center;
+
+        margin-top: 0;
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns:
+            repeat(
+                4,
+                minmax(0, 1fr)
+            );
+    }
+
+
+    .new-job-button {
+        max-width: 340px;
+
+        min-height: 62px;
+    }
+
+
+    #newJobForm,
+    #newJobScreen > .form-card,
+    #newJobScreen > .warning-card {
+        max-width: 900px;
+    }
+
+
+    .screen-toolbar {
+        max-width: 900px;
+    }
+
+
+    .price-summary-card {
+        padding:
+            22px;
+    }
+
+}
+
+
+/* =========================================================
+   34. DESKTOP ADMIN
+   ========================================================= */
+
+@media (min-width: 1100px) {
+
+    .app-shell {
+        padding-top: 26px;
+    }
+
+
+    .main-navigation {
+        max-width: 600px;
+    }
+
+
+    .summary-card strong {
+        font-size: 34px;
+    }
+
+
+    .admin-menu-card {
+        min-height: 155px;
+    }
+
+
+    .pricing-list {
+        gap: 11px;
+    }
+
+}
+
+
+/* =========================================================
+   35. SMALL PHONE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .header-brand h1 {
+        font-size: 14px;
+    }
+
+
+    .header-brand p {
+        font-size: 8px;
+    }
+
+
+    .app-shell {
+        width:
+            calc(100% - 16px);
+    }
+
+
+    .summary-card {
+        padding:
+            11px;
+    }
+
+
+    .summary-card strong {
+        font-size: 23px;
+    }
+
+
+    .quick-action-button {
+        padding:
+            9px;
+    }
+
+
+    .lookup-form {
+        grid-template-columns: 1fr;
+    }
+
+
+    .lookup-form
+    .secondary-button,
+    .lookup-form
+    .primary-button {
+        width: 100%;
+    }
+
+
+    .admin-menu-grid {
+        grid-template-columns: 1fr;
+    }
+
+
+    .admin-menu-card {
+        min-height: 100px;
+    }
+
+
+    .pricing-row {
+        grid-template-columns: 1fr;
+    }
+
+
+    .pricing-save-button {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   36. REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    html {
+        scroll-behavior: auto;
+    }
+
+
+    *,
+    *::before,
+    *::after {
+        transition-duration:
+            0.01ms !important;
+
+        animation-duration:
+            0.01ms !important;
+
+        animation-iteration-count:
+            1 !important;
+    }
+
+}
