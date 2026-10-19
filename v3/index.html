@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,1588 +8,1082 @@
         content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     >
 
-    <meta
-        name="theme-color"
-        content="#123b66"
-    >
+    <meta name="theme-color" content="#123b66">
 
     <meta
         name="description"
         content="GLS Car Wash Management System V3."
     >
 
-    <title>
-        GLS Car Wash | Management System
-    </title>
-
-
-    <!-- =====================================================
-         V3 STYLES
-         ===================================================== -->
+    <title>GLS Car Wash | Management System</title>
 
     <link rel="stylesheet" href="css/app.css">
-
 </head>
-
 
 <body>
 
+<header class="app-header">
 
-    <!-- =====================================================
-         APPLICATION HEADER
-         ===================================================== -->
+    <div class="header-brand">
+        <img src="../assets/logo.png" alt="Global Line Services Logo" class="brand-logo">
 
-    <header class="app-header">
-
-        <div class="header-brand">
-
-            <img src="../assets/logo.png" alt="Global Line Services Logo" class="brand-logo">
-
-            <div>
-
-                <h1>
-                    GLS Car Wash
-                </h1>
-
-                <p>
-                    Management System
-                </p>
-
-            </div>
-
+        <div>
+            <h1>GLS Car Wash</h1>
+            <p>Management System</p>
         </div>
+    </div>
 
+    <div id="headerUser" class="header-user" hidden>
+
+        <div class="header-user-info">
+            <strong id="headerUserName">Staff</strong>
+            <span id="headerUserRole">Staff</span>
+        </div>
 
         <div
-            id="headerUser"
-            class="header-user"
-            hidden
+            class="theme-control"
+            role="group"
+            aria-label="Appearance"
         >
-
-            <div class="header-user-info">
-
-                <strong id="headerUserName">
-                    Staff
-                </strong>
-
-                <span id="headerUserRole">
-                    Staff
-                </span>
-
-            </div>
-
-            <!-- =============================================
-     APPEARANCE
-     ============================================= -->
-
-<div
-    class="theme-control"
-    role="group"
-    aria-label="Appearance"
->
-
-    <button
-        class="theme-button"
-        type="button"
-        data-theme="light"
-        title="Light Mode"
-        aria-label="Use Light Mode"
-        aria-pressed="false"
-    >
-        ☀
-    </button>
-
-
-    <button
-        class="theme-button"
-        type="button"
-        data-theme="dark"
-        title="Dark Mode"
-        aria-label="Use Dark Mode"
-        aria-pressed="false"
-    >
-        ☾
-    </button>
-
-
-    <button
-        class="theme-button active"
-        type="button"
-        data-theme="system"
-        title="System Mode"
-        aria-label="Use System Appearance"
-        aria-pressed="true"
-    >
-        ◐
-    </button>
-
-</div>
+            <button
+                class="theme-button"
+                type="button"
+                data-theme="light"
+                title="Light Mode"
+                aria-label="Use Light Mode"
+                aria-pressed="false"
+            >☀</button>
 
             <button
-                id="logoutButton"
-                class="header-action-button"
+                class="theme-button"
                 type="button"
-            >
-                Log Out
-            </button>
+                data-theme="dark"
+                title="Dark Mode"
+                aria-label="Use Dark Mode"
+                aria-pressed="false"
+            >☾</button>
+
+            <button
+                class="theme-button active"
+                type="button"
+                data-theme="system"
+                title="System Mode"
+                aria-label="Use System Appearance"
+                aria-pressed="true"
+            >◐</button>
+        </div>
+
+        <button
+            id="logoutButton"
+            class="header-action-button"
+            type="button"
+        >
+            Log Out
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="app-shell">
+
+    <!-- LOGIN -->
+
+    <section id="loginScreen" class="login-screen">
+
+        <div class="login-card">
+
+            <img src="../assets/logo.png" alt="Global Line Services Logo" class="login-logo">
+
+            <p class="eyebrow">GLS CAR WASH V3</p>
+
+            <h2>Staff Sign In</h2>
+
+            <p class="screen-description">
+                Sign in using your assigned staff account
+                to access car wash operations.
+            </p>
+
+            <form id="loginForm" class="login-form">
+
+                <div class="form-field">
+                    <label for="loginEmail">
+                        Email Address
+                    </label>
+
+                    <input
+                        id="loginEmail"
+                        name="email"
+                        type="email"
+                        inputmode="email"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-field">
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <input
+                        id="loginPassword"
+                        name="password"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                    >
+                </div>
+
+                <p
+                    id="loginMessage"
+                    class="status-message"
+                    role="alert"
+                    aria-live="polite"
+                ></p>
+
+                <button
+                    id="loginButton"
+                    class="primary-button large-button"
+                    type="submit"
+                >
+                    Sign In
+                </button>
+
+            </form>
+
+            <p class="security-note">
+                For authorised GLS personnel only.
+            </p>
 
         </div>
 
-    </header>
+    </section>
 
 
-    <!-- =====================================================
-         APPLICATION
-         ===================================================== -->
+    <!-- AUTHENTICATED APP -->
 
-    <main class="app-shell">
+    <section id="appScreen" hidden>
+
+        <nav
+            id="mainNavigation"
+            class="main-navigation"
+            aria-label="Main navigation"
+        >
+            <button
+                class="nav-button active"
+                type="button"
+                data-screen="operationsScreen"
+            >
+                Operations
+            </button>
+
+            <button
+                class="nav-button"
+                type="button"
+                data-screen="searchScreen"
+            >
+                Search
+            </button>
+
+            <button
+                id="adminNavigationButton"
+                class="nav-button"
+                type="button"
+                data-screen="adminScreen"
+                hidden
+            >
+                Admin
+            </button>
+        </nav>
 
 
-        <!-- =================================================
-             STAFF LOGIN
-             ================================================= -->
+        <!-- OPERATIONS -->
 
         <section
-            id="loginScreen"
-            class="login-screen"
+            id="operationsScreen"
+            class="application-screen"
         >
 
-            <div class="login-card">
+            <section class="welcome-section">
 
-                <img src="../assets/logo.png" alt="Global Line Services Logo" class="login-logo">
+                <div>
+                    <p class="eyebrow">
+                        TODAY'S OPERATIONS
+                    </p>
 
+                    <h2 id="welcomeHeading">
+                        Good day
+                    </h2>
 
-                <p class="eyebrow">
-                    GLS CAR WASH
-                </p>
-
-
-                <h2>
-                    Staff Sign In
-                </h2>
-
-
-                <p class="screen-description">
-                    Sign in using your assigned staff account
-                    to access car wash operations.
-                </p>
-
-
-                <form
-                    id="loginForm"
-                    class="login-form"
-                >
-
-                    <div class="form-field">
-
-                        <label for="loginEmail">
-                            Email Address
-                        </label>
-
-                        <input
-                            id="loginEmail"
-                            name="email"
-                            type="email"
-                            autocomplete="username"
-                            inputmode="email"
-                            required
-                        >
-
-                    </div>
-
-
-                    <div class="form-field">
-
-                        <label for="loginPassword">
-                            Password
-                        </label>
-
-                        <input
-                            id="loginPassword"
-                            name="password"
-                            type="password"
-                            autocomplete="current-password"
-                            required
-                        >
-
-                    </div>
-
-
-                    <p
-                        id="loginMessage"
-                        class="status-message"
-                        role="alert"
-                        aria-live="polite"
-                    ></p>
-
-
-                    <button
-                        id="loginButton"
-                        class="primary-button large-button"
-                        type="submit"
-                    >
-                        Sign In
-                    </button>
-
-                </form>
-
-
-                <p class="security-note">
-                    For authorised GLS personnel only.
-                </p>
-
-            </div>
-
-        </section>
-
-
-        <!-- =================================================
-             MAIN APPLICATION
-             ================================================= -->
-
-        <section
-            id="appScreen"
-            hidden
-        >
-
-
-            <!-- =============================================
-                 MOBILE / TABLET NAVIGATION
-                 ============================================= -->
-
-            <nav
-                id="mainNavigation"
-                class="main-navigation"
-                aria-label="Main navigation"
-            >
+                    <p id="operationsDate">
+                        Loading Malaysia time...
+                    </p>
+                </div>
 
                 <button
-                    class="nav-button active"
+                    id="refreshOperationsButton"
+                    class="icon-button"
                     type="button"
-                    data-screen="operationsScreen"
+                    title="Refresh"
+                    aria-label="Refresh operations"
                 >
-                    Operations
+                    ↻
                 </button>
-
-
-                <button
-                    class="nav-button"
-                    type="button"
-                    data-screen="searchScreen"
-                >
-                    Search
-                </button>
-
-
-                <button
-                    id="adminNavigationButton"
-                    class="nav-button"
-                    type="button"
-                    data-screen="adminScreen"
-                    hidden
-                >
-                    Admin
-                </button>
-
-            </nav>
-
-
-            <!-- =================================================
-                 OPERATIONS SCREEN
-                 ================================================= -->
-
-            <section
-                id="operationsScreen"
-                class="application-screen"
-            >
-
-
-                <!-- =============================================
-                     WELCOME
-                     ============================================= -->
-
-                <section class="welcome-section">
-
-                    <div>
-
-                        <p class="eyebrow">
-                            TODAY'S OPERATIONS
-                        </p>
-
-                        <h2 id="welcomeHeading">
-                            Good day
-                        </h2>
-
-                        <p id="operationsDate">
-                            Loading Malaysia time...
-                        </p>
-
-                    </div>
-
-
-                    <button
-                        id="refreshOperationsButton"
-                        class="icon-button"
-                        type="button"
-                        aria-label="Refresh operations"
-                    >
-                        ↻
-                    </button>
-
-                </section>
-
-
-                <!-- =============================================
-                     PRIMARY ACTION
-                     ============================================= -->
-
-                <button
-                    id="newJobButton"
-                    class="new-job-button"
-                    type="button"
-                >
-
-                    <span class="new-job-icon">
-                        +
-                    </span>
-
-                    <span>
-                        New Job
-                    </span>
-
-                </button>
-
-
-                <!-- =============================================
-                     DAILY KPI
-                     ============================================= -->
-
-                <section
-                    class="operations-summary"
-                    aria-label="Today's job summary"
-                >
-
-                    <article class="summary-card waiting-card">
-
-                        <span>
-                            Waiting
-                        </span>
-
-                        <strong id="waitingCount">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="summary-card washing-card">
-
-                        <span>
-                            Washing
-                        </span>
-
-                        <strong id="washingCount">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="summary-card ready-card">
-
-                        <span>
-                            Ready
-                        </span>
-
-                        <strong id="readyCount">
-                            0
-                        </strong>
-
-                    </article>
-
-
-                    <article class="summary-card closed-card">
-
-                        <span>
-                            Closed
-                        </span>
-
-                        <strong id="closedCount">
-                            0
-                        </strong>
-
-                    </article>
-
-                </section>
-
-
-                <!-- =============================================
-                     QUICK ACTIONS
-                     ============================================= -->
-
-                <section class="quick-actions">
-
-                    <button
-                        id="quickSearchButton"
-                        class="quick-action-button"
-                        type="button"
-                    >
-
-                        <span class="quick-action-icon">
-                            🔎
-                        </span>
-
-                        <span>
-                            Search
-                        </span>
-
-                    </button>
-
-
-                    <button
-                        id="drinkSaleButton"
-                        class="quick-action-button"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="quick-action-icon">
-                            🥤
-                        </span>
-
-                        <span>
-                            Drink Sale
-                        </span>
-
-                        <small>
-                            Coming Soon
-                        </small>
-
-                    </button>
-
-                </section>
-
-
-                <!-- =============================================
-                     JOB FILTER
-                     ============================================= -->
-
-                <section class="jobs-section">
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <p class="eyebrow">
-                                LIVE OPERATIONS
-                            </p>
-
-                            <h3>
-                                Today's Jobs
-                            </h3>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        class="job-filter-bar"
-                        role="group"
-                        aria-label="Job status filter"
-                    >
-
-                        <button
-                            class="job-filter active"
-                            type="button"
-                            data-job-filter="active"
-                        >
-                            Active
-                        </button>
-
-
-                        <button
-                            class="job-filter"
-                            type="button"
-                            data-job-filter="waiting"
-                        >
-                            Waiting
-                        </button>
-
-
-                        <button
-                            class="job-filter"
-                            type="button"
-                            data-job-filter="washing"
-                        >
-                            Washing
-                        </button>
-
-
-                        <button
-                            class="job-filter"
-                            type="button"
-                            data-job-filter="ready"
-                        >
-                            Ready
-                        </button>
-
-
-                        <button
-                            class="job-filter"
-                            type="button"
-                            data-job-filter="closed"
-                        >
-                            Closed
-                        </button>
-
-                    </div>
-
-
-                    <p
-                        id="operationsMessage"
-                        class="status-message"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
-
-                    <div
-                        id="jobsList"
-                        class="jobs-list"
-                    >
-
-                        <div class="empty-state">
-                            No jobs loaded yet.
-                        </div>
-
-                    </div>
-
-                </section>
 
             </section>
 
 
-            <!-- =================================================
-                 NEW JOB SCREEN
-                 ================================================= -->
+            <button
+                id="newJobButton"
+                class="new-job-button"
+                type="button"
+            >
+                <span class="new-job-icon">+</span>
+                <span>New Job</span>
+            </button>
+
 
             <section
-                id="newJobScreen"
-                class="application-screen"
-                hidden
+                class="operations-summary"
+                aria-label="Today's job summary"
             >
+                <article class="summary-card waiting-card">
+                    <span>Waiting</span>
+                    <strong id="waitingCount">0</strong>
+                </article>
 
-                <div class="screen-toolbar">
+                <article class="summary-card washing-card">
+                    <span>Washing</span>
+                    <strong id="washingCount">0</strong>
+                </article>
 
-                    <button
-                        id="newJobBackButton"
-                        class="back-button"
-                        type="button"
-                    >
-                        ← Back
-                    </button>
+                <article class="summary-card ready-card">
+                    <span>Ready</span>
+                    <strong id="readyCount">0</strong>
+                </article>
+
+                <article class="summary-card closed-card">
+                    <span>Closed</span>
+                    <strong id="closedCount">0</strong>
+                </article>
+            </section>
 
 
+            <section class="quick-actions">
+
+                <button
+                    id="quickSearchButton"
+                    class="quick-action-button"
+                    type="button"
+                >
+                    <span class="quick-action-icon">🔎</span>
+                    <span>Search</span>
+                </button>
+
+                <button
+                    id="drinkSaleButton"
+                    class="quick-action-button"
+                    type="button"
+                    disabled
+                >
+                    <span class="quick-action-icon">🥤</span>
+                    <span>Drink Sale</span>
+                    <small>Coming Soon</small>
+                </button>
+
+            </section>
+
+
+            <section class="jobs-section">
+
+                <div class="section-heading">
                     <div>
-
-                        <p class="eyebrow">
-                            CAR WASH REGISTRATION
-                        </p>
-
-                        <h2>
-                            New Job
-                        </h2>
-
+                        <p class="eyebrow">LIVE OPERATIONS</p>
+                        <h3>Today's Jobs</h3>
                     </div>
-
                 </div>
-
-
-                <!-- =============================================
-                     PRICING WARNING
-                     ============================================= -->
 
                 <div
-                    id="pricingWarning"
-                    class="warning-card"
-                    hidden
+                    class="job-filter-bar"
+                    role="group"
+                    aria-label="Job status filters"
                 >
+                    <button
+                        class="job-filter active"
+                        type="button"
+                        data-job-filter="active"
+                    >Active</button>
 
-                    <strong>
-                        Pricing Setup Required
-                    </strong>
+                    <button
+                        class="job-filter"
+                        type="button"
+                        data-job-filter="waiting"
+                    >Waiting</button>
 
-                    <p>
-                        Service pricing has not been fully
-                        configured. Please contact an administrator.
-                    </p>
+                    <button
+                        class="job-filter"
+                        type="button"
+                        data-job-filter="washing"
+                    >Washing</button>
 
+                    <button
+                        class="job-filter"
+                        type="button"
+                        data-job-filter="ready"
+                    >Ready</button>
+
+                    <button
+                        class="job-filter"
+                        type="button"
+                        data-job-filter="closed"
+                    >Closed</button>
                 </div>
 
+                <p
+                    id="operationsMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
 
-                <!-- =============================================
-                     EXISTING CUSTOMER SEARCH
-                     ============================================= -->
+                <div id="jobsList" class="jobs-list">
+                    <div class="empty-state">
+                        No jobs loaded yet.
+                    </div>
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- NEW JOB -->
+
+        <section
+            id="newJobScreen"
+            class="application-screen"
+            hidden
+        >
+
+            <div class="screen-toolbar">
+
+                <button
+                    id="newJobBackButton"
+                    class="back-button"
+                    type="button"
+                >
+                    ← Back
+                </button>
+
+                <div>
+                    <p class="eyebrow">
+                        CAR WASH REGISTRATION
+                    </p>
+                    <h2>New Job</h2>
+                </div>
+
+            </div>
+
+
+            <div
+                id="pricingWarning"
+                class="warning-card"
+                hidden
+            >
+                <strong>Pricing Setup Required</strong>
+
+                <p>
+                    Service pricing has not been configured.
+                    Please contact an administrator.
+                </p>
+            </div>
+
+
+            <!-- STEP 1 -->
+
+            <section class="form-card">
+
+                <div class="form-card-heading">
+                    <span class="step-number">1</span>
+
+                    <div>
+                        <h3>Find Customer / Vehicle</h3>
+
+                        <p>
+                            Search by plate, phone, customer name,
+                            vehicle model or vehicle type.
+                        </p>
+                    </div>
+                </div>
+
+                <form
+                    id="customerVehicleSearchForm"
+                    class="lookup-form"
+                >
+                    <input
+                        id="customerVehicleSearch"
+                        type="search"
+                        placeholder="Plate, phone, name or vehicle"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="customerVehicleSearchButton"
+                        class="secondary-button"
+                        type="submit"
+                    >
+                        Search
+                    </button>
+                </form>
+
+                <p
+                    id="customerVehicleSearchMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <div
+                    id="customerVehicleResults"
+                    class="lookup-results"
+                ></div>
+
+            </section>
+
+
+            <form id="newJobForm">
+
+                <!-- STEP 2 CUSTOMER -->
 
                 <section class="form-card">
 
                     <div class="form-card-heading">
-
-                        <span class="step-number">
-                            1
-                        </span>
+                        <span class="step-number">2</span>
 
                         <div>
+                            <h3>Customer</h3>
+                            <p>Enter customer contact details.</p>
+                        </div>
+                    </div>
 
-                            <h3>
-                                Find Customer / Vehicle
-                            </h3>
+                    <input
+                        id="selectedCustomerId"
+                        type="hidden"
+                    >
 
-                            <p>
-                                Search by plate number,
-                                phone number, customer name
-                                or vehicle model.
-                            </p>
+                    <input
+                        id="selectedVehicleId"
+                        type="hidden"
+                    >
 
+                    <div class="form-grid">
+
+                        <div class="form-field">
+                            <label for="customerPhone">
+                                Phone Number
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                id="customerPhone"
+                                type="tel"
+                                inputmode="tel"
+                                autocomplete="tel"
+                                placeholder="Example: 0123456789"
+                                maxlength="20"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-field">
+                            <label for="customerName">
+                                Customer Name
+                            </label>
+
+                            <input
+                                id="customerName"
+                                type="text"
+                                autocomplete="name"
+                                placeholder="Optional"
+                                maxlength="100"
+                            >
+                        </div>
+
+                    </div>
+
+                    <div class="form-field">
+                        <label for="customerNotes">
+                            Customer Notes
+                        </label>
+
+                        <textarea
+                            id="customerNotes"
+                            rows="2"
+                            maxlength="500"
+                            placeholder="Optional notes"
+                        ></textarea>
+                    </div>
+
+                </section>
+
+
+                <!-- STEP 3 VEHICLE -->
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span class="step-number">3</span>
+
+                        <div>
+                            <h3>Vehicle</h3>
+                            <p>Record the vehicle details.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-field">
+                            <label for="plateNumber">
+                                Plate Number
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                id="plateNumber"
+                                type="text"
+                                autocomplete="off"
+                                autocapitalize="characters"
+                                placeholder="Example: RAC9259"
+                                maxlength="20"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-field">
+                            <label for="vehicleModel">
+                                Vehicle Model
+                                <span class="required">*</span>
+                            </label>
+
+                            <input
+                                id="vehicleModel"
+                                type="text"
+                                autocomplete="off"
+                                placeholder="Example: Myvi"
+                                maxlength="100"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-field">
+                            <label for="vehicleColour">
+                                Colour
+                            </label>
+
+                            <input
+                                id="vehicleColour"
+                                type="text"
+                                autocomplete="off"
+                                placeholder="Example: White"
+                                maxlength="50"
+                            >
+                        </div>
+
+                        <div class="form-field">
+                            <label for="vehicleCategory">
+                                Vehicle Category
+                                <span class="required">*</span>
+                            </label>
+
+                            <select
+                                id="vehicleCategory"
+                                required
+                            >
+                                <option value="">
+                                    Select Category
+                                </option>
+                            </select>
                         </div>
 
                     </div>
 
 
-                    <form
-                        id="customerVehicleSearchForm"
-                        class="lookup-form"
-                    >
-
-                        <input
-                            id="customerVehicleSearch"
-                            type="search"
-                            placeholder="Plate, phone, name or vehicle"
-                            autocomplete="off"
-                        >
-
-
-                        <button
-                            id="customerVehicleSearchButton"
-                            class="secondary-button"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-
-                    </form>
-
-
-                    <p
-                        id="customerVehicleSearchMessage"
-                        class="status-message"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
+                    <!-- ONLY APPEARS FOR OTHER -->
 
                     <div
-                        id="customerVehicleResults"
-                        class="lookup-results"
+                        id="customVehicleTypeField"
+                        class="form-field"
+                        hidden
+                    >
+                        <label for="customVehicleType">
+                            Vehicle Type
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            id="customVehicleType"
+                            type="text"
+                            autocomplete="off"
+                            maxlength="100"
+                            placeholder="Example: Mini Bus, Buggy"
+                        >
+
+                        <small class="field-help">
+                            Required when Vehicle Category is Other.
+                        </small>
+                    </div>
+
+
+                    <div class="form-field">
+                        <label for="vehicleNotes">
+                            Vehicle Notes
+                        </label>
+
+                        <textarea
+                            id="vehicleNotes"
+                            rows="2"
+                            maxlength="500"
+                            placeholder="Existing damage or other notes"
+                        ></textarea>
+                    </div>
+
+                </section>
+
+
+                <!-- STEP 4 SERVICE -->
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span class="step-number">4</span>
+
+                        <div>
+                            <h3>Wash Service</h3>
+                            <p>Select the main service required.</p>
+                        </div>
+                    </div>
+
+                    <div
+                        id="serviceOptions"
+                        class="selection-grid"
+                    >
+                        <div class="empty-state">
+                            Loading services...
+                        </div>
+                    </div>
+
+                </section>
+
+
+                <!-- STEP 5 ADDONS -->
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span class="step-number">5</span>
+
+                        <div>
+                            <h3>Add-ons</h3>
+                            <p>
+                                Optional treatments and
+                                additional charges.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="addOnOptions" class="addon-list">
+                        <div class="empty-state">
+                            Loading add-ons...
+                        </div>
+                    </div>
+
+                </section>
+
+
+                <!-- STEP 6 NOTES -->
+
+                <section class="form-card">
+
+                    <div class="form-card-heading">
+                        <span class="step-number">6</span>
+
+                        <div>
+                            <h3>Job Notes</h3>
+                            <p>Optional operational notes.</p>
+                        </div>
+                    </div>
+
+                    <div class="form-field">
+                        <textarea
+                            id="jobNotes"
+                            rows="3"
+                            maxlength="1000"
+                            placeholder="Example: Customer will return after 3 PM"
+                        ></textarea>
+                    </div>
+
+                </section>
+
+
+                <!-- PRICE -->
+
+                <section class="price-summary-card">
+
+                    <div class="price-summary-heading">
+                        <div>
+                            <p class="eyebrow">PRICE SUMMARY</p>
+                            <h3>Job Total</h3>
+                        </div>
+
+                        <strong id="jobTotalAmount">
+                            RM 0.00
+                        </strong>
+                    </div>
+
+                    <div
+                        id="priceBreakdown"
+                        class="price-breakdown"
+                    >
+                        <div class="price-placeholder">
+                            Select a vehicle and service
+                            to calculate price.
+                        </div>
+                    </div>
+
+                    <div
+                        id="seasonalPricingNotice"
+                        class="seasonal-notice"
+                        hidden
                     ></div>
 
                 </section>
 
+                <p
+                    id="newJobMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
 
-                <!-- =============================================
-                     CUSTOMER DETAILS
-                     ============================================= -->
-
-                <form
-                    id="newJobForm"
+                <button
+                    id="createJobButton"
+                    class="primary-button create-job-button"
+                    type="submit"
+                    disabled
                 >
+                    Create Job
+                </button>
 
-                    <section class="form-card">
-
-                        <div class="form-card-heading">
-
-                            <span class="step-number">
-                                2
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Customer
-                                </h3>
-
-                                <p>
-                                    Enter the customer's contact details.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <input
-                            id="selectedCustomerId"
-                            type="hidden"
-                        >
-
-
-                        <input
-                            id="selectedVehicleId"
-                            type="hidden"
-                        >
-
-
-                        <div class="form-grid">
-
-                            <div class="form-field">
-
-                                <label for="customerPhone">
-                                    Phone Number
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <input
-                                    id="customerPhone"
-                                    type="tel"
-                                    inputmode="tel"
-                                    autocomplete="tel"
-                                    placeholder="Example: 0123456789"
-                                    maxlength="20"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="customerName">
-                                    Customer Name
-                                </label>
-
-                                <input
-                                    id="customerName"
-                                    type="text"
-                                    autocomplete="name"
-                                    placeholder="Optional"
-                                    maxlength="100"
-                                >
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <label for="customerNotes">
-                                Customer Notes
-                            </label>
-
-                            <textarea
-                                id="customerNotes"
-                                rows="2"
-                                maxlength="500"
-                                placeholder="Optional notes"
-                            ></textarea>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =========================================
-                         VEHICLE
-                         ========================================= -->
-
-                    <section class="form-card">
-
-                        <div class="form-card-heading">
-
-                            <span class="step-number">
-                                3
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Vehicle
-                                </h3>
-
-                                <p>
-                                    Record the vehicle details.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-grid">
-
-                            <div class="form-field">
-
-                                <label for="plateNumber">
-                                    Plate Number
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <input
-                                    id="plateNumber"
-                                    type="text"
-                                    autocomplete="off"
-                                    autocapitalize="characters"
-                                    placeholder="Example: RAC9259"
-                                    maxlength="20"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="vehicleModel">
-                                    Vehicle Model
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <input
-                                    id="vehicleModel"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Example: Myvi"
-                                    maxlength="100"
-                                    required
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="vehicleColour">
-                                    Colour
-                                </label>
-
-                                <input
-                                    id="vehicleColour"
-                                    type="text"
-                                    autocomplete="off"
-                                    placeholder="Example: White"
-                                    maxlength="50"
-                                >
-
-                            </div>
-
-
-                            <div class="form-field">
-
-                                <label for="vehicleCategory">
-                                    Vehicle Category
-                                    <span class="required">
-                                        *
-                                    </span>
-                                </label>
-
-                                <select
-                                    id="vehicleCategory"
-                                    required
-                                >
-
-                                    <option value="">
-                                        Select Category
-                                    </option>
-
-                                </select>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <label for="vehicleNotes">
-                                Vehicle Notes
-                            </label>
-
-                            <textarea
-                                id="vehicleNotes"
-                                rows="2"
-                                maxlength="500"
-                                placeholder="Existing damage or other notes"
-                            ></textarea>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =========================================
-                         SERVICE
-                         ========================================= -->
-
-                    <section class="form-card">
-
-                        <div class="form-card-heading">
-
-                            <span class="step-number">
-                                4
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Wash Service
-                                </h3>
-
-                                <p>
-                                    Select the main service required.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="serviceOptions"
-                            class="selection-grid"
-                        >
-
-                            <div class="empty-state">
-                                Loading services...
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =========================================
-                         ADD-ONS
-                         ========================================= -->
-
-                    <section class="form-card">
-
-                        <div class="form-card-heading">
-
-                            <span class="step-number">
-                                5
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Add-ons
-                                </h3>
-
-                                <p>
-                                    Add optional treatments
-                                    or additional charges.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="addOnOptions"
-                            class="addon-list"
-                        >
-
-                            <div class="empty-state">
-                                Loading add-ons...
-                            </div>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =========================================
-                         JOB NOTES
-                         ========================================= -->
-
-                    <section class="form-card">
-
-                        <div class="form-card-heading">
-
-                            <span class="step-number">
-                                6
-                            </span>
-
-                            <div>
-
-                                <h3>
-                                    Job Notes
-                                </h3>
-
-                                <p>
-                                    Optional operational notes.
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-                        <div class="form-field">
-
-                            <textarea
-                                id="jobNotes"
-                                rows="3"
-                                maxlength="1000"
-                                placeholder="Example: Customer will return after 3 PM"
-                            ></textarea>
-
-                        </div>
-
-                    </section>
-
-
-                    <!-- =========================================
-                         PRICE SUMMARY
-                         ========================================= -->
-
-                    <section class="price-summary-card">
-
-                        <div class="price-summary-heading">
-
-                            <div>
-
-                                <p class="eyebrow">
-                                    PRICE SUMMARY
-                                </p>
-
-                                <h3>
-                                    Job Total
-                                </h3>
-
-                            </div>
-
-
-                            <strong id="jobTotalAmount">
-                                RM 0.00
-                            </strong>
-
-                        </div>
-
-
-                        <div
-                            id="priceBreakdown"
-                            class="price-breakdown"
-                        >
-
-                            <div class="price-placeholder">
-                                Select a vehicle category
-                                and service to calculate price.
-                            </div>
-
-                        </div>
-
-
-                        <div
-                            id="seasonalPricingNotice"
-                            class="seasonal-notice"
-                            hidden
-                        ></div>
-
-                    </section>
-
-
-                    <p
-                        id="newJobMessage"
-                        class="status-message"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
-
-                    <button
-                        id="createJobButton"
-                        class="primary-button create-job-button"
-                        type="submit"
-                        disabled
-                    >
-                        Create Job
-                    </button>
-
-                </form>
-
-            </section>
-
-
-            <!-- =================================================
-                 SEARCH SCREEN
-                 ================================================= -->
-
-            <section
-                id="searchScreen"
-                class="application-screen"
-                hidden
-            >
-
-                <div class="screen-heading">
-
-                    <p class="eyebrow">
-                        RECORDS
-                    </p>
-
-                    <h2>
-                        Search
-                    </h2>
-
-                    <p>
-                        Find jobs, vehicles, customers
-                        and historical records.
-                    </p>
-
-                </div>
-
-
-                <div class="form-card">
-
-                    <form
-                        id="globalSearchForm"
-                        class="lookup-form"
-                    >
-
-                        <input
-                            id="globalSearchInput"
-                            type="search"
-                            placeholder="Plate, customer, phone or job no."
-                            autocomplete="off"
-                        >
-
-
-                        <button
-                            id="globalSearchButton"
-                            class="primary-button"
-                            type="submit"
-                        >
-                            Search
-                        </button>
-
-                    </form>
-
-
-                    <p
-                        id="globalSearchMessage"
-                        class="status-message"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
-
-                    <div
-                        id="globalSearchResults"
-                        class="search-results"
-                    >
-
-                        <div class="empty-state">
-                            Enter a search term to find records.
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 ADMIN SCREEN
-                 ================================================= -->
-
-            <section
-                id="adminScreen"
-                class="application-screen"
-                hidden
-            >
-
-                <div class="screen-heading">
-
-                    <p class="eyebrow">
-                        ADMINISTRATION
-                    </p>
-
-                    <h2>
-                        Admin
-                    </h2>
-
-                    <p>
-                        Business management and configuration.
-                    </p>
-
-                </div>
-
-
-                <div class="admin-menu-grid">
-
-
-                    <button
-                        id="staffManagementButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            👥
-                        </span>
-
-                        <strong>
-                            Staff Management
-                        </strong>
-
-                        <small>
-                            Add, revoke and manage staff access.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="pricingManagementButton"
-                        class="admin-menu-card"
-                        type="button"
-                    >
-
-                        <span class="admin-menu-icon">
-                            💰
-                        </span>
-
-                        <strong>
-                            Pricing
-                        </strong>
-
-                        <small>
-                            Services, add-ons and pricing.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="seasonalPricingButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            🗓️
-                        </span>
-
-                        <strong>
-                            Seasonal Pricing
-                        </strong>
-
-                        <small>
-                            Raya and seasonal surcharges.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="expensesButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            🧾
-                        </span>
-
-                        <strong>
-                            Expenses
-                        </strong>
-
-                        <small>
-                            Record daily business expenses.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="closingButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            🔐
-                        </span>
-
-                        <strong>
-                            Daily Closing
-                        </strong>
-
-                        <small>
-                            Cash reconciliation and closing.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="reportsButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            📊
-                        </span>
-
-                        <strong>
-                            Reports
-                        </strong>
-
-                        <small>
-                            Daily, monthly and yearly statistics.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="inventoryButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            🥤
-                        </span>
-
-                        <strong>
-                            Inventory
-                        </strong>
-
-                        <small>
-                            Drinks, stock and retail sales.
-                        </small>
-
-                    </button>
-
-
-                    <button
-                        id="auditLogButton"
-                        class="admin-menu-card"
-                        type="button"
-                        disabled
-                    >
-
-                        <span class="admin-menu-icon">
-                            🛡️
-                        </span>
-
-                        <strong>
-                            Audit Log
-                        </strong>
-
-                        <small>
-                            Review staff and admin activity.
-                        </small>
-
-                    </button>
-
-                </div>
-
-
-                <p class="coming-soon-note">
-                    Additional Admin modules will be enabled
-                    as V3 development continues.
-                </p>
-
-            </section>
-
-
-            <!-- =================================================
-                 PRICING MANAGEMENT SCREEN
-                 ================================================= -->
-
-            <section
-                id="pricingScreen"
-                class="application-screen"
-                hidden
-            >
-
-                <div class="screen-toolbar">
-
-                    <button
-                        id="pricingBackButton"
-                        class="back-button"
-                        type="button"
-                    >
-                        ← Admin
-                    </button>
-
-
-                    <div>
-
-                        <p class="eyebrow">
-                            ADMIN SETTINGS
-                        </p>
-
-                        <h2>
-                            Pricing
-                        </h2>
-
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="pricingSetupStatus"
-                    class="info-card"
-                >
-
-                    <strong>
-                        Pricing Configuration
-                    </strong>
-
-                    <p>
-                        Configure service and add-on prices
-                        before V3 is used for live operations.
-                    </p>
-
-                </div>
-
-
-                <section class="form-card">
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h3>
-                                Service Prices
-                            </h3>
-
-                            <p>
-                                Prices are configured
-                                by vehicle category.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <p
-                        id="pricingMessage"
-                        class="status-message"
-                        role="status"
-                        aria-live="polite"
-                    ></p>
-
-
-                    <div
-                        id="servicePricingList"
-                        class="pricing-list"
-                    >
-
-                        <div class="empty-state">
-                            Loading pricing...
-                        </div>
-
-                    </div>
-
-                </section>
-
-
-                <section class="form-card">
-
-                    <div class="section-heading">
-
-                        <div>
-
-                            <h3>
-                                Add-on Prices
-                            </h3>
-
-                            <p>
-                                Configure Nano and
-                                optional additional charges.
-                            </p>
-
-                        </div>
-
-                    </div>
-
-
-                    <div
-                        id="addonPricingList"
-                        class="pricing-list"
-                    >
-
-                        <div class="empty-state">
-                            Loading add-ons...
-                        </div>
-
-                    </div>
-
-                </section>
-
-            </section>
-
+            </form>
 
         </section>
 
-    </main>
+
+        <!-- SEARCH -->
+
+        <section
+            id="searchScreen"
+            class="application-screen"
+            hidden
+        >
+
+            <div class="screen-heading">
+                <p class="eyebrow">RECORDS</p>
+                <h2>Search</h2>
+                <p>Find vehicles and customers.</p>
+            </div>
+
+            <div class="form-card">
+
+                <form
+                    id="globalSearchForm"
+                    class="lookup-form"
+                >
+                    <input
+                        id="globalSearchInput"
+                        type="search"
+                        placeholder="Plate, customer, phone or vehicle"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="globalSearchButton"
+                        class="primary-button"
+                        type="submit"
+                    >
+                        Search
+                    </button>
+                </form>
+
+                <p
+                    id="globalSearchMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <div
+                    id="globalSearchResults"
+                    class="search-results"
+                >
+                    <div class="empty-state">
+                        Enter a search term to find records.
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
 
 
-    <!-- =====================================================
-         FOOTER
-         ===================================================== -->
+        <!-- ADMIN -->
 
-    <footer class="app-footer">
+        <section
+            id="adminScreen"
+            class="application-screen"
+            hidden
+        >
 
-        <p>
-            © 2026 GLS Car Wash · Global Line Services
-        </p>
+            <div class="screen-heading">
+                <p class="eyebrow">ADMINISTRATION</p>
+                <h2>Admin</h2>
 
-        <p>
-            System crafted by TheIz
-        </p>
+                <p>
+                    Business management and configuration.
+                </p>
+            </div>
 
-    </footer>
+            <div class="admin-menu-grid">
+
+                <button
+                    id="staffManagementButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">👥</span>
+                    <strong>Staff Management</strong>
+                    <small>
+                        Add, revoke and manage staff access.
+                    </small>
+                </button>
+
+                <button
+                    id="pricingManagementButton"
+                    class="admin-menu-card"
+                    type="button"
+                >
+                    <span class="admin-menu-icon">💰</span>
+                    <strong>Pricing</strong>
+                    <small>
+                        Services, add-ons and pricing.
+                    </small>
+                </button>
+
+                <button
+                    id="seasonalPricingButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">🗓️</span>
+                    <strong>Seasonal Pricing</strong>
+                    <small>
+                        Raya and seasonal surcharges.
+                    </small>
+                </button>
+
+                <button
+                    id="expensesButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">🧾</span>
+                    <strong>Expenses</strong>
+                    <small>
+                        Record daily business expenses.
+                    </small>
+                </button>
+
+                <button
+                    id="closingButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">🔐</span>
+                    <strong>Daily Closing</strong>
+                    <small>
+                        Cash reconciliation and closing.
+                    </small>
+                </button>
+
+                <button
+                    id="reportsButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">📊</span>
+                    <strong>Reports</strong>
+                    <small>
+                        Daily, monthly and yearly statistics.
+                    </small>
+                </button>
+
+                <button
+                    id="inventoryButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">🥤</span>
+                    <strong>Inventory</strong>
+                    <small>
+                        Drinks, stock and retail sales.
+                    </small>
+                </button>
+
+                <button
+                    id="auditLogButton"
+                    class="admin-menu-card"
+                    type="button"
+                    disabled
+                >
+                    <span class="admin-menu-icon">🛡️</span>
+                    <strong>Audit Log</strong>
+                    <small>
+                        Review staff and admin activity.
+                    </small>
+                </button>
+
+            </div>
+
+            <p class="coming-soon-note">
+                Additional Admin modules will be enabled
+                as V3 development continues.
+            </p>
+
+        </section>
 
 
-    <!-- =====================================================
-         SUPABASE
-         ===================================================== -->
+        <!-- PRICING -->
 
-    <script
-        src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
-    ></script>
+        <section
+            id="pricingScreen"
+            class="application-screen"
+            hidden
+        >
+
+            <div class="screen-toolbar">
+
+                <button
+                    id="pricingBackButton"
+                    class="back-button"
+                    type="button"
+                >
+                    ← Admin
+                </button>
+
+                <div>
+                    <p class="eyebrow">ADMIN SETTINGS</p>
+                    <h2>Pricing</h2>
+                </div>
+
+            </div>
+
+            <div
+                id="pricingSetupStatus"
+                class="info-card"
+            >
+                <strong>Pricing Configuration</strong>
+
+                <p>
+                    Configure service and add-on prices
+                    before V3 is used for live operations.
+                </p>
+            </div>
+
+            <section class="form-card">
+
+                <div class="section-heading">
+                    <div>
+                        <h3>Service Prices</h3>
+                        <p>
+                            Prices are configured
+                            by vehicle category.
+                        </p>
+                    </div>
+                </div>
+
+                <p
+                    id="pricingMessage"
+                    class="status-message"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+                <div
+                    id="servicePricingList"
+                    class="pricing-list"
+                >
+                    <div class="empty-state">
+                        Loading pricing...
+                    </div>
+                </div>
+
+            </section>
+
+            <section class="form-card">
+
+                <div class="section-heading">
+                    <div>
+                        <h3>Add-on Prices</h3>
+
+                        <p>
+                            Configure Nano and optional
+                            additional charges.
+                        </p>
+                    </div>
+                </div>
+
+                <div
+                    id="addonPricingList"
+                    class="pricing-list"
+                >
+                    <div class="empty-state">
+                        Loading add-ons...
+                    </div>
+                </div>
+
+            </section>
+
+        </section>
+
+    </section>
+
+</main>
 
 
-    <!-- =====================================================
-         V3 APPLICATION
-         ===================================================== -->
+<footer class="app-footer">
+    <p>
+        © 2026 GLS Car Wash · Global Line Services
+    </p>
 
-    <script src="js/app.js"></script>
+    <p>
+        System crafted by TheIz
+    </p>
+</footer>
+
+
+<script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"
+></script>
+
+<script src="js/app.js"></script>
 
 </body>
-
 </html>
