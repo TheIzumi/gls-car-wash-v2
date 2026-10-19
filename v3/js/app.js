@@ -59,6 +59,190 @@ let createJobInProgress =
 let pricingSaveInProgress =
     false;
 
+/* =========================================================
+   2A. THEME MANAGEMENT
+   ========================================================= */
+
+const THEME_STORAGE_KEY =
+    "gls-v3-theme";
+
+
+function getSavedTheme() {
+
+    const saved =
+        window.localStorage.getItem(
+            THEME_STORAGE_KEY
+        );
+
+
+    if (
+        saved === "light" ||
+        saved === "dark" ||
+        saved === "system"
+    ) {
+        return saved;
+    }
+
+
+    return "system";
+}
+
+
+function applyTheme(
+    theme
+) {
+
+    const html =
+        document.documentElement;
+
+
+    if (
+        theme === "light" ||
+        theme === "dark"
+    ) {
+
+        html.setAttribute(
+            "data-theme",
+            theme
+        );
+
+    }
+
+    else {
+
+        html.removeAttribute(
+            "data-theme"
+        );
+    }
+
+
+    document
+        .querySelectorAll(
+            ".theme-button"
+        )
+        .forEach(
+            function (button) {
+
+                const isActive =
+                    button.dataset.theme ===
+                    theme;
+
+
+                button.classList.toggle(
+                    "active",
+                    isActive
+                );
+
+
+                button.setAttribute(
+                    "aria-pressed",
+                    isActive
+                        ? "true"
+                        : "false"
+                );
+            }
+        );
+
+
+    updateThemeColor(
+        theme
+    );
+}
+
+
+function updateThemeColor(
+    theme
+) {
+
+    const meta =
+        document.querySelector(
+            'meta[name="theme-color"]'
+        );
+
+
+    if (!meta) {
+        return;
+    }
+
+
+    let isDark =
+        theme === "dark";
+
+
+    if (
+        theme === "system"
+    ) {
+
+        isDark =
+            window.matchMedia(
+                "(prefers-color-scheme: dark)"
+            ).matches;
+    }
+
+
+    meta.setAttribute(
+        "content",
+        isDark
+            ? "#263746"
+            : "#123b66"
+    );
+}
+
+
+function setTheme(
+    theme
+) {
+
+    if (
+        theme !== "light" &&
+        theme !== "dark" &&
+        theme !== "system"
+    ) {
+        return;
+    }
+
+
+    window.localStorage.setItem(
+        THEME_STORAGE_KEY,
+        theme
+    );
+
+
+    applyTheme(
+        theme
+    );
+}
+
+
+function initialiseTheme() {
+
+    applyTheme(
+        getSavedTheme()
+    );
+
+
+    const systemTheme =
+        window.matchMedia(
+            "(prefers-color-scheme: dark)"
+        );
+
+
+    systemTheme.addEventListener(
+        "change",
+        function () {
+
+            if (
+                getSavedTheme() ===
+                "system"
+            ) {
+
+                applyTheme(
+                    "system"
+                );
+            }
+        }
+    );
+}
 
 /* =========================================================
    3. LOGIN ELEMENTS
@@ -3652,6 +3836,30 @@ async function openPricingManagement() {
 
 function registerEvents() {
 
+    /* =====================================================
+       THEME SELECTOR
+       ===================================================== */
+
+    document
+        .querySelectorAll(
+            ".theme-button"
+        )
+        .forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        setTheme(
+                            button.dataset.theme
+                        );
+                    }
+                );
+            }
+        );
+
+
     loginForm.addEventListener(
         "submit",
         handleLogin
@@ -4100,6 +4308,9 @@ async function restoreSession() {
    ========================================================= */
 
 async function initialiseApplication() {
+
+    initialiseTheme();
+
 
     if (
         !requiredElementsExist()
