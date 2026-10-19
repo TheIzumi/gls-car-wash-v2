@@ -3037,3 +3037,706 @@ textarea:focus-visible {
     }
 
 }
+
+/* =========================================================
+   38. DARK MODE
+   Automatically follows device / browser colour scheme
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+
+    :root {
+        --gls-primary: #79b8f2;
+        --gls-primary-dark: #9bc9f5;
+        --gls-primary-mid: #438dd0;
+        --gls-primary-light: #162b3f;
+
+        --gls-background: #0d141c;
+        --gls-surface: #151f29;
+        --gls-surface-soft: #19242f;
+
+        --gls-text: #edf4fb;
+        --gls-text-soft: #c1cfdb;
+        --gls-muted: #95a9ba;
+        --gls-muted-light: #768b9c;
+
+        --gls-border: #2b3c4c;
+        --gls-border-light: #22323f;
+
+        --gls-success: #63d6a0;
+        --gls-success-dark: #80e4b7;
+        --gls-success-bg: #14372a;
+
+        --gls-warning: #f3c95e;
+        --gls-warning-dark: #ffda77;
+        --gls-warning-bg: #382f17;
+
+        --gls-danger: #ff8379;
+        --gls-danger-bg: #3d2222;
+
+        --gls-info: #79b8f2;
+        --gls-info-bg: #172e43;
+
+        --gls-waiting: #75b9f3;
+        --gls-waiting-bg: #172d41;
+
+        --gls-washing: #f0c766;
+        --gls-washing-bg: #382f18;
+
+        --gls-ready: #63d6a0;
+        --gls-ready-bg: #14372a;
+
+        --gls-closed: #b5c4d0;
+        --gls-closed-bg: #26333e;
+
+        --shadow-small:
+            0 4px 16px
+            rgba(0, 0, 0, 0.20);
+
+        --shadow:
+            0 12px 34px
+            rgba(0, 0, 0, 0.26);
+
+        --shadow-large:
+            0 20px 50px
+            rgba(0, 0, 0, 0.32);
+    }
+
+
+    /* =====================================================
+       BASE
+       ===================================================== */
+
+    html,
+    body {
+        color-scheme: dark;
+
+        background:
+            var(--gls-background);
+
+        color:
+            var(--gls-text);
+    }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .app-header {
+        background:
+            rgba(21, 31, 41, 0.96);
+
+        border-bottom-color:
+            var(--gls-border);
+
+        box-shadow:
+            0 3px 16px
+            rgba(0, 0, 0, 0.25);
+    }
+
+
+    .header-brand h1 {
+        color: #d9ebfb;
+    }
+
+
+    .header-brand p {
+        color:
+            var(--gls-muted);
+    }
+
+
+    .header-user-info strong {
+        color: #d9ebfb;
+    }
+
+
+    .header-action-button {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+
+        color: #d9ebfb;
+    }
+
+
+    .header-action-button:hover {
+        background:
+            #1e3245;
+
+        border-color:
+            #39536a;
+    }
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    .login-card {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .login-card h2 {
+        color: #d9ebfb;
+    }
+
+
+    .security-note {
+        color:
+            var(--gls-muted-light);
+    }
+
+
+    /* =====================================================
+       FORMS
+       ===================================================== */
+
+    .form-field label {
+        color:
+            var(--gls-text);
+    }
+
+
+    .form-field input,
+    .form-field select,
+    .form-field textarea,
+    .lookup-form input,
+    .addon-custom-fields input,
+    .pricing-row input {
+        background:
+            #101922;
+
+        border-color:
+            var(--gls-border);
+
+        color:
+            var(--gls-text);
+    }
+
+
+    .form-field input::placeholder,
+    .form-field textarea::placeholder,
+    .lookup-form input::placeholder,
+    .addon-custom-fields input::placeholder {
+        color: #647b8e;
+    }
+
+
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus,
+    .lookup-form input:focus,
+    .addon-custom-fields input:focus,
+    .pricing-row input:focus {
+        border-color: #579bd6;
+
+        box-shadow:
+            0 0 0 4px
+            rgba(87, 155, 214, 0.15);
+    }
+
+
+    /* =====================================================
+       BUTTONS
+       ===================================================== */
+
+    .secondary-button,
+    .back-button,
+    .icon-button {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+
+        color: #d9ebfb;
+    }
+
+
+    .secondary-button:hover:not(:disabled),
+    .back-button:hover,
+    .icon-button:hover {
+        background:
+            #1b3042;
+
+        border-color:
+            #3b5870;
+    }
+
+
+    .primary-button {
+        background:
+            linear-gradient(
+                135deg,
+                #205f96,
+                #2875b3
+            );
+
+        border-color:
+            #2875b3;
+    }
+
+
+    .primary-button:hover:not(:disabled) {
+        background:
+            linear-gradient(
+                135deg,
+                #2875b3,
+                #3487c8
+            );
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+       ===================================================== */
+
+    .main-navigation {
+        background:
+            rgba(21, 31, 41, 0.96);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .nav-button {
+        color:
+            var(--gls-muted);
+    }
+
+
+    .nav-button:hover {
+        background:
+            #1b3042;
+
+        color:
+            #d9ebfb;
+    }
+
+
+    .nav-button.active {
+        background:
+            #205f96;
+
+        color: #ffffff;
+
+        box-shadow:
+            0 4px 14px
+            rgba(0, 0, 0, 0.25);
+    }
+
+
+    /* =====================================================
+       SCREEN HEADINGS
+       ===================================================== */
+
+    .welcome-section h2,
+    .screen-heading h2,
+    .screen-toolbar h2,
+    .section-heading h3,
+    .form-card-heading h3,
+    .price-summary-heading h3 {
+        color: #d9ebfb;
+    }
+
+
+    /* =====================================================
+       NEW JOB
+       ===================================================== */
+
+    .new-job-button {
+        background:
+            linear-gradient(
+                135deg,
+                #205f96,
+                #2876b4
+            );
+
+        box-shadow:
+            0 10px 28px
+            rgba(0, 0, 0, 0.30);
+    }
+
+
+    .new-job-button:hover {
+        background:
+            linear-gradient(
+                135deg,
+                #2876b4,
+                #3487c8
+            );
+    }
+
+
+    /* =====================================================
+       KPI / SUMMARY CARDS
+       ===================================================== */
+
+    .summary-card {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .summary-card span {
+        color:
+            var(--gls-muted);
+    }
+
+
+    .summary-card strong {
+        color: #d9ebfb;
+    }
+
+
+    /* =====================================================
+       QUICK ACTIONS
+       ===================================================== */
+
+    .quick-action-button {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+
+        color: #d9ebfb;
+    }
+
+
+    .quick-action-button:hover:not(:disabled) {
+        background:
+            #1b3042;
+
+        border-color:
+            #38546b;
+    }
+
+
+    /* =====================================================
+       JOB SECTION / FILTERS
+       ===================================================== */
+
+    .jobs-section {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .job-filter {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+
+        color:
+            var(--gls-muted);
+    }
+
+
+    .job-filter:hover {
+        background:
+            #1b3042;
+
+        color:
+            #d9ebfb;
+    }
+
+
+    .job-filter.active {
+        background:
+            #205f96;
+
+        border-color:
+            #2875b3;
+
+        color: #ffffff;
+    }
+
+
+    /* =====================================================
+       JOB / SEARCH CARDS
+       ===================================================== */
+
+    .job-card,
+    .lookup-result-card,
+    .search-result-card {
+        background:
+            var(--gls-surface-soft);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .vehicle-plate {
+        color:
+            var(--gls-text);
+    }
+
+
+    .job-number {
+        color:
+            var(--gls-primary);
+    }
+
+
+    /* =====================================================
+       EMPTY STATE
+       ===================================================== */
+
+    .empty-state {
+        background:
+            #111c25;
+
+        border-color:
+            #314657;
+
+        color:
+            var(--gls-muted);
+    }
+
+
+    /* =====================================================
+       FORM CARDS
+       ===================================================== */
+
+    .form-card {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .step-number {
+        background:
+            #276fa9;
+
+        color: #ffffff;
+    }
+
+
+    /* =====================================================
+       SERVICE SELECTION
+       ===================================================== */
+
+    .selection-card {
+        background:
+            #101922;
+
+        border-color:
+            var(--gls-border);
+
+        color:
+            var(--gls-text);
+    }
+
+
+    .selection-card:hover {
+        background:
+            #192f42;
+
+        border-color:
+            #3b5870;
+    }
+
+
+    .selection-card.selected {
+        background:
+            #18344b;
+
+        border-color:
+            #5fa4df;
+    }
+
+
+    .selection-card strong,
+    .selection-card .service-price {
+        color: #8cc4f3;
+    }
+
+
+    /* =====================================================
+       ADD-ONS
+       ===================================================== */
+
+    .addon-card {
+        background:
+            var(--gls-surface-soft);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .addon-checkbox-label strong,
+    .addon-price {
+        color: #a4d0f4;
+    }
+
+
+    /* =====================================================
+       PRICE SUMMARY
+       ===================================================== */
+
+    .price-summary-card {
+        background:
+            linear-gradient(
+                145deg,
+                #151f29,
+                #172634
+            );
+
+        border-color:
+            #344b5e;
+    }
+
+
+    .price-summary-heading {
+        border-bottom-color:
+            var(--gls-border);
+    }
+
+
+    .price-summary-heading > strong {
+        color: #8cc4f3;
+    }
+
+
+    .price-line {
+        color:
+            var(--gls-text-soft);
+    }
+
+
+    .price-line strong {
+        color:
+            var(--gls-text);
+    }
+
+
+    .price-line.total {
+        border-top-color:
+            var(--gls-border);
+
+        color: #a9d5f7;
+    }
+
+
+    /* =====================================================
+       ADMIN MENU
+       ===================================================== */
+
+    .admin-menu-card {
+        background:
+            var(--gls-surface);
+
+        border-color:
+            var(--gls-border);
+
+        color:
+            var(--gls-text);
+    }
+
+
+    .admin-menu-card:hover:not(:disabled) {
+        background:
+            #1b3042;
+
+        border-color:
+            #39556e;
+    }
+
+
+    .admin-menu-card strong {
+        color: #a4d0f4;
+    }
+
+
+    /* =====================================================
+       ADMIN PRICING
+       ===================================================== */
+
+    .pricing-card {
+        background:
+            var(--gls-surface-soft);
+
+        border-color:
+            var(--gls-border);
+    }
+
+
+    .pricing-card h4 {
+        color: #a4d0f4;
+    }
+
+
+    .pricing-row {
+        border-top-color:
+            var(--gls-border-light);
+    }
+
+
+    .pricing-row label {
+        color:
+            var(--gls-text-soft);
+    }
+
+
+    .pricing-save-button {
+        background:
+            #276fa9;
+
+        border-color:
+            #276fa9;
+    }
+
+
+    .pricing-save-button:hover {
+        background:
+            #3283bf;
+    }
+
+
+    /* =====================================================
+       STATUS BADGES
+       ===================================================== */
+
+    .status-badge.unpaid {
+        background:
+            #293640;
+
+        color:
+            #c5d1db;
+    }
+
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .app-footer {
+        color:
+            var(--gls-muted-light);
+    }
+
+}
