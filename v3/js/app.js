@@ -498,6 +498,16 @@ const vehicleCategory =
         "vehicleCategory"
     );
 
+const customVehicleTypeField =
+    document.getElementById(
+        "customVehicleTypeField"
+    );
+
+const customVehicleType =
+    document.getElementById(
+        "customVehicleType"
+    );
+
 const vehicleNotes =
     document.getElementById(
         "vehicleNotes"
@@ -1397,6 +1407,35 @@ function getCurrentServicePrice(
         ) ||
         null
     );
+}
+
+/* =========================================================
+   OTHER VEHICLE
+   ========================================================= */
+
+function updateCustomVehicleTypeField() {
+
+    const isOther =
+        vehicleCategory.value ===
+        "Other";
+
+
+    customVehicleTypeField.hidden =
+        !isOther;
+
+
+    customVehicleType.required =
+        isOther;
+
+
+    if (!isOther) {
+
+        customVehicleType.value =
+            "";
+    }
+
+
+    updateCreateJobButton();
 }
 
 
@@ -2496,16 +2535,45 @@ function selectExistingCustomerVehicle(
         "";
 
     vehicleColour.value =
-        row.colour ||
-        "";
+    row.colour ||
+    "";
 
-    vehicleCategory.value =
-        row.vehicle_category ||
-        "";
+vehicleCategory.value =
+    row.vehicle_category ||
+    "";
 
-    vehicleNotes.value =
-        row.vehicle_notes ||
+customVehicleType.value =
+    row.custom_vehicle_type ||
+    "";
+
+
+/*
+ * Show Vehicle Type field when
+ * existing vehicle category is Other.
+ */
+updateCustomVehicleTypeField();
+
+
+/*
+ * updateCustomVehicleTypeField()
+ * clears the value for non-Other categories.
+ *
+ * For Other, restore the saved custom type.
+ */
+if (
+    row.vehicle_category ===
+    "Other"
+) {
+
+    customVehicleType.value =
+        row.custom_vehicle_type ||
         "";
+}
+
+
+vehicleNotes.value =
+    row.vehicle_notes ||
+    "";
 
 
     selectedService =
@@ -2600,17 +2668,25 @@ async function upsertCustomerVehicle() {
                         .trim(),
 
                 p_vehicle_category:
-                    vehicleCategory.value,
+    vehicleCategory.value,
 
-                p_colour:
-                    vehicleColour.value
-                        .trim() ||
-                    null,
+p_colour:
+    vehicleColour.value
+        .trim() ||
+    null,
 
-                p_customer_notes:
-                    customerNotes.value
-                        .trim() ||
-                    null,
+p_custom_vehicle_type:
+    vehicleCategory.value ===
+        "Other"
+        ? customVehicleType.value
+            .trim() ||
+            null
+        : null,
+
+p_customer_notes:
+    customerNotes.value
+        .trim() ||
+    null,
 
                 p_vehicle_notes:
                     vehicleNotes.value
@@ -2662,12 +2738,30 @@ function updateCreateJobButton() {
         );
 
 
+    const otherVehicleReady =
+        vehicleCategory.value !==
+            "Other" ||
+        Boolean(
+            customVehicleType.value
+                .trim()
+        );
+
+
     const requiredFieldsReady =
         Boolean(
-            customerPhone.value.trim() &&
-            plateNumber.value.trim() &&
-            vehicleModel.value.trim() &&
+            customerPhone.value
+                .trim() &&
+
+            plateNumber.value
+                .trim() &&
+
+            vehicleModel.value
+                .trim() &&
+
             vehicleCategory.value &&
+
+            otherVehicleReady &&
+
             selectedService
         );
 
@@ -3108,6 +3202,15 @@ function resetNewJob() {
 
     selectedCustomerVehicle =
         null;
+
+   customVehicleType.value =
+    "";
+
+customVehicleType.required =
+    false;
+
+customVehicleTypeField.hidden =
+    true;
 
     selectedService =
         null;
@@ -3948,32 +4051,38 @@ function registerEvents() {
 
 
     vehicleCategory.addEventListener(
-        "change",
-        async function () {
+    "change",
+    async function () {
 
-            /*
-             * Existing selected vehicle must not
-             * silently change category without
-             * going through the upsert path.
-             */
+        selectedService =
+            null;
 
-            selectedService =
-                null;
-
-            currentPricePreview =
-                null;
+        currentPricePreview =
+            null;
 
 
-            renderServiceOptions();
+        /*
+         * Show Vehicle Type only
+         * when category is Other.
+         */
+        updateCustomVehicleTypeField();
 
-            renderPricePreview(
-                null
-            );
+
+        /*
+         * Refresh services because
+         * pricing depends on category.
+         */
+        renderServiceOptions();
 
 
-            updateCreateJobButton();
-        }
-    );
+        renderPricePreview(
+            null
+        );
+
+
+        updateCreateJobButton();
+    }
+);
 
 
     plateNumber.addEventListener(
@@ -3994,6 +4103,11 @@ function registerEvents() {
             updateCreateJobButton();
         }
     );
+
+   customVehicleType.addEventListener(
+    "input",
+    updateCreateJobButton
+);
 
 
     customerPhone.addEventListener(
@@ -4127,10 +4241,14 @@ function requiredElementsExist() {
         customerNotes,
 
         plateNumber,
-        vehicleModel,
-        vehicleColour,
-        vehicleCategory,
-        vehicleNotes,
+       vehicleModel,
+vehicleColour,
+vehicleCategory,
+
+customVehicleTypeField,
+customVehicleType,
+
+vehicleNotes,
 
         serviceOptions,
         addOnOptions,
