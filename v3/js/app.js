@@ -1977,17 +1977,16 @@ async function refreshPricePreview() {
     if (
         priceCalculationInProgress
     ) {
-
         return;
     }
 
 
-    const vehicleId =
-        selectedVehicleId.value;
-
-
+    /*
+     * Preview sekarang tak perlukan vehicle_id.
+     * Cukup Vehicle Category + Service.
+     */
     if (
-        !vehicleId ||
+        !vehicleCategory.value ||
         !selectedService
     ) {
 
@@ -2017,10 +2016,10 @@ async function refreshPricePreview() {
             error
         } =
             await glsSupabase.rpc(
-                "calculate_v3_job_price",
+                "calculate_v3_job_price_preview",
                 {
-                    p_vehicle_id:
-                        vehicleId,
+                    p_vehicle_category:
+                        vehicleCategory.value,
 
                     p_service_id:
                         selectedService.id,
